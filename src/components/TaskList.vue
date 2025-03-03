@@ -8,13 +8,26 @@
     <div class="task-list-body">
       <div class="task-list-row" v-for="task in tasks" :key="task.id">
         <div class="task-desc" @click="toggleRow(task.id)">
-          {{ task.description }}
+          <div class="task-desc-text" v-if="editingTaskId !== task.id">
+            {{ task.description }}
+          </div>
+          <InputText
+            :ref="`taskInput-${task.id}`"
+            v-else
+            v-model="editableDescription"
+            @blur="saveEditing()"
+            @keyup.enter="saveEditing()"
+            @keyup.esc="abortEditing(task)"
+            class="task-input"
+            name="edit-task-input"
+            id="edit-task-input"
+          />
           <AppIcon name="chevronDown" :class="{ rotated: expandedRow === task.id }" />
         </div>
 
-        <!-- Actions section (visible only when expanded) -->
+        <!-- Actions section (visible only when expanded or on non-mobile devices) -->
         <div class="task-actions" v-if="isMobile ? expandedRow === task.id : true">
-          <SolidButton type="icon" icon="pencil" />
+          <SolidButton type="icon" icon="pencil" @click="startEditing(task.id, task.description)" />
           <SolidButton type="icon" icon="trash2" />
           <router-link :to="{ name: 'countdown' }">
             <SolidButton
@@ -53,6 +66,8 @@ export default {
   },
   data() {
     return {
+      editingTaskId: null,
+      editableDescription: '',
       inpNewTask: '', // reflects the input field 'create new task'
       tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
@@ -60,6 +75,29 @@ export default {
     }
   },
   methods: {
+    startEditing(taskId, description) {
+      this.editingTaskId = taskId
+      this.editableDescription = description
+      this.$nextTick(() => {
+        // nextTick delays execution until the input field is in the DOM and rendered
+        this.$refs[`taskInput-${taskId}`]?.focusInput() // focus input
+      })
+    },
+    saveEditing() {
+      const task = this.tasks.find((t) => t.id === this.editingTaskId)
+      if (task && this.editableDescription.trim()) {
+        task.description = this.editableDescription // Save the updated description
+        this.updateLocalStorage()
+      }
+      this.stopEditing() // Stop editing after abort
+    },
+    abortEditing() {
+      this.editableDescription = '' // Reset editable description
+      this.stopEditing() // Stop editing after abort
+    },
+    stopEditing() {
+      this.editingTaskId = null // Exit editing mode
+    },
     generateUniqueId() {
       const now = new Date()
       const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")

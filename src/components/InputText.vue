@@ -1,5 +1,6 @@
 <template>
   <input
+    ref="inputField"
     type="text"
     :id="id"
     :name="name"
@@ -37,6 +38,11 @@ export default {
     },
   },
   emits: ['update:modelValue'],
+  methods: {
+    focusInput() {
+      this.$refs.inputField.focus()
+    },
+  },
 }
 </script>
 
