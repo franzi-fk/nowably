@@ -1,0 +1,89 @@
+:root {
+  /* Main */
+  --primary: #507460; /* Primary Button */
+  --secondary: #ebdad1; /* Secondary Button */
+  --base-black: #201a1a; /* Text, icons */
+  --base-white: #fff; /* Text, icons, backgrounds */
+  --base-sand: #f3e7e0; /* Backgrounds */
+
+  /* Other */
+  --sand-01: #fbf0eb;
+  --sand-02: #f3e9e4;
+  --sand-03: #ccb9af;
+  --terra-01: #d09983;
+  --terra-02: #a8766c;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Reddit Sans', sans-serif;
+}
+
+html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+}
+
+#app {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: var(--base-sand);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 1.15rem;
+  color: var(--base-black);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.3rem;
+}
+
+.page-padding-inline {
+  width: 100%;
+  padding-inline: 1.25rem;
+  text-align: left;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  #app {
+    font-size: 1.1rem;
+  }
+}
+/* @media (min-width: 992px) {
+  #app {
+    padding: 1.5rem min(16rem, 15%);
+  }
+} */
