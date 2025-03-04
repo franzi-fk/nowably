@@ -61,15 +61,34 @@
       </div>
     </div>
     <div class="create-new-task-container">
-      <!-- <SolidButton type="icon-text" text="Create new task" icon="plus" id="btn-create-new-task" /> -->
-      <form class="form-create-new-task" @submit.prevent="saveNewTask">
+      <SolidButton
+        v-show="!creatingTask"
+        type="icon-text"
+        text="Add task"
+        icon="plus"
+        id="btn-create-new-task"
+        @click="startCreatingTask()"
+      />
+      <form class="form-create-new-task" @submit.prevent="saveNewTask" v-show="creatingTask">
         <InputText
+          ref="newTaskInput"
           id="new-task"
           name="new-task"
           v-model="inpNewTask"
           placeholder="Enter your task"
+          @keydown.enter.prevent="saveNewTask"
+          @keydown.esc.prevent="creatingTask = false"
         />
-        <SolidButton type="icon-text" text="Save task" icon="save" />
+        <div class="form-actions">
+          <SolidButton
+            type="icon-text"
+            icon="x"
+            text="Cancel"
+            backgroundColor="var(--secondary)"
+            @click="cancelCreatingTask()"
+          />
+          <SolidButton type="icon-text" text="Add task" icon="plus" submit />
+        </div>
       </form>
     </div>
     <!-- Snackbar -->
@@ -117,6 +136,7 @@ export default {
       ],
       editingTaskId: null,
       editableDescription: '',
+      creatingTask: false,
       inpNewTask: '',
       tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
@@ -164,7 +184,7 @@ export default {
       )
 
       if (isDuplicate) {
-        this.showSnackbar('Description already exists', 'warning')
+        this.showSnackbar('Task already exists', 'warning')
 
         // Ensure the input field regains focus using nextTick
         this.$nextTick(() => {
@@ -258,6 +278,23 @@ export default {
     updateLocalStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
+    focusInput(inputElement) {
+      this.$nextTick(() => {
+        inputElement?.focusInput()
+      })
+    },
+    startCreatingTask() {
+      this.creatingTask = true
+      this.$nextTick(() => {
+        if (this.creatingTask === true) {
+          this.focusInput(this.$refs.newTaskInput)
+        }
+      })
+    },
+    cancelCreatingTask() {
+      this.creatingTask = false
+      this.inpNewTask = '' // Reset the task input field if needed
+    },
     saveNewTask() {
       const newTaskDesc = this.inpNewTask.trim() // Removes spaces from input value
 
@@ -269,7 +306,9 @@ export default {
 
       // Check if user tries to add a duplicate (case-insensitive)
       if (this.tasks.some((task) => task.description.toLowerCase() === newTaskDesc.toLowerCase())) {
-        this.inpNewTask = '' // clear input field
+        this.showSnackbar('Task already exists', 'warning')
+        // Ensure the input field regains focus using nextTick
+        this.focusInput(this.$refs.newTaskInput)
         return
       }
 
@@ -280,6 +319,7 @@ export default {
         doneState: false,
       })
       this.inpNewTask = '' // clear input field
+      this.focusInput(this.$refs.newTaskInput)
       this.updateLocalStorage()
     },
     showSnackbar(text, variant) {
@@ -378,11 +418,9 @@ export default {
 
 .create-new-task-container {
   width: 100%;
-  padding-inline: 20px;
-}
-
-.create-new-task-container button {
-  width: 100%;
+  padding-inline: 1.25rem;
+  display: flex;
+  flex-direction: row;
 }
 
 .rotated {
@@ -396,24 +434,32 @@ export default {
 }
 
 .form-create-new-task {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-actions {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+}
+
+#btn-create-new-task {
+  width: 100%;
 }
 
 /*_________________________________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .create-new-task-container {
-    width: auto;
-    padding-inline: 3rem;
-  }
-
-  .create-new-task-container button {
-    width: auto;
-  }
-
   .task-actions a {
     display: flex;
     flex-grow: 0;
@@ -456,6 +502,20 @@ export default {
 
   .task-list-header {
     padding-inline: 3rem;
+  }
+
+  .create-new-task-container {
+    padding-inline: 3rem;
+  }
+
+  .form-create-new-task {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+
+  #btn-create-new-task {
+    width: auto;
   }
 }
 
