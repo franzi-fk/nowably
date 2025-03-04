@@ -28,26 +28,36 @@
         <div class="task-actions" v-if="isMobile ? expandedRow === task.id : true">
           <!-- Edit button is shown if the task is not being edited -->
           <SolidButton
-            v-if="editingTaskId !== task.id"
+            v-show="editingTaskId !== task.id"
             type="icon"
             icon="pencil"
-            @click="startEditing(task.id, task.description)"
+            @click="startEditing(task.id, task.description, $event)"
+            id="btn-edit-task"
           />
           <!-- Save and Cancel buttons appear when editing -->
           <SolidButton
-            v-if="editingTaskId === task.id"
-            type="icon"
+            v-show="editingTaskId === task.id"
+            type="icon-text"
             icon="save"
+            text="Save"
             @click="saveEditing(task)"
+            id="btn-save-edited-task"
           />
           <SolidButton
-            v-if="editingTaskId === task.id"
-            type="icon"
+            v-show="editingTaskId === task.id"
+            type="icon-text"
+            text="Cancel"
             icon="x"
             @click="abortEditing(task)"
+            id="btn-cancel-edit-task"
           />
-          <SolidButton type="icon" icon="trash2" @click="confirmDeletion(task.id)" />
-          <router-link :to="{ name: 'countdown' }">
+          <SolidButton
+            v-show="editingTaskId !== task.id"
+            type="icon"
+            icon="trash2"
+            @click="confirmDeletion(task.id)"
+          />
+          <router-link v-show="editingTaskId !== task.id" :to="{ name: 'countdown' }">
             <SolidButton
               type="icon-text"
               text="Start task"
@@ -151,7 +161,10 @@ export default {
     }
   },
   methods: {
-    startEditing(taskId, description) {
+    startEditing(taskId, description, event) {
+      if (event) {
+        event.stopPropagation() // Stop the event from propagating to the parent elements
+      }
       this.editingTaskId = taskId
       this.editableDescription = description // store the description to be edited
       this.$nextTick(() => {
@@ -333,7 +346,10 @@ export default {
     },
     updateWindowWidth() {
       this.isMobile = window.innerWidth < 576
-      this.expandedRow = null
+      if (!this.isMobile) {
+        // Reset expandedRow when switching to a larger screen
+        this.expandedRow = null
+      }
     },
   },
   mounted() {
@@ -395,24 +411,30 @@ export default {
 
 .task-desc svg {
   min-width: fit-content;
+  margin-left: 1.2rem;
 }
 
 .task-actions {
   margin-bottom: 1.625rem;
   display: flex;
+  flex-direction: row;
   gap: 1rem;
   justify-content: start;
   align-items: center;
   width: 100%;
 }
 
-.task-actions a {
-  display: flex;
-  flex-grow: 1;
-  text-decoration: none;
+.task-actions > button {
+  min-width: 3.125rem;
 }
 
-.task-actions a button {
+.task-actions a {
+  display: flex;
+  text-decoration: none;
+  width: 100%;
+}
+
+#btn-start-task {
   width: 100%;
 }
 
@@ -437,22 +459,20 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.form-actions {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .form-actions {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 #btn-create-new-task {
+  width: 100%;
+}
+
+#edit-task-input {
   width: 100%;
 }
 
@@ -466,16 +486,17 @@ export default {
     text-decoration: none;
   }
 
-  .task-actions a button {
+  .task-actions button {
     width: fit-content;
     white-space: nowrap;
   }
 
   .task-actions {
     margin: 0;
+    display: flex;
     justify-content: end;
     width: auto;
-    padding-left: 1rem;
+    padding-left: 1.2rem;
     gap: 1.2rem;
   }
 
