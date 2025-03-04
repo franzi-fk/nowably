@@ -46,7 +46,7 @@
             icon="x"
             @click="abortEditing(task)"
           />
-          <SolidButton type="icon" icon="trash2" @click="deleteTask(task.id)" />
+          <SolidButton type="icon" icon="trash2" @click="confirmDeletion(task.id)" />
           <router-link :to="{ name: 'countdown' }">
             <SolidButton
               type="icon-text"
@@ -80,23 +80,44 @@
       :variant="snackbar.variant"
       :duration="snackbar.duration"
     />
+    <!-- Modal -->
+    <ModalOverlay
+      :isVisible="isModalVisible"
+      :text="modalText"
+      :headline="modalHeadline"
+      :actions="modalActions"
+      @update:isVisible="isModalVisible = $event"
+    />
   </section>
 </template>
 
 <script>
 import InputText from './InputText.vue'
 import SnackbarOverlay from './SnackbarOverlay.vue'
+import ModalOverlay from './ModalOverlay.vue'
 export default {
   name: 'TaskList',
   components: {
     InputText,
     SnackbarOverlay,
+    ModalOverlay,
   },
   data() {
     return {
+      isModalVisible: false,
+      modalText: '',
+      modalHeadline: '',
+      modalActions: [
+        {
+          text: 'Confirm',
+          onClick: () => {},
+          backgroundColor: 'var(--primary)',
+          textColor: 'var(--base-white)',
+        },
+      ],
       editingTaskId: null,
       editableDescription: '',
-      inpNewTask: '', // reflects the input field 'create new task'
+      inpNewTask: '',
       tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
@@ -173,8 +194,54 @@ export default {
     stopEditing() {
       this.editingTaskId = null // Exit editing mode
     },
+    openModal() {
+      this.isModalVisible = true
+    },
+    closeModal() {
+      this.isModalVisible = false
+    },
+    confirmDeletion(taskId) {
+      // Define the modal content dynamically
+      this.modalHeadline = `Delete task`
+      this.modalText = `Are you sure you want to delete this task? You can't bring it back.`
+
+      // Define the actions for the modal dynamically
+      this.modalActions = [
+        {
+          text: 'Cancel',
+          onClick: () => {
+            this.closeModal()
+          },
+          backgroundColor: 'var(--base-sand)',
+          textColor: 'var(--base-black)',
+        },
+        {
+          text: 'Delete task',
+          onClick: () => {
+            this.deleteTask(taskId)
+            this.closeModal()
+          },
+          backgroundColor: 'var(--primary)',
+          textColor: 'white',
+        },
+      ]
+
+      // Show the modal
+      this.openModal()
+    },
     deleteTask(taskId) {
-      console.log('delete')
+      const taskToDelete = this.tasks.find((t) => t.id === taskId)
+      this.$nextTick(() => {
+        if (!taskToDelete) {
+          console.log(taskToDelete)
+          this.showSnackbar('Task not found', 'error')
+          return
+        } else {
+          this.tasks = this.tasks.filter((t) => t.id !== taskId)
+          this.updateLocalStorage()
+          return
+        }
+      })
     },
     generateUniqueId() {
       const now = new Date()
