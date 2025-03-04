@@ -15,7 +15,6 @@
             :ref="`taskInput-${task.id}`"
             v-else
             v-model="editableDescription"
-            @blur="saveEditing()"
             @keyup.enter="saveEditing()"
             @keyup.esc="abortEditing(task)"
             class="task-input"
@@ -27,8 +26,27 @@
 
         <!-- Actions section (visible only when expanded or on non-mobile devices) -->
         <div class="task-actions" v-if="isMobile ? expandedRow === task.id : true">
-          <SolidButton type="icon" icon="pencil" @click="startEditing(task.id, task.description)" />
-          <SolidButton type="icon" icon="trash2" />
+          <!-- Edit button is shown if the task is not being edited -->
+          <SolidButton
+            v-if="editingTaskId !== task.id"
+            type="icon"
+            icon="pencil"
+            @click="startEditing(task.id, task.description)"
+          />
+          <!-- Save and Cancel buttons appear when editing -->
+          <SolidButton
+            v-if="editingTaskId === task.id"
+            type="icon"
+            icon="save"
+            @click="saveEditing(task)"
+          />
+          <SolidButton
+            v-if="editingTaskId === task.id"
+            type="icon"
+            icon="x"
+            @click="abortEditing(task)"
+          />
+          <SolidButton type="icon" icon="trash2" @click="deleteTask(task.id)" />
           <router-link :to="{ name: 'countdown' }">
             <SolidButton
               type="icon-text"
@@ -54,15 +72,25 @@
         <SolidButton type="icon-text" text="Save task" icon="save" />
       </form>
     </div>
+    <!-- Snackbar -->
+    <SnackbarOverlay
+      ref="snackbar"
+      :icon="snackbar.icon"
+      :text="snackbar.text"
+      :variant="snackbar.variant"
+      :duration="snackbar.duration"
+    />
   </section>
 </template>
 
 <script>
 import InputText from './InputText.vue'
+import SnackbarOverlay from './SnackbarOverlay.vue'
 export default {
   name: 'TaskList',
   components: {
     InputText,
+    SnackbarOverlay,
   },
   data() {
     return {
@@ -72,31 +100,81 @@ export default {
       tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
+      snackbar: {
+        visible: false,
+        text: '',
+        icon: '',
+        variant: 'info',
+        duration: 3000,
+      },
     }
   },
   methods: {
     startEditing(taskId, description) {
       this.editingTaskId = taskId
-      this.editableDescription = description
+      this.editableDescription = description // store the description to be edited
       this.$nextTick(() => {
         // nextTick delays execution until the input field is in the DOM and rendered
-        this.$refs[`taskInput-${taskId}`]?.focusInput() // focus input
+        const inputElement = this.$refs[`taskInput-${taskId}`][0]
+        if (inputElement) {
+          inputElement.focusInput() // focus input
+        }
       })
     },
     saveEditing() {
       const task = this.tasks.find((t) => t.id === this.editingTaskId)
-      if (task && this.editableDescription.trim()) {
-        task.description = this.editableDescription // Save the updated description
-        this.updateLocalStorage()
+      if (!task) {
+        this.stopEditing()
+        return
       }
-      this.stopEditing() // Stop editing after abort
+      const newTaskDesc = this.editableDescription.trim()
+
+      // Check if the description hasn't changed
+      if (task.description === newTaskDesc) {
+        this.stopEditing()
+        return
+      }
+
+      // Check if user tries to add a duplicate (case-insensitive)
+      const isDuplicate = this.tasks.some(
+        (existingTask) =>
+          existingTask.id !== this.editingTaskId &&
+          existingTask.description.toLowerCase() === newTaskDesc.toLowerCase(),
+      )
+
+      if (isDuplicate) {
+        this.showSnackbar('Description already exists', 'warning')
+
+        // Ensure the input field regains focus using nextTick
+        this.$nextTick(() => {
+          const inputElement = this.$refs[`taskInput-${this.editingTaskId}`]?.[0]
+          inputElement?.focusInput()
+        })
+
+        return
+      }
+
+      // Check if the user input is empty
+      if (newTaskDesc === '') {
+        this.abortEditing()
+        return
+      }
+
+      // Save the updated task description
+      task.description = newTaskDesc
+      this.updateLocalStorage()
+
+      this.stopEditing() // Stop editing after save
     },
-    abortEditing() {
-      this.editableDescription = '' // Reset editable description
+    abortEditing(task) {
+      this.editableDescription = task.description // Reset editable description to original
       this.stopEditing() // Stop editing after abort
     },
     stopEditing() {
       this.editingTaskId = null // Exit editing mode
+    },
+    deleteTask(taskId) {
+      console.log('delete')
     },
     generateUniqueId() {
       const now = new Date()
@@ -134,8 +212,13 @@ export default {
         description: `${newTaskDesc}`,
         doneState: false,
       })
-      this.newTask = '' // clear input field
+      this.inpNewTask = '' // clear input field
       this.updateLocalStorage()
+    },
+    showSnackbar(text, variant) {
+      this.snackbar.text = text
+      this.snackbar.variant = variant
+      this.$refs.snackbar.show()
     },
     toggleRow(id) {
       // if the clicked row is already expanded, collapse it; otherwise, expand the new one
@@ -143,9 +226,6 @@ export default {
     },
     updateWindowWidth() {
       this.isMobile = window.innerWidth < 576
-
-      // Reset expandedRow if switching to desktop
-      window.addEventListener('resize', this.updateWindowWidth) // Track window resize
       this.expandedRow = null
     },
   },
