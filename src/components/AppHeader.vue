@@ -24,8 +24,8 @@ export default {
   width: 100%;
   padding: 1rem 0.6rem 1rem 1.25rem;
   height: 4.5rem;
-  position: sticky;
-  background-color: color-mix(in srgb, var(--base-sand) 50%, transparent);
+  position: relative;
+  background-color: var(--base-sand);
   backdrop-filter: blur(20px);
   top: 0;
   left: 0;

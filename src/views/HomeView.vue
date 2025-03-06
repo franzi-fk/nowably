@@ -1,6 +1,6 @@
 <template>
   <AppHeader />
-  <div class="home-container">
+  <div class="home-container flex-grow">
     <section class="welcome-message page-padding-inline">
       <h1>Welcome</h1>
       <span>Let's defeat procrastination now.</span>
@@ -11,10 +11,21 @@
 
 <script>
 import TaskList from '../components/TaskList.vue'
+import { useTaskStore } from '../stores/taskStore'
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
     TaskList,
+  },
+  data() {
+    return {
+      taskStore: useTaskStore(),
+      router: useRouter(),
+    }
+  },
+  mounted() {
+    this.taskStore.setCurrentTask(null)
   },
 }
 </script>

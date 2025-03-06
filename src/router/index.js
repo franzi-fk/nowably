@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import NeedHelpView from '../views/NeedHelpView.vue'
 import TaskInProgressView from '../views/TaskInProgressView.vue'
 import TaskSuccess from '../views/TaskSuccess.vue'
+import AfterHelpView from '../views/AfterHelpView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/countdown',
+      path: '/:id/countdown',
       name: 'countdown',
       component: CountdownView,
     },
@@ -24,7 +25,12 @@ const router = createRouter({
       component: NeedHelpView,
     },
     {
-      path: '/working-on-task',
+      path: '/task-continue',
+      name: 'task-continue',
+      component: AfterHelpView,
+    },
+    {
+      path: '/:id/working-on-task',
       name: 'task-in-progress',
       component: TaskInProgressView,
     },

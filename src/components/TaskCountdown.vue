@@ -2,7 +2,7 @@
   <div class="countdown-container">
     <div :class="['circle', { fading: showStartNow }]"></div>
     <div
-      class="countdown-number"
+      class="countdown-number task-progress-body-text"
       :class="{ delayedFadeIn: showStartNow }"
       :style="countdownMarginStyle"
     >
@@ -101,16 +101,8 @@ export default {
 
 .countdown-number {
   position: absolute;
-  white-space: nowrap;
-  font-size: 3rem;
-  font-weight: bold;
-  text-align: center;
   user-select: none; /* Prevent text selection */
   width: 3.75rem; /* Ensure consistent width to handle both single and double-digit values */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0.4375rem;
 }
 
 /* Apply margin-left only for two-digit countdown to shift it slightly */

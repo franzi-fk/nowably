@@ -57,16 +57,16 @@
             icon="trash2"
             @click="confirmDeletion(task.id)"
           />
-          <router-link v-show="editingTaskId !== task.id" :to="{ name: 'countdown' }">
-            <SolidButton
-              type="icon-text"
-              text="Start task"
-              icon="play"
-              background-color="var(--primary)"
-              text-color="var(--base-white)"
-              id="btn-start-task"
-            />
-          </router-link>
+          <SolidButton
+            v-show="editingTaskId !== task.id"
+            type="icon-text"
+            text="Start task"
+            icon="play"
+            background-color="var(--primary)"
+            text-color="var(--base-white)"
+            id="btn-start-task"
+            @click="startTask(task)"
+          />
         </div>
       </div>
     </div>
@@ -87,7 +87,14 @@
           v-model="inpNewTask"
           placeholder="Enter your task"
           @keydown.enter.prevent="saveNewTask"
-          @keydown.esc.prevent="creatingTask = false"
+          @keydown.esc.prevent="cancelCreatingTask"
+          @blur="
+            () => {
+              if (inpNewTask.trim() === '') {
+                cancelCreatingTask()
+              }
+            }
+          "
         />
         <div class="form-actions">
           <SolidButton
@@ -124,6 +131,9 @@
 import InputText from './InputText.vue'
 import SnackbarOverlay from './SnackbarOverlay.vue'
 import ModalOverlay from './ModalOverlay.vue'
+import { useRouter } from 'vue-router'
+import { useTaskStore } from '@/stores/taskStore'
+
 export default {
   name: 'TaskList',
   components: {
@@ -133,6 +143,8 @@ export default {
   },
   data() {
     return {
+      taskStore: useTaskStore(),
+      router: useRouter(),
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
@@ -148,7 +160,7 @@ export default {
       editableDescription: '',
       creatingTask: false,
       inpNewTask: '',
-      tasks: [],
+      // tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
       snackbar: {
@@ -160,7 +172,16 @@ export default {
       },
     }
   },
+  computed: {
+    tasks() {
+      return this.taskStore.tasks
+    },
+  },
   methods: {
+    startTask(task) {
+      this.taskStore.setCurrentTask(task)
+      this.router.push({ name: 'countdown', params: { id: task.id } })
+    },
     startEditing(taskId, description, event) {
       if (event) {
         event.stopPropagation() // Stop the event from propagating to the parent elements
@@ -216,7 +237,8 @@ export default {
 
       // Save the updated task description
       task.description = newTaskDesc
-      this.updateLocalStorage()
+      this.taskStore.updateTask(task)
+      this.taskStore.saveTasksToStorage()
 
       this.stopEditing() // Stop editing after save
     },
@@ -266,12 +288,11 @@ export default {
       const taskToDelete = this.tasks.find((t) => t.id === taskId)
       this.$nextTick(() => {
         if (!taskToDelete) {
-          console.log(taskToDelete)
           this.showSnackbar('Task not found', 'error')
           return
         } else {
-          this.tasks = this.tasks.filter((t) => t.id !== taskId)
-          this.updateLocalStorage()
+          this.taskStore.deleteTask(taskId)
+          this.taskStore.saveTasksToStorage()
           return
         }
       })
@@ -281,15 +302,6 @@ export default {
       const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
       const timePart = now.getMilliseconds() // add milliseconds for further uniqueness
       return `${datePart}${timePart}`
-    },
-    loadLocalStorage() {
-      const storedTasks = localStorage.getItem('tasks')
-      if (storedTasks) {
-        this.tasks = JSON.parse(storedTasks)
-      }
-    },
-    updateLocalStorage() {
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     },
     focusInput(inputElement) {
       this.$nextTick(() => {
@@ -325,15 +337,16 @@ export default {
         return
       }
 
-      // Add new todo to appState
-      this.tasks.push({
-        id: `${this.generateUniqueId()}`,
-        description: `${newTaskDesc}`,
+      const newTask = {
+        id: this.generateUniqueId(),
+        description: newTaskDesc,
         doneState: false,
-      })
+      }
+      this.taskStore.addTask(newTask)
+      this.taskStore.saveTasksToStorage()
+
       this.inpNewTask = '' // clear input field
       this.focusInput(this.$refs.newTaskInput)
-      this.updateLocalStorage()
     },
     showSnackbar(text, variant) {
       this.snackbar.text = text
@@ -353,7 +366,7 @@ export default {
     },
   },
   mounted() {
-    this.loadLocalStorage()
+    this.taskStore.loadTasksFromStorage()
     window.addEventListener('resize', this.updateWindowWidth) // Track window resize
   },
   beforeUnmount() {

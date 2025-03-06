@@ -12,6 +12,8 @@
   --sand-03: #ccb9af;
   --terra-01: #d09983;
   --terra-02: #a8766c;
+  --terra-03: #9e605a;
+  --sky-01: #9dd1fe;
 }
 
 * {
@@ -19,30 +21,32 @@
   font-family: 'Reddit Sans', sans-serif;
 }
 
-html {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  font-size: 16px;
-}
-
-body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
 button {
   padding: 0;
   margin: 0;
 }
 
+html {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  height: auto;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  height: auto;
+  width: 100%;
+}
+
 #app {
   text-align: center;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  height: auto;
   margin: 0;
-  background-color: var(--base-sand);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -53,8 +57,13 @@ button {
 
 h1,
 h2,
-h3 {
+h3,
+p {
   margin: 0;
+}
+
+p {
+  white-space: normal;
 }
 
 h1 {
@@ -75,6 +84,40 @@ h3 {
 
 .hidden {
   display: none;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+
+.task-progress-headline {
+  color: var(--terra-03);
+  padding-inline: 1.3rem;
+  max-width: 40ch;
+  white-space: normal;
+}
+
+.task-progress-body-text {
+  white-space: nowrap;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.4375rem;
 }
 
 @media (min-width: 576px) {

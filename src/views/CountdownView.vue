@@ -1,6 +1,11 @@
 <template>
-  <div class="countdown-view">
-    <CountdownAnimation />
+  <div class="countdown-view flex-grow">
+    <h1 class="sr-only">Start working on the task</h1>
+    <h2 class="task-progress-headline" v-if="this.taskStore.currentTask">
+      {{ this.taskStore.currentTask.description }}
+    </h2>
+    <!-- v-if ensures currentTask is loaded before vue is trying to access it-->
+    <TaskCountdown />
     <div class="button-container">
       <router-link :to="{ name: 'need-help' }"
         ><SolidButton type="text" text="I need help"
@@ -11,18 +16,38 @@
           text="I started"
           backgroundColor="var(--primary)"
           textColor="var(--base-white)"
+          @click="taskInProgress"
       /></router-link>
     </div>
   </div>
 </template>
 
 <script>
-import CountdownAnimation from '../components/CountdownAnimation.vue'
+import TaskCountdown from '../components/TaskCountdown.vue'
+import { useTaskStore } from '../stores/taskStore'
+import { useUserStore } from '../stores/userStore'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'CountdownView',
   components: {
-    CountdownAnimation,
+    TaskCountdown,
+  },
+  data() {
+    return {
+      taskStore: useTaskStore(),
+      userStore: useUserStore(),
+      router: useRouter(),
+    }
+  },
+  methods: {
+    taskInProgress() {
+      this.router.push({ name: 'task-in-progress', params: { id: this.taskStore.currentTask.id } })
+    },
+  },
+  mounted() {
+    this.taskStore.loadCurrentTask()
+    this.userStore.setCurrentEmotion(null)
   },
 }
 </script>
