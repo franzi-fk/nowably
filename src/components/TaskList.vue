@@ -111,7 +111,6 @@
     <!-- Snackbar -->
     <SnackbarOverlay
       ref="snackbar"
-      :icon="snackbar.icon"
       :text="snackbar.text"
       :variant="snackbar.variant"
       :duration="snackbar.duration"
@@ -164,9 +163,8 @@ export default {
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
       snackbar: {
-        visible: false,
+        visible: true,
         text: '',
-        icon: '',
         variant: 'info',
         duration: 3000,
       },
@@ -218,7 +216,7 @@ export default {
       )
 
       if (isDuplicate) {
-        this.showSnackbar('Task already exists', 'warning')
+        this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
 
         // Ensure the input field regains focus using nextTick
         this.$nextTick(() => {
@@ -288,7 +286,7 @@ export default {
       const taskToDelete = this.tasks.find((t) => t.id === taskId)
       this.$nextTick(() => {
         if (!taskToDelete) {
-          this.showSnackbar('Task not found', 'error')
+          this.showSnackbar('error', 'Task not found.', '3000') // properties:  variant, text, duration in ms
           return
         } else {
           this.taskStore.deleteTask(taskId)
@@ -331,7 +329,7 @@ export default {
 
       // Check if user tries to add a duplicate (case-insensitive)
       if (this.tasks.some((task) => task.description.toLowerCase() === newTaskDesc.toLowerCase())) {
-        this.showSnackbar('Task already exists', 'warning')
+        this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
         // Ensure the input field regains focus using nextTick
         this.focusInput(this.$refs.newTaskInput)
         return
@@ -348,9 +346,10 @@ export default {
       this.inpNewTask = '' // clear input field
       this.focusInput(this.$refs.newTaskInput)
     },
-    showSnackbar(text, variant) {
+    showSnackbar(variant, text, duration) {
       this.snackbar.text = text
       this.snackbar.variant = variant
+      this.snackbar.duration = Number(duration)
       this.$refs.snackbar.show()
     },
     toggleRow(id) {

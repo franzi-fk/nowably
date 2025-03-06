@@ -1,3 +1,9 @@
+<template>
+  <component v-if="iconComponent" :is="iconComponent" :size="iconSize" :color="props.color" />
+  <span v-else>⚠️</span>
+  <!-- Fallback if icon not found -->
+</template>
+
 <script setup>
 import { computed } from 'vue'
 import * as LucideIcons from 'lucide-vue-next'
@@ -19,9 +25,3 @@ const iconComponent = computed(() => {
   return icon || null // Return icon component or null if not found
 })
 </script>
-
-<template>
-  <component v-if="iconComponent" :is="iconComponent" :size="iconSize" :color="props.color" />
-  <span v-else>⚠️</span>
-  <!-- Fallback if icon not found -->
-</template>

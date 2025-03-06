@@ -6,6 +6,12 @@
   --base-white: #fff; /* Text, icons, backgrounds */
   --base-sand: #f3e7e0; /* Backgrounds */
 
+  /* App General */
+  --error: rgb(199, 28, 28);
+  --warning: rgb(206, 148, 23);
+  --success: rgb(17, 142, 71);
+  --info: rgb(87, 87, 175);
+
   /* Other */
   --sand-01: #fbf0eb;
   --sand-02: #f3e9e4;
