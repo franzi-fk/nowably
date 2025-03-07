@@ -5,6 +5,11 @@ export const useTaskStore = defineStore('taskStore', {
     tasks: [], // Full list of tasks
     currentTask: null, // Task currently being worked on
   }),
+  getters: {
+    openTasks() {
+      return this.tasks.filter((task) => task.doneState === false)
+    },
+  },
   actions: {
     addTask(task) {
       this.tasks.push(task)

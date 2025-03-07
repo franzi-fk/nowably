@@ -1,6 +1,6 @@
 <template>
   <AppHeader />
-  <div class="home-container flex-grow">
+  <div class="home-container flex-grow view-layout-default">
     <section class="welcome-message page-padding-inline">
       <h1>Welcome</h1>
       <span>Let's defeat procrastination now.</span>

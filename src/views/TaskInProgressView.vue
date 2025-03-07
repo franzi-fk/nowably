@@ -1,5 +1,5 @@
 <template>
-  <div class="in-progress-view flex-grow">
+  <div class="in-progress-view flex-grow page-padding-inline">
     <h1 class="sr-only">Start working on the task</h1>
     <h2 class="task-progress-headline" v-if="this.taskStore.currentTask">
       {{ this.taskStore.currentTask.description }}
@@ -43,7 +43,6 @@ export default {
   justify-content: center;
   gap: 3rem;
   align-items: center;
-  white-space: nowrap;
   background-image: radial-gradient(circle at 50%, var(--terra-01), var(--base-sand));
 }
 </style>

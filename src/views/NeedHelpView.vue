@@ -1,5 +1,5 @@
 <template>
-  <div class="need-help-view flex-grow" v-if="taskStore.currentTask">
+  <div class="need-help-view flex-grow page-padding-inline" v-if="taskStore.currentTask">
     <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
       <h1>demotivated?</h1>
       <section class="actions">
@@ -150,7 +150,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  white-space: nowrap;
 }
 
 .need-help-view {
@@ -161,9 +160,11 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  min-width: 100vw;
   display: grid;
   grid-template-rows: auto 1fr auto;
   background-color: var(--base-sand);
+  text-align: center;
 }
 
 .intro {
