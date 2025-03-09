@@ -87,6 +87,7 @@
           name="new-task"
           v-model="inpNewTask"
           placeholder="Enter your task"
+          maxLength="80"
           @keydown.enter.prevent="saveNewTask"
           @keydown.esc.prevent="cancelCreatingTask"
           @blur="
@@ -472,13 +473,19 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 1.2rem;
+}
+
+.input-container {
+  width: 100%;
 }
 
 .form-actions {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 1.2rem;
+  width: 100%;
 }
 
 #btn-create-new-task {
