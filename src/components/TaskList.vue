@@ -6,6 +6,7 @@
     </div>
 
     <div class="task-list-body">
+      <p class="empty-state" v-if="tasks.length === 0">No tasks yet. Create a new one.</p>
       <div class="task-list-row" v-for="task in tasks" :key="task.id">
         <div class="task-desc" @click="toggleRow(task.id)">
           <div class="task-desc-text" v-if="editingTaskId !== task.id">
