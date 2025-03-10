@@ -1,46 +1,51 @@
 <template>
   <section class="after-help-view page-padding-inline flex-grow">
-    <h1>Do you want to continue right now?</h1>
-    <form class="ask-if-continue" @submit.prevent="submitUserInput">
-      <fieldset>
-        <InputRadio
-          v-model="userInput"
-          type="radio"
-          name="task-continue"
-          id="continue-with-task"
-          value="continue"
-          label="Yes, I will give it another try. I want to continue with:"
-        />
-        <InputSelect
-          v-model="selectedValue"
-          :items="taskStore.openTasks"
-          labelKey="description"
-          valueKey="id"
-          :disabled="userInput === 'dont-continue'"
-          name="select-task"
-          id="select-task"
-          placeholder="Select a task"
-        />
-      </fieldset>
-      <fieldset>
-        <InputRadio
-          v-model="userInput"
-          type="radio"
-          name="task-continue"
-          id="do-not-continue"
-          value="dont-continue"
-          label="No, I will take a break and try again another time."
-        />
-      </fieldset>
-      <fieldset>
-        <SolidButton
-          type="text"
-          text="Continue"
-          background-color="var(--base-white)"
-          id="btn-continue"
-        />
-      </fieldset>
-    </form>
+    <section class="after-help-view-body">
+      <h1>Do you want to continue right now?</h1>
+      <form class="ask-if-continue" @submit.prevent="submitUserInput">
+        <fieldset>
+          <InputRadio
+            v-model="userInput"
+            type="radio"
+            name="task-continue"
+            id="continue-with-task"
+            value="continue"
+            label="Yes, I will give it another try. I want to continue with:"
+          />
+          <InputSelect
+            v-model="selectedValue"
+            :items="taskStore.openTasks"
+            labelKey="description"
+            valueKey="id"
+            :disabled="userInput === 'dont-continue'"
+            name="select-task"
+            id="select-task"
+            placeholder="Select a task"
+          />
+        </fieldset>
+        <fieldset>
+          <InputRadio
+            v-model="userInput"
+            type="radio"
+            name="task-continue"
+            id="do-not-continue"
+            value="dont-continue"
+            label="No, I will take a break and try again another time."
+          />
+        </fieldset>
+        <fieldset>
+          <SolidButton
+            type="text"
+            text="Continue"
+            background-color="var(--base-white)"
+            id="btn-continue"
+          />
+        </fieldset>
+      </form>
+    </section>
+    <section class="actions after-help-view-footer">
+      <LinkButton type="text" text="Go back" @click="backToLastStep" />
+    </section>
   </section>
   <!-- Snackbar -->
   <SnackbarOverlay
@@ -58,6 +63,7 @@ import InputSelect from '../components/InputSelect.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
 import InputRadio from '../components/InputRadio.vue'
+import { useUserStore } from '../stores/userStore'
 
 export default {
   components: {
@@ -69,6 +75,7 @@ export default {
   data() {
     return {
       taskStore: useTaskStore(),
+      userStore: useUserStore(),
       router: useRouter(),
       userInput: 'continue',
       selectedValue: null, // Initially null until data is loaded
@@ -80,6 +87,9 @@ export default {
     }
   },
   methods: {
+    backToLastStep() {
+      this.router.push({ name: 'need-help' })
+    },
     showSnackbar(variant, text, duration) {
       this.snackbar.text = text
       this.snackbar.variant = variant
@@ -95,6 +105,8 @@ export default {
             (task) => task.id === this.selectedValue,
           )
           this.taskStore.setCurrentTask(selectedTask)
+          this.userStore.setCurrentStep('countdown')
+          this.userStore.setCurrentEmotion(null)
           this.router.push({ name: 'countdown', params: { id: selectedTask.id } })
           return
         } else {
@@ -102,6 +114,8 @@ export default {
           return
         }
       } else {
+        this.userStore.setCurrentStep(null)
+        this.userStore.setCurrentEmotion(null)
         this.router.push({ name: 'home' })
         return
       }
@@ -109,7 +123,11 @@ export default {
   },
   mounted() {
     // **Wait for taskStore data to load before setting the selectedValue**
-    Promise.all([this.taskStore.loadCurrentTask(), this.taskStore.loadTasksFromStorage()])
+    Promise.all([
+      this.taskStore.loadCurrentTask(),
+      this.taskStore.loadTasksFromStorage(),
+      this.userStore.initLoad(),
+    ])
       .then(() => {
         // **Once the data is loaded, set selectedValue from currentTask**
         this.selectedValue = this.taskStore.currentTask?.id || 'Select a task'
@@ -125,13 +143,18 @@ export default {
 .after-help-view {
   width: 100%;
   min-height: 100vh;
+  background-color: var(--base-sand);
+  display: flex;
+  flex-direction: column;
+}
+
+.after-help-view-body {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-bottom: 7rem;
   align-items: center;
   gap: 3rem;
-  background-color: var(--base-sand);
 }
 
 .ask-if-continue {
@@ -151,6 +174,14 @@ fieldset {
 
 .input-label {
   min-height: 3.75rem;
+}
+
+.actions {
+  padding-inline: 1.25rem;
+  padding-block: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
 #btn-continue {

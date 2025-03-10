@@ -21,6 +21,7 @@
             class="task-input"
             name="edit-task-input"
             id="edit-task-input"
+            maxLength="80"
           />
           <AppIcon name="chevronDown" :class="{ rotated: expandedRow === task.id }" />
         </div>
@@ -161,7 +162,6 @@ export default {
       editableDescription: '',
       creatingTask: false,
       inpNewTask: '',
-      // tasks: [],
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
       snackbar: {
@@ -197,7 +197,7 @@ export default {
       })
     },
     saveEditing() {
-      const task = this.tasks.find((t) => t.id === this.editingTaskId)
+      const task = this.taskStore.tasks.find((t) => t.id === this.editingTaskId)
       if (!task) {
         this.stopEditing()
         return
@@ -211,7 +211,7 @@ export default {
       }
 
       // Check if user tries to add a duplicate (case-insensitive)
-      const isDuplicate = this.tasks.some(
+      const isDuplicate = this.taskStore.tasks.some(
         (existingTask) =>
           existingTask.id !== this.editingTaskId &&
           existingTask.description.toLowerCase() === newTaskDesc.toLowerCase(),
@@ -285,7 +285,7 @@ export default {
       this.openModal()
     },
     deleteTask(taskId) {
-      const taskToDelete = this.tasks.find((t) => t.id === taskId)
+      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId)
       this.$nextTick(() => {
         if (!taskToDelete) {
           this.showSnackbar('error', 'Task not found.', '3000') // properties:  variant, text, duration in ms
@@ -300,8 +300,9 @@ export default {
     generateUniqueId() {
       const now = new Date()
       const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-      const timePart = now.getMilliseconds() // add milliseconds for further uniqueness
-      return `${datePart}${timePart}`
+      const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
+      const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
+      return `${datePart}${timePart}${randomPart}`
     },
     focusInput(inputElement) {
       this.$nextTick(() => {
@@ -330,7 +331,11 @@ export default {
       }
 
       // Check if user tries to add a duplicate (case-insensitive)
-      if (this.tasks.some((task) => task.description.toLowerCase() === newTaskDesc.toLowerCase())) {
+      if (
+        this.taskStore.openTasks.some(
+          (task) => task.description.toLowerCase() === newTaskDesc.toLowerCase(),
+        )
+      ) {
         this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
         // Ensure the input field regains focus using nextTick
         this.focusInput(this.$refs.newTaskInput)

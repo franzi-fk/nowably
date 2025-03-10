@@ -2,7 +2,6 @@
   <div class="input-container">
     <input
       ref="inputField"
-      type="text"
       :id="id"
       :name="name"
       :value="modelValue"
@@ -15,7 +14,7 @@
       @blur="isFocused = false"
     />
     <div v-if="maxLength && isFocused" class="char-counter">
-      {{ modelValue.length }} / {{ maxLength }} characters
+      {{ modelValue.length }} / {{ maxLength }}
     </div>
   </div>
 </template>
@@ -23,7 +22,10 @@
 <script>
 export default {
   props: {
-    modelValue: String,
+    modelValue: {
+      type: String,
+      default: '',
+    },
     id: {
       type: String,
       required: true,
@@ -40,13 +42,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    type: {
-      type: String,
-      default: 'text',
-    },
     maxLength: {
-      type: Number,
-      default: null, // Default to null if no limit is specified
+      type: [Number, String],
+      default: null,
+      validator(value) {
+        const numValue = Number(value)
+        return !isNaN(numValue)
+      },
     },
   },
   data() {
@@ -65,23 +67,32 @@ export default {
 
 <style scoped>
 .input-container {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-input[type='text'],
-input[type='text']:focus {
+input,
+input:focus {
   height: 3.125rem;
   border-radius: 0.625rem;
   border: 2px solid var(--sand-03) !important;
-  padding: 0.2rem 0.8rem;
+  padding: 0.2rem 4rem 0.2rem 0.8rem;
   font-size: 1.1rem;
   letter-spacing: 0.03rem;
   width: 100%;
 }
+
+input:disabled {
+  opacity: 0.5;
+}
+
 .char-counter {
   font-size: 0.8125rem;
   color: var(--base-black);
-  margin-block: 0.2rem;
-  margin-inline: 0.5rem;
+  margin-inline: 0.25rem;
+  padding-inline: 0.5rem;
+  min-width: fit-content;
+  position: absolute;
 }
 </style>

@@ -7,17 +7,14 @@
     <!-- v-if ensures currentTask is loaded before vue is trying to access it-->
     <TaskCountdown />
     <div class="button-container">
-      <router-link :to="{ name: 'need-help' }"
-        ><SolidButton type="text" text="I need help"
-      /></router-link>
-      <router-link :to="{ name: 'task-in-progress' }"
-        ><SolidButton
-          type="text"
-          text="I started"
-          backgroundColor="var(--primary)"
-          textColor="var(--base-white)"
-          @click="taskInProgress"
-      /></router-link>
+      <SolidButton type="text" text="I need help" @click="needHelp" />
+      <SolidButton
+        type="text"
+        text="I started"
+        backgroundColor="var(--primary)"
+        textColor="var(--base-white)"
+        @click="taskInProgress"
+      />
     </div>
   </div>
 </template>
@@ -41,12 +38,18 @@ export default {
     }
   },
   methods: {
+    needHelp() {
+      this.userStore.setCurrentStep('help')
+      this.router.push({ name: 'need-help' })
+    },
     taskInProgress() {
+      this.userStore.setCurrentStep('workingOnTask')
       this.router.push({ name: 'task-in-progress', params: { id: this.taskStore.currentTask.id } })
     },
   },
   mounted() {
     this.taskStore.loadCurrentTask()
+    this.userStore.initLoad()
     this.userStore.setCurrentEmotion(null)
   },
 }
