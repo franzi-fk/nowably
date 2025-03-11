@@ -14,20 +14,14 @@ export const useTaskStore = defineStore('taskStore', {
     addTask(task) {
       this.tasks.push(task)
     },
-    updateTask(updatedTask) {
-      const task = this.tasks.find((task) => task.id === updatedTask.id)
+    updateTask(taskId, updatedProperties) {
+      const task = this.tasks.find((task) => task.id === taskId)
       if (task) {
-        Object.assign(task, updatedTask)
+        Object.assign(task, updatedProperties)
       }
     },
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
-    },
-    loadTasksFromStorage() {
-      const storedTasks = localStorage.getItem('tasks')
-      if (storedTasks) {
-        this.tasks = JSON.parse(storedTasks)
-      }
     },
     saveTasksToStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
@@ -36,10 +30,14 @@ export const useTaskStore = defineStore('taskStore', {
       this.currentTask = task
       localStorage.setItem('currentTask', JSON.stringify(task)) // Persist across refreshes
     },
-    loadCurrentTask() {
+    initLoad() {
       const storedCurrentTask = localStorage.getItem('currentTask')
       if (storedCurrentTask) {
         this.currentTask = JSON.parse(storedCurrentTask)
+      }
+      const storedTasks = localStorage.getItem('tasks')
+      if (storedTasks) {
+        this.tasks = JSON.parse(storedTasks)
       }
     },
   },

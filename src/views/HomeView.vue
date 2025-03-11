@@ -13,6 +13,7 @@
 import TaskList from '../components/TaskList.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/userStore'
 
 export default {
   components: {
@@ -21,11 +22,14 @@ export default {
   data() {
     return {
       taskStore: useTaskStore(),
+      userStore: useUserStore(),
       router: useRouter(),
     }
   },
   mounted() {
     this.taskStore.setCurrentTask(null)
+    this.taskStore.initLoad()
+    this.userStore.initLoad()
   },
 }
 </script>

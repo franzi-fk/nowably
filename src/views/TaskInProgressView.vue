@@ -14,10 +14,10 @@
     class="document-task-status flex-grow page-padding-inline"
     v-if="userStore.currentStep === 'documentTaskStatus'"
   >
-    <h1 class="sr-only">Update the task status</h1>
-    <h2>Document your progress on this task</h2>
-    <section class="actions after-help-view-footer">
-      <form id="task-status-form">
+    <section class="document-task-status-body">
+      <h1>Document your progress on this task</h1>
+
+      <form id="task-status-form" @submit.prevent="submitUserInput">
         <fieldset>
           <InputRadio
             label="Task is completed"
@@ -34,14 +34,18 @@
             v-model="taskComplete"
           />
         </fieldset>
-        <SolidButton
-          id="btn-continue"
-          type="text"
-          text="Save and continue"
-          backgroundColor="var(--primary)"
-          textColor="var(--base-white)"
-        />
+        <fieldset>
+          <SolidButton
+            id="btn-continue"
+            type="text"
+            text="Save and continue"
+            backgroundColor="var(--primary)"
+            textColor="var(--base-white)"
+          />
+        </fieldset>
       </form>
+    </section>
+    <section class="actions document-task-status-footer">
       <LinkButton type="text" text="Go back" @click="userStore.setCurrentStep('workingOnTask')" />
     </section>
   </article>
@@ -67,6 +71,20 @@ export default {
     }
   },
   methods: {
+    submitUserInput() {
+      const updatedTask = this.taskStore.tasks.find((t) => t.id === this.taskStore.currentTask.id)
+
+      if (updatedTask) {
+        // Update the task's doneState in the tasks array
+        this.taskStore.updateTask(updatedTask.id, { doneState: this.taskComplete })
+
+        // Since it's the current task, update currentTask as well
+        this.taskStore.setCurrentTask(updatedTask)
+        this.taskStore.saveTasksToStorage()
+        this.userStore.setCurrentStep('success')
+        this.router.push({ name: 'task-success' })
+      }
+    },
     stopWorking() {
       this.workingOnTask = false
     },
@@ -78,18 +96,16 @@ export default {
     },
   },
   mounted() {
-    this.taskStore.loadCurrentTask()
+    this.taskStore.initLoad()
     this.userStore.initLoad()
   },
 }
 </script>
 
 <style scoped>
-.in-progress-view,
-.document-task-status {
+.in-progress-view {
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle at 50%, var(--terra-01), var(--base-sand));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -97,7 +113,51 @@ export default {
   gap: 3rem;
 }
 
+.in-progress-view {
+  background-image: radial-gradient(circle at 50%, var(--terra-01), var(--base-sand));
+}
+
+.document-task-status {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--base-sand);
+  display: flex;
+  flex-direction: column;
+}
+
+.document-task-status-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+.document-task-status form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.ask-if-continue-form fieldset:not(:last-child) {
+  align-self: flex-start;
+}
+
+.document-task-status form .input-label {
+  min-height: 2.25rem;
+}
+
+.actions {
+  padding-inline: 1.25rem;
+  padding-block: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
 #btn-continue {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 </style>

@@ -48,7 +48,7 @@ export default {
     },
   },
   mounted() {
-    this.taskStore.loadCurrentTask()
+    this.taskStore.initLoad()
     this.userStore.initLoad()
     this.userStore.setCurrentEmotion(null)
   },

@@ -2,7 +2,7 @@
   <section class="after-help-view page-padding-inline flex-grow">
     <section class="after-help-view-body">
       <h1>Do you want to continue right now?</h1>
-      <form class="ask-if-continue" @submit.prevent="submitUserInput">
+      <form class="ask-if-continue-form" @submit.prevent="submitUserInput">
         <fieldset>
           <InputRadio
             v-model="userInput"
@@ -37,7 +37,8 @@
           <SolidButton
             type="text"
             text="Continue"
-            background-color="var(--base-white)"
+            background-color="var(--primary)"
+            textColor="var(--base-white)"
             id="btn-continue"
           />
         </fieldset>
@@ -123,11 +124,7 @@ export default {
   },
   mounted() {
     // **Wait for taskStore data to load before setting the selectedValue**
-    Promise.all([
-      this.taskStore.loadCurrentTask(),
-      this.taskStore.loadTasksFromStorage(),
-      this.userStore.initLoad(),
-    ])
+    Promise.all([this.taskStore.initLoad(), this.userStore.initLoad()])
       .then(() => {
         // **Once the data is loaded, set selectedValue from currentTask**
         this.selectedValue = this.taskStore.currentTask?.id || 'Select a task'
@@ -157,19 +154,15 @@ export default {
   gap: 3rem;
 }
 
-.ask-if-continue {
+.ask-if-continue-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2rem;
 }
 
-fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+.ask-if-continue-form fieldset:not(:last-child) {
+  align-self: flex-start;
 }
 
 .input-label {
@@ -186,6 +179,7 @@ fieldset {
 
 #btn-continue {
   margin-top: 2rem;
+  min-width: 12rem;
 }
 
 /* Small devices (landscape phones, 576px and up) */

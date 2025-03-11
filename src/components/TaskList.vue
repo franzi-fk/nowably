@@ -6,8 +6,11 @@
     </div>
 
     <div class="task-list-body">
-      <p class="empty-state" v-if="tasks.length === 0">No tasks yet. Create a new one.</p>
-      <div class="task-list-row" v-for="task in tasks" :key="task.id">
+      <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
+        <AppIllustration name="empty-state" width="16rem" opacity="0.9" />
+        <p>No tasks yet. Create a new one.</p>
+      </div>
+      <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
         <div class="task-desc" @click="toggleRow(task.id)">
           <div class="task-desc-text" v-if="editingTaskId !== task.id">
             {{ task.description }}
@@ -135,6 +138,8 @@ import SnackbarOverlay from './SnackbarOverlay.vue'
 import ModalOverlay from './ModalOverlay.vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
+import { useUserStore } from '../stores/userStore'
+import AppIllustration from './AppIllustration.vue'
 
 export default {
   name: 'TaskList',
@@ -142,10 +147,12 @@ export default {
     InputText,
     SnackbarOverlay,
     ModalOverlay,
+    AppIllustration,
   },
   data() {
     return {
       taskStore: useTaskStore(),
+      userStore: useUserStore(),
       router: useRouter(),
       isModalVisible: false,
       modalText: '',
@@ -180,6 +187,7 @@ export default {
   methods: {
     startTask(task) {
       this.taskStore.setCurrentTask(task)
+      this.userStore.setCurrentStep('countdown')
       this.router.push({ name: 'countdown', params: { id: task.id } })
     },
     startEditing(taskId, description, event) {
@@ -197,7 +205,8 @@ export default {
       })
     },
     saveEditing() {
-      const task = this.taskStore.tasks.find((t) => t.id === this.editingTaskId)
+      const taskId = this.editingTaskId
+      const task = this.taskStore.tasks.find((t) => t.id === taskId)
       if (!task) {
         this.stopEditing()
         return
@@ -236,8 +245,7 @@ export default {
       }
 
       // Save the updated task description
-      task.description = newTaskDesc
-      this.taskStore.updateTask(task)
+      this.taskStore.updateTask(taskId, { description: newTaskDesc })
       this.taskStore.saveTasksToStorage()
 
       this.stopEditing() // Stop editing after save
@@ -372,7 +380,8 @@ export default {
     },
   },
   mounted() {
-    this.taskStore.loadTasksFromStorage()
+    this.userStore.initLoad()
+    this.taskStore.initLoad()
     window.addEventListener('resize', this.updateWindowWidth) // Track window resize
   },
   beforeUnmount() {
@@ -499,6 +508,14 @@ export default {
 
 #edit-task-input {
   width: 100%;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: center;
 }
 
 /*_________________________________________________________________________*/

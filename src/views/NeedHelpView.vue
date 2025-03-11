@@ -300,9 +300,8 @@ export default {
     },
   },
   mounted() {
-    this.userStore.initLoad() // Assuming this is async
-    this.taskStore.loadCurrentTask() // Assuming this is async
-    this.taskStore.loadTasksFromStorage()
+    this.userStore.initLoad()
+    this.taskStore.initLoad()
 
     // If there is no currentTask, redirect to the home view
     if (!this.taskStore.currentTask) {
