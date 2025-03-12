@@ -1,14 +1,14 @@
 <template>
   <section class="task-list-container">
     <div class="task-list-header">
-      <h2>Tasks</h2>
-      <LinkButton type="text" text="View all" />
+      <h2>{{ listHeadline }}</h2>
+      <LinkButton v-if="showViewAll" type="text" text="View all" @click="goToAllTasksView" />
     </div>
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
         <AppIllustration name="empty-state" width="16rem" opacity="0.9" />
-        <p>No tasks yet. Create a new one.</p>
+        <p>No open tasks. Create a new one.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
         <div class="task-desc" @click="toggleRow(task.id)">
@@ -142,12 +142,22 @@ import { useUserStore } from '../stores/userStore'
 import AppIllustration from './AppIllustration.vue'
 
 export default {
-  name: 'TaskList',
+  name: 'OpenTasksList',
   components: {
     InputText,
     SnackbarOverlay,
     ModalOverlay,
     AppIllustration,
+  },
+  props: {
+    listHeadline: {
+      type: String,
+      default: 'Open tasks',
+    },
+    showViewAll: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -185,6 +195,9 @@ export default {
     },
   },
   methods: {
+    goToAllTasksView() {
+      this.router.push({ name: 'all-tasks' })
+    },
     startTask(task) {
       this.taskStore.setCurrentTask(task)
       this.userStore.setCurrentStep('countdown')

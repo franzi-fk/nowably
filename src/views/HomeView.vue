@@ -6,14 +6,14 @@
       <span>Let's defeat procrastination now.</span>
     </section>
     <div class="tile-container">
-      <TaskList />
+      <OpenTasksList listHeadline="Tasks" />
       <CompletionCardsTile />
     </div>
   </div>
 </template>
 
 <script>
-import TaskList from '../components/TaskList.vue'
+import OpenTasksList from '../components/OpenTasksList.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
@@ -21,7 +21,7 @@ import CompletionCardsTile from '../components/CompletionCardsTile.vue'
 
 export default {
   components: {
-    TaskList,
+    OpenTasksList,
     CompletionCardsTile,
   },
   data() {
@@ -53,6 +53,10 @@ export default {
     color-mix(in srgb, var(--terra-01) 50%, transparent),
     var(--base-sand)
   );
+}
+
+.tile-container {
+  width: 100%;
 }
 
 .welcome-message {

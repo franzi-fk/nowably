@@ -6,6 +6,7 @@ import TaskInProgressView from '../views/TaskInProgressView.vue'
 import TaskSuccessView from '../views/TaskSuccessView.vue'
 import AfterHelpView from '../views/AfterHelpView.vue'
 import CompletionCardsView from '../views/CompletionCardsView.vue'
+import AllTasksView from '../views/AllTasksView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/completion-cards',
       name: 'completion-cards',
       component: CompletionCardsView,
+    },
+    {
+      path: '/all-tasks',
+      name: 'all-tasks',
+      component: AllTasksView,
     },
   ],
   scrollBehavior() {

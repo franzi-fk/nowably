@@ -3,7 +3,7 @@
     <h1>
       <img src="@/assets/logo-nowably.svg" alt="Logo Nowably" id="logo" @click="goToHome()" />
     </h1>
-    <LinkButton type="icon" icon="menu" iconSize="28" iconColor="#201A1A" />
+    <!-- <LinkButton type="icon" icon="menu" iconSize="28" iconColor="#201A1A" /> -->
   </div>
 </template>
 

@@ -9,6 +9,9 @@ export const useTaskStore = defineStore('taskStore', {
     openTasks() {
       return this.tasks.filter((task) => task.doneState === false)
     },
+    doneTasks() {
+      return this.tasks.filter((task) => task.doneState === true)
+    },
   },
   actions: {
     addTask(task) {
@@ -22,6 +25,9 @@ export const useTaskStore = defineStore('taskStore', {
     },
     deleteTask(taskId) {
       this.tasks = this.tasks.filter((task) => task.id !== taskId)
+    },
+    deleteAllDoneTasks() {
+      this.tasks = this.tasks.filter((task) => task.doneState === false)
     },
     saveTasksToStorage() {
       localStorage.setItem('tasks', JSON.stringify(this.tasks))
