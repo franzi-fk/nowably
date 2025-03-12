@@ -23,7 +23,7 @@
         <section class="split-task-form">
           <p id="current-task">{{ taskStore.currentTask.description }}</p>
           <p>Create at least 2 tasks that will replace the original task.</p>
-          <form @submit.prevent="handleSplitting">
+          <form @submit.prevent="confirmSplitting">
             <fieldset>
               <InputText
                 v-model="splitTask1"
@@ -162,6 +162,14 @@
     :variant="snackbar.variant"
     :duration="snackbar.duration"
   />
+  <!-- Modal -->
+  <ModalOverlay
+    :isVisible="isModalVisible"
+    :text="modalText"
+    :headline="modalHeadline"
+    :actions="modalActions"
+    @update:isVisible="isModalVisible = $event"
+  />
 </template>
 
 <script>
@@ -170,6 +178,7 @@ import HummingAnimation from '../components/HummingAnimation.vue'
 import InputText from '../components/InputText.vue'
 import SnackbarOverlay from '../components/SnackbarOverlay.vue'
 import SolidButton from '../components/SolidButton.vue'
+import ModalOverlay from '../components/ModalOverlay.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
@@ -182,6 +191,7 @@ export default {
     InputText,
     SolidButton,
     SnackbarOverlay,
+    ModalOverlay,
   },
   data() {
     return {
@@ -194,6 +204,17 @@ export default {
         variant: 'info',
         duration: 3000,
       },
+      isModalVisible: false,
+      modalText: '',
+      modalHeadline: '',
+      modalActions: [
+        {
+          text: 'Confirm',
+          onClick: () => {},
+          backgroundColor: 'var(--primary)',
+          textColor: 'var(--base-white)',
+        },
+      ],
       relaxExerciseStarted: false,
       animationDuration: 120, // in seconds
       hummingAnimationCompleted: false,
@@ -205,6 +226,40 @@ export default {
     }
   },
   methods: {
+    openModal() {
+      this.isModalVisible = true
+    },
+    closeModal() {
+      this.isModalVisible = false
+    },
+    confirmSplitting() {
+      // Define the modal content dynamically
+      this.modalHeadline = `Replace task`
+      this.modalText = `Are you sure you want to replace the current task with the new ones?`
+
+      // Define the actions for the modal dynamically
+      this.modalActions = [
+        {
+          text: 'Cancel',
+          onClick: () => {
+            this.closeModal()
+          },
+          backgroundColor: 'var(--base-sand)',
+          textColor: 'var(--base-black)',
+        },
+        {
+          text: 'Replace task',
+          onClick: () => {
+            this.handleSplitting()
+            this.closeModal()
+          },
+          backgroundColor: 'var(--primary)',
+          textColor: 'white',
+        },
+      ]
+      // Show the modal
+      this.openModal()
+    },
     handleSplitting() {
       // Check if the split task descriptions are not empty
       const splitTasks = [

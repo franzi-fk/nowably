@@ -1,7 +1,7 @@
 <template>
   <section class="task-list-container">
     <div class="task-list-header">
-      <h2>My tasks</h2>
+      <h2>Tasks</h2>
       <LinkButton type="text" text="View all" />
     </div>
 

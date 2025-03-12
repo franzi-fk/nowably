@@ -45,7 +45,12 @@
       </form>
     </section>
     <section class="actions after-help-view-footer">
-      <LinkButton type="text" text="Go back" @click="backToLastStep" />
+      <LinkButton
+        type="text"
+        text="Go back"
+        @click="backToLastStep"
+        v-if="this.userStore.currentEmotion !== 'overwhelmed'"
+      />
     </section>
   </section>
   <!-- Snackbar -->
