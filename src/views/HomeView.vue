@@ -5,7 +5,10 @@
       <h1>Welcome</h1>
       <span>Let's defeat procrastination now.</span>
     </section>
-    <TaskList />
+    <div class="tile-container">
+      <TaskList />
+      <CompletionCardsTile />
+    </div>
   </div>
 </template>
 
@@ -14,10 +17,12 @@ import TaskList from '../components/TaskList.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
+import CompletionCardsTile from '../components/CompletionCardsTile.vue'
 
 export default {
   components: {
     TaskList,
+    CompletionCardsTile,
   },
   data() {
     return {
@@ -62,6 +67,13 @@ span {
   font-size: 1.25rem;
   font-weight: 500;
   letter-spacing: 0.0313rem;
+}
+
+.tile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-bottom: 5rem;
 }
 
 @media (min-width: 992px) {

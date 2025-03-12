@@ -78,7 +78,12 @@ export default {
         // Update the task's doneState in the tasks array
         this.taskStore.updateTask(updatedTask.id, { doneState: this.taskComplete })
 
-        // Since it's the current task, update currentTask as well
+        // If user marks task as completed, increase successCount in userStore
+        if (this.taskComplete) {
+          this.userStore.increaseTotalSuccessCount()
+        }
+
+        // Update currentTask
         this.taskStore.setCurrentTask(updatedTask)
         this.taskStore.saveTasksToStorage()
         this.userStore.setCurrentStep('success')

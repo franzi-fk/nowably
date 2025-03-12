@@ -399,7 +399,7 @@ export default {
   gap: 0.2rem;
   width: 100%;
   background-color: var(--base-white);
-  padding-block: 2.5rem;
+  padding-block: 2.5rem 3rem;
   border-radius: 1.5rem;
 }
 

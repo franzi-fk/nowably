@@ -1,19 +1,34 @@
 <template>
   <div class="header-container">
-    <h1><img src="@/assets/logo-nowably.svg" alt="Logo Nowably" id="logo" /></h1>
+    <h1>
+      <img src="@/assets/logo-nowably.svg" alt="Logo Nowably" id="logo" @click="goToHome()" />
+    </h1>
     <LinkButton type="icon" icon="menu" iconSize="28" iconColor="#201A1A" />
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
+
 export default {
   name: 'AppHeader',
+  data() {
+    return {
+      router: useRouter(),
+    }
+  },
+  methods: {
+    goToHome() {
+      this.router.push({ name: 'home' })
+    },
+  },
 }
 </script>
 
 <style scoped>
 #logo {
   margin-top: 0.75rem;
+  cursor: pointer;
 }
 
 .header-container {

@@ -3,8 +3,9 @@ import CountdownView from '../views/CountdownView.vue'
 import HomeView from '../views/HomeView.vue'
 import NeedHelpView from '../views/NeedHelpView.vue'
 import TaskInProgressView from '../views/TaskInProgressView.vue'
-import TaskSuccess from '../views/TaskSuccess.vue'
+import TaskSuccessView from '../views/TaskSuccessView.vue'
 import AfterHelpView from '../views/AfterHelpView.vue'
+import CompletionCardsView from '../views/CompletionCardsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,9 +38,17 @@ const router = createRouter({
     {
       path: '/task-success',
       name: 'task-success',
-      component: TaskSuccess,
+      component: TaskSuccessView,
+    },
+    {
+      path: '/completion-cards',
+      name: 'completion-cards',
+      component: CompletionCardsView,
     },
   ],
+  scrollBehavior() {
+    return { top: 0 } // Always scroll to top
+  },
 })
 
 export default router
