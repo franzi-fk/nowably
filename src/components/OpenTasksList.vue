@@ -2,7 +2,12 @@
   <section class="task-list-container">
     <div class="task-list-header">
       <h2>{{ listHeadline }}</h2>
-      <LinkButton v-if="showViewAll" type="text" text="View all" @click="goToAllTasksView" />
+      <LinkButton
+        v-if="showViewAll && taskStore.openTasks.length > 0"
+        type="text"
+        text="View all"
+        @click="goToAllTasksView"
+      />
     </div>
 
     <div class="task-list-body">

@@ -53,6 +53,7 @@ export default {
   }
   .header-container {
     height: auto;
+    padding: 1rem 1.8rem 1rem 1.8rem;
   }
 }
 </style>

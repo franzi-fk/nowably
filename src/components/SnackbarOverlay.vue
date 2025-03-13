@@ -1,5 +1,11 @@
 <template>
-  <div v-if="visible" :class="['snackbar', variantClass]" role="alert" aria-live="assertive">
+  <div
+    v-if="visible"
+    :class="['snackbar', variantClass]"
+    :style="{ bottom: snackbarBottom }"
+    role="alert"
+    aria-live="assertive"
+  >
     <AppIcon :name="iconName" class="snackbar-icon" size="20" />
     <span class="snackbar-text">{{ text }}</span>
   </div>
@@ -31,6 +37,7 @@ export default {
     return {
       visible: false, // Initially hidden
       snackbarTimeout: null, // Store the timeout reference to clear it
+      keyboardOpen: false, // Track if keyboard is open
     }
   },
   computed: {
@@ -46,22 +53,43 @@ export default {
       }
       return icons[this.variant] || 'info'
     },
+    snackbarBottom() {
+      return this.keyboardOpen ? '8rem' : '2rem'
+    },
   },
   methods: {
-    // Method to show the snackbar with a new message
     show() {
       this.visible = true
 
-      // Clear any previous timeout if present
       if (this.snackbarTimeout) {
         clearTimeout(this.snackbarTimeout)
       }
 
-      // Set a new timeout to hide the snackbar after the specified duration
       this.snackbarTimeout = setTimeout(() => {
         this.visible = false
       }, this.duration)
     },
+
+    adjustSnackbarPosition() {
+      if (!window.visualViewport) return
+
+      const viewportHeight = window.visualViewport.height
+      this.keyboardOpen = viewportHeight < window.innerHeight * 0.7
+    },
+  },
+  mounted() {
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', this.adjustSnackbarPosition)
+    } else {
+      window.addEventListener('resize', this.adjustSnackbarPosition)
+    }
+  },
+  beforeUnmount() {
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', this.adjustSnackbarPosition)
+    } else {
+      window.removeEventListener('resize', this.adjustSnackbarPosition)
+    }
   },
 }
 </script>
@@ -71,7 +99,6 @@ export default {
   display: flex;
   align-items: center;
   position: fixed;
-  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
   padding: 0.8rem 1.25rem 0.8rem 1rem;
@@ -82,6 +109,7 @@ export default {
   opacity: 100;
   transition: opacity 0.3s ease;
   z-index: 1000;
+  width: 85%;
 }
 .snackbar.snackbar-success {
   background-color: var(--base-white);
@@ -125,7 +153,16 @@ export default {
 }
 
 .snackbar-text {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--base-black);
+}
+
+/*_________________________________________________________________________*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .snackbar {
+    width: auto;
+  }
 }
 </style>
