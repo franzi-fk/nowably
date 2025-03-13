@@ -21,6 +21,7 @@
   --terra-01: #d09983;
   --terra-02: #a8766c;
   --terra-03: #9e605a;
+  --terra-04: #95786f;
   --sky-01: #9dd1fe;
   --cloud-01: #f2f2f2;
   --cloud-02: #d8d8d8;
@@ -36,11 +37,6 @@
     0deg,
     color-mix(in srgb, var(--terra-01) 40%, var(--sand-04)),
     var(--sand-04)
-  );
-  --radial-sand-01: radial-gradient(
-    circle at 50%,
-    color-mix(in srgb, var(--terra-01) 80%, transparent),
-    var(--base-sand) 60%
   );
 }
 
@@ -131,7 +127,7 @@ h3 {
 }
 
 .task-progress-headline {
-  color: var(--terra-03);
+  color: var(--terra-04);
   padding-inline: 1.3rem;
   max-width: 40ch;
   white-space: normal;

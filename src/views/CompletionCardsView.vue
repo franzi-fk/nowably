@@ -35,7 +35,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import CompletionCard from '../components/CompletionCard.vue'
+import CompletionCard from '@/components/DataDisplay/CompletionCard.vue'
 import { useUserStore } from '../stores/userStore'
 
 export default {

@@ -5,10 +5,10 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import SolidButton from './components/SolidButton.vue'
-import LinkButton from './components/LinkButton.vue'
-import AppIcon from './components/AppIcon.vue'
-import AppHeader from './components/AppHeader.vue'
+import SolidButton from '@/components/InputsAndControls/SolidButton.vue'
+import LinkButton from '@/components/InputsAndControls/LinkButton.vue'
+import AppIcon from '@/components/Visuals/AppIcon.vue'
+import AppHeader from '@/components/Navigation/AppHeader.vue'
 
 const app = createApp(App)
 

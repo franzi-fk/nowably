@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import OpenTasksList from '../components/OpenTasksList.vue'
+import OpenTasksList from '@/components/DataDisplay/OpenTasksList.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
-import CompletionCardsTile from '../components/CompletionCardsTile.vue'
+import CompletionCardsTile from '@/components/DataDisplay/CompletionCardsTile.vue'
 
 export default {
   components: {

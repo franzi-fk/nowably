@@ -12,7 +12,7 @@
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.doneTasks.length === 0">
-        <AppIllustration name="empty-state" width="16rem" opacity="0.9" />
+        <EmptyStateSvg />
         <p>No completed tasks yet.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.doneTasks" :key="task.id">
@@ -50,19 +50,19 @@
 </template>
 
 <script>
-import SnackbarOverlay from './SnackbarOverlay.vue'
-import ModalOverlay from './ModalOverlay.vue'
+import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
+import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '../stores/userStore'
-import AppIllustration from './AppIllustration.vue'
+import { useUserStore } from '@/stores/userStore'
+import EmptyStateSvg from '@/components/Visuals/EmptyStateSvg.vue'
 
 export default {
   name: 'DoneTasksList',
   components: {
     SnackbarOverlay,
     ModalOverlay,
-    AppIllustration,
+    EmptyStateSvg,
   },
   props: {
     listHeadline: {

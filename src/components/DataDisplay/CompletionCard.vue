@@ -149,18 +149,31 @@ export default {
           const words = milestoneData.title.split(' ')
           const identifier = words.length > 1 ? words[words.length - 1].toLowerCase() : 'default'
 
-          // Use new URL() for proper path resolution
-          const imagePath = new URL(`../assets/cc-graphics/cc_${identifier}.png`, import.meta.url)
-            .href
+          // Direct path reference for assets in public/cc-graphics/
+          const imagePath = `/cc-graphics/cc_${identifier}.png` // No need for `new URL()` here
 
-          this.completionCardMilestones[milestone].image = imagePath
+          // Check if the image exists (optional, for error handling)
+          const imageExists = await this.checkImageExists(imagePath)
+          if (imageExists) {
+            this.completionCardMilestones[milestone].image = imagePath
+          } else {
+            // Fallback to default image if the image does not exist
+            this.completionCardMilestones[milestone].image = '/cc-graphics/default-image.png'
+          }
         } catch (error) {
           console.error(`Failed to load image for milestone ${milestone}:`, error)
-          this.completionCardMilestones[milestone].image = new URL(
-            '../assets/cc-graphics/default-image.png',
-            import.meta.url,
-          ).href
+          // Default image path in case of error
+          this.completionCardMilestones[milestone].image = '/cc-graphics/default-image.png'
         }
+      }
+    },
+
+    async checkImageExists(imagePath) {
+      try {
+        const response = await fetch(imagePath, { method: 'HEAD' })
+        return response.ok // Returns true if the image exists
+      } catch (error) {
+        return console.log(error)
       }
     },
   },
@@ -234,7 +247,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/cc-graphics/cc-backside-pattern.png'); /* Fixed backside image */
+  background-image: url('/cc-graphics/cc-backside-pattern.png'); /* Fixed backside image */
   background-size: cover;
   background-position: center;
   color: var(--base-white);

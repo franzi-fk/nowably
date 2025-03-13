@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import InputRadio from '../components/InputRadio.vue'
+import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'

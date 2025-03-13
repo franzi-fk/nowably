@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import TaskCountdown from '../components/TaskCountdown.vue'
+import TaskCountdown from '@/components/Animations/TaskCountdown.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'

@@ -15,8 +15,8 @@
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/userStore'
 import { useTaskStore } from '../stores/taskStore'
-import OpenTasksList from '../components/OpenTasksList.vue'
-import DoneTasksList from '../components/DoneTasksList.vue'
+import OpenTasksList from '@/components/DataDisplay/OpenTasksList.vue'
+import DoneTasksList from '@/components/DataDisplay/DoneTasksList.vue'
 
 export default {
   name: 'CompletionCardsView',

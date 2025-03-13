@@ -176,14 +176,14 @@
 </template>
 
 <script>
-import GeneralCountdown from '../components/GeneralCountdown.vue'
-import HummingAnimation from '../components/HummingAnimation.vue'
-import InputText from '../components/InputText.vue'
-import SnackbarOverlay from '../components/SnackbarOverlay.vue'
-import SolidButton from '../components/SolidButton.vue'
-import ModalOverlay from '../components/ModalOverlay.vue'
-import { useTaskStore } from '../stores/taskStore'
-import { useUserStore } from '../stores/userStore'
+import GeneralCountdown from '@/components/Animations/GeneralCountdown.vue'
+import HummingAnimation from '@/components/Animations/HummingAnimation.vue'
+import InputText from '@/components/InputsAndControls/InputText.vue'
+import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
+import SolidButton from '@/components/InputsAndControls/SolidButton.vue'
+import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
+import { useTaskStore } from '@/stores/taskStore'
+import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 
 export default {

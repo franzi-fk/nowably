@@ -12,7 +12,7 @@
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
-        <AppIllustration name="empty-state" width="16rem" opacity="0.9" />
+        <EmptyStateSvg />
         <p>No open tasks. Create a new one.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
@@ -138,13 +138,13 @@
 </template>
 
 <script>
-import InputText from './InputText.vue'
-import SnackbarOverlay from './SnackbarOverlay.vue'
-import ModalOverlay from './ModalOverlay.vue'
+import InputText from '@/components/InputsAndControls/InputText.vue'
+import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
+import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '../stores/userStore'
-import AppIllustration from './AppIllustration.vue'
+import { useUserStore } from '@/stores/userStore'
+import EmptyStateSvg from '@/components/Visuals/EmptyStateSvg.vue'
 
 export default {
   name: 'OpenTasksList',
@@ -152,7 +152,7 @@ export default {
     InputText,
     SnackbarOverlay,
     ModalOverlay,
-    AppIllustration,
+    EmptyStateSvg,
   },
   props: {
     listHeadline: {

@@ -24,14 +24,7 @@
 </template>
 
 <script>
-import LinkButton from './LinkButton.vue'
-import SolidButton from './SolidButton.vue'
-
 export default {
-  components: {
-    SolidButton,
-    LinkButton,
-  },
   props: {
     isVisible: {
       type: Boolean,

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import AppIcon from '@/components/AppIcon.vue'
+import AppIcon from '@/components/Visuals/AppIcon.vue'
 
 export default {
   components: { AppIcon },

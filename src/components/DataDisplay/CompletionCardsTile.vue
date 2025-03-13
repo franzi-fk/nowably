@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import { useUserStore } from '../stores/userStore'
-import CompletionCard from './CompletionCard.vue'
+import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
+import CompletionCard from '@/components/DataDisplay/CompletionCard.vue'
 
 export default {
   name: 'CompletionCardsTile',

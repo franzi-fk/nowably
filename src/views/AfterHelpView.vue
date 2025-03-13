@@ -63,17 +63,15 @@
 </template>
 
 <script>
-import SolidButton from '../components/SolidButton.vue'
-import SnackbarOverlay from '../components/SnackbarOverlay.vue'
-import InputSelect from '../components/InputSelect.vue'
+import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
+import InputSelect from '@/components/InputsAndControls/InputSelect.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
-import InputRadio from '../components/InputRadio.vue'
+import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
 import { useUserStore } from '../stores/userStore'
 
 export default {
   components: {
-    SolidButton,
     InputSelect,
     SnackbarOverlay,
     InputRadio,
