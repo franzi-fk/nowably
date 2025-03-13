@@ -145,7 +145,7 @@ export default {
 .after-help-view {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--base-sand);
+  background-image: var(--linear-sand-01);
   display: flex;
   flex-direction: column;
 }

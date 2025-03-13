@@ -140,16 +140,19 @@
           type="text"
           text="I feel demotivated"
           @click="userStore.setCurrentEmotion('demotivated')"
+          backgroundColor="var(--cotton-01)"
         />
         <SolidButton
           type="text"
           text="I feel overwhelmed"
           @click="userStore.setCurrentEmotion('overwhelmed')"
+          backgroundColor="var(--cotton-01)"
         />
         <SolidButton
           type="text"
           text="I feel anxious"
           @click="userStore.setCurrentEmotion('anxious')"
+          backgroundColor="var(--cotton-01)"
         />
         <LinkButton type="text" text="Go back" @click="backToCountdown" />
       </div>
@@ -378,7 +381,14 @@ export default {
 }
 
 .need-help-view {
-  background-image: radial-gradient(circle at 50%, var(--terra-01), var(--base-sand));
+  background-color: white;
+  background-image: var(--linear-sand-01);
+}
+
+#whats-wrong {
+  background-color: white;
+  background-image: var(--linear-sand-01);
+  width: 100vw;
 }
 
 .help-sub-view {
@@ -388,7 +398,7 @@ export default {
   min-width: 100vw;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  background-color: var(--base-sand);
+  background-color: var(--linear-sand-01);
   text-align: center;
 }
 

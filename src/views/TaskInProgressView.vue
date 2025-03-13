@@ -8,7 +8,12 @@
       {{ this.taskStore.currentTask.description }}
     </h2>
     <span class="task-progress-body-text">Keep going!</span>
-    <SolidButton type="text" text="Stop" @click="userStore.setCurrentStep('documentTaskStatus')" />
+    <SolidButton
+      type="text"
+      text="Stop"
+      @click="userStore.setCurrentStep('documentTaskStatus')"
+      backgroundColor="var(--cotton-01)"
+    />
   </article>
   <article
     class="document-task-status flex-grow page-padding-inline"
@@ -119,13 +124,13 @@ export default {
 }
 
 .in-progress-view {
-  background-image: radial-gradient(circle at 50%, var(--terra-01), var(--base-sand));
+  background-image: var(--linear-sand-01);
 }
 
 .document-task-status {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--base-sand);
+  background-image: var(--linear-sand-01);
   display: flex;
   flex-direction: column;
 }

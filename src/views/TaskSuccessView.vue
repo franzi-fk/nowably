@@ -48,6 +48,6 @@ export default {
   justify-content: center;
   gap: 3rem;
   align-items: center;
-  background-color: var(--base-sand);
+  background-image: var(--linear-sand-01);
 }
 </style>

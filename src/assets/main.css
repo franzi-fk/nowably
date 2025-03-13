@@ -13,9 +13,11 @@
   --info: rgb(87, 87, 175);
 
   /* Other */
+  --cotton-01: #f9f2ee;
   --sand-01: #fbf0eb;
   --sand-02: #f3e9e4;
   --sand-03: #ccb9af;
+  --sand-04: #f1dac6;
   --terra-01: #d09983;
   --terra-02: #a8766c;
   --terra-03: #9e605a;
@@ -23,6 +25,23 @@
   --cloud-01: #f2f2f2;
   --cloud-02: #d8d8d8;
   --cloud-03: #afafaf;
+
+  /* Gradients */
+  --linear-sand-01: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--terra-01) 50%, transparent),
+    var(--base-sand)
+  );
+  --linear-sand-02: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--terra-01) 40%, var(--sand-04)),
+    var(--sand-04)
+  );
+  --radial-sand-01: radial-gradient(
+    circle at 50%,
+    color-mix(in srgb, var(--terra-01) 80%, transparent),
+    var(--base-sand) 60%
+  );
 }
 
 * {

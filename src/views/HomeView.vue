@@ -48,11 +48,7 @@ export default {
   gap: 2rem;
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(
-    0deg,
-    color-mix(in srgb, var(--terra-01) 50%, transparent),
-    var(--base-sand)
-  );
+  background-image: var(--linear-sand-01);
 }
 
 .tile-container {
