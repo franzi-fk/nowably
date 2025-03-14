@@ -12,11 +12,12 @@
         <SolidButton
           v-for="(action, index) in actions"
           :key="index"
-          @click.once="action.onClick"
+          @click="action.onClick"
           type="text"
           :text="action.text"
           :backgroundColor="action.backgroundColor"
           :textColor="action.textColor"
+          :stopPropagation="true"
         />
       </div>
     </div>

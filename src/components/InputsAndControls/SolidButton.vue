@@ -43,6 +43,10 @@ export default {
       default: 'left',
       validator: (value) => ['left', 'right'].includes(value),
     },
+    stopPropagation: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     buttonStyle() {
@@ -63,8 +67,13 @@ export default {
     },
   },
   methods: {
-    handleClick() {
-      this.$emit('click')
+    handleClick(event) {
+      if (this.stopPropagation) {
+        event.stopPropagation() // Prevent event bubbling if stopPropagation is true
+      }
+      if (!this.stopPropagation) {
+        this.$emit('click', event) // Only emit if stopPropagration is false
+      }
     },
   },
 }

@@ -18,6 +18,14 @@ export const useTaskStore = defineStore('taskStore', {
     doneTasks() {
       return this.tasks.filter((task) => task.doneState === true)
     },
+    // Get count of completed tasks in the last 24 hours
+    completedTasksCountLast24h() {
+      const now = new Date()
+      const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000) // 24 hours ago
+      return this.tasks.filter((task) => {
+        return task.successAt && new Date(task.successAt) >= oneDayAgo
+      }).length
+    },
   },
   actions: {
     addTask(task) {

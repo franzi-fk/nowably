@@ -7,9 +7,12 @@
     </section>
     <div class="tile-container">
       <OpenTasksList listHeadline="Tasks" />
-      <router-link to="/send-message-in-bottle">
-        <SolidButton type="text" text="create mebo" />
-      </router-link>
+      <CreateMeboBanner
+        v-if="
+          this.userStore.role === 'admin' ||
+          (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens > 0)
+        "
+      />
       <CompletionCardsTile />
     </div>
   </div>
@@ -17,15 +20,17 @@
 
 <script>
 import OpenTasksList from '@/components/DataDisplay/OpenTasksList.vue'
-import { useTaskStore } from '../stores/taskStore'
+import { useTaskStore } from '@/stores/taskStore'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '@/stores/userStore'
 import CompletionCardsTile from '@/components/DataDisplay/CompletionCardsTile.vue'
+import CreateMeboBanner from '@/components/DataDisplay/CreateMeboBanner.vue'
 
 export default {
   components: {
     OpenTasksList,
     CompletionCardsTile,
+    CreateMeboBanner,
   },
   data() {
     return {

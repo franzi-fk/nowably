@@ -3,6 +3,7 @@
   <article class="create-mebo-view-container flex-grow view-layout-default">
     <section class="create-mebo-header page-padding-inline">
       <h1>Send a Message in a Bottle</h1>
+      <p>You can write {{ this.userStore.availableMeboTokens }} more messages today.</p>
       <p>
         Write what you would tell a friend who is struggling to start a task or simply feeling
         demotivated. Make sure it's in English, anonymous, and neutral, so anyone reading it can
@@ -39,6 +40,13 @@
     </section>
   </article>
   <!-- Modal -->
+  <!-- <DialogOverlay
+    :isVisible="isModalVisible"
+    headline="Confirm Action"
+    text="Are you sure you want to proceed?"
+    :onConfirm="handleConfirm"
+    @update:isVisible="isModalVisible = $event"
+  /> -->
   <ModalOverlay
     :isVisible="isModalVisible"
     :text="modalText"
@@ -55,7 +63,7 @@ import { useTaskStore } from '@/stores/taskStore'
 import { useMeboStore } from '@/stores/meboStore'
 import InputText from '@/components/InputsAndControls/InputText.vue'
 import InputCheckbox from '@/components/InputsAndControls/InputCheckbox.vue'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
+import ModalOverlay from '../components/ContainersAndLayouts/ModalOverlay.vue'
 
 export default {
   name: 'CreateMeboView',
@@ -86,13 +94,20 @@ export default {
     }
   },
   methods: {
+    handleConfirm() {
+      this.sendMebo()
+      this.closeModal()
+    },
     openModal() {
-      console.log('modal opened')
       this.isModalVisible = true
     },
     closeModal() {
-      console.log('modal closed')
       this.isModalVisible = false
+    },
+    sendMebo() {
+      this.meboStore.addNewMebo(this.inputMessage)
+      this.userStore.increaseDailyMeboCreationCount()
+      console.log('mebo sent')
     },
     confirmMebo() {
       // Define the modal content dynamically
@@ -114,6 +129,7 @@ export default {
           text: 'Send message',
           onClick: () => {
             this.meboStore.addNewMebo(this.inputMessage)
+            this.userStore.increaseDailyMeboCreationCount()
             console.log('confirmMebo triggered')
             this.closeModal()
           },
@@ -130,6 +146,10 @@ export default {
     this.userStore.initLoad()
     this.taskStore.initLoad()
     this.meboStore.initLoad()
+    // If role is not admin and dailyMeboCreation count >= 3
+    if (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0) {
+      this.$router.push({ name: 'home' })
+    }
   },
 }
 </script>
