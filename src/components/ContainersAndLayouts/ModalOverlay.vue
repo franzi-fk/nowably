@@ -12,7 +12,7 @@
         <SolidButton
           v-for="(action, index) in actions"
           :key="index"
-          @click="action.onClick"
+          @click.once="action.onClick"
           type="text"
           :text="action.text"
           :backgroundColor="action.backgroundColor"

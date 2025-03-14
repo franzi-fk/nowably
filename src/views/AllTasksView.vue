@@ -4,10 +4,12 @@
     <section class="tasks-view-header page-padding-inline">
       <h1>Tasks</h1>
     </section>
-    <section class="open-tasks">
-      <OpenTasksList :showViewAll="false" />
-    </section>
-    <section class="done-tasks"><DoneTasksList :showViewAll="false" /></section>
+    <div class="tile-container">
+      <section class="open-tasks">
+        <OpenTasksList :showViewAll="false" />
+      </section>
+      <section class="done-tasks"><DoneTasksList :showViewAll="false" /></section>
+    </div>
   </article>
 </template>
 
@@ -62,6 +64,14 @@ export default {
 .done-tasks,
 .task-list-container {
   width: 100%;
+}
+
+.tile-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-bottom: 5rem;
 }
 
 /*________________________________________________________________*/

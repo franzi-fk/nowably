@@ -3,23 +3,39 @@
     <h1>
       <img src="@/assets/logo-nowably.svg" alt="Logo Nowably" id="logo" @click="goToHome()" />
     </h1>
+    <div class="role-container">
+      <LinkButton type="text" text="Make me User" @click="setRoleToUser" />
+      <LinkButton type="text" text="Make me Admin" @click="setRoleToAdmin" />
+    </div>
     <!-- <LinkButton type="icon" icon="menu" iconSize="28" iconColor="#201A1A" /> -->
   </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
+import LinkButton from '@/components/InputsAndControls/LinkButton.vue'
+import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'AppHeader',
+  components: {
+    LinkButton,
+  },
   data() {
     return {
       router: useRouter(),
+      userStore: useUserStore(),
     }
   },
   methods: {
     goToHome() {
       this.router.push({ name: 'home' })
+    },
+    setRoleToAdmin() {
+      this.userStore.setRoleToAdmin()
+    },
+    setRoleToUser() {
+      this.userStore.setRoleToUser()
     },
   },
 }
@@ -46,11 +62,16 @@ export default {
   left: 0;
 }
 
+.role-container {
+  display: flex;
+  gap: 2rem;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .btn-link {
+  /* .btn-link {
     display: none;
-  }
+  } */
   .header-container {
     height: auto;
     padding: 1rem 1.8rem 1rem 1.8rem;

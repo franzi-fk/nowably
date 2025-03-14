@@ -7,6 +7,9 @@
     </section>
     <div class="tile-container">
       <OpenTasksList listHeadline="Tasks" />
+      <router-link to="/send-message-in-bottle">
+        <SolidButton type="text" text="create mebo" />
+      </router-link>
       <CompletionCardsTile />
     </div>
   </div>
@@ -51,10 +54,6 @@ export default {
   background-image: var(--linear-sand-01);
 }
 
-.tile-container {
-  width: 100%;
-}
-
 .welcome-message {
   display: flex;
   flex-direction: column;
@@ -70,6 +69,7 @@ span {
 }
 
 .tile-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 3rem;

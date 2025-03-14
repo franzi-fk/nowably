@@ -3,7 +3,10 @@
     <div class="task-list-header">
       <h2>{{ listHeadline }}</h2>
       <LinkButton
-        v-if="showViewAll && taskStore.openTasks.length > 0"
+        v-if="
+          (showViewAll && taskStore.openTasks.length > 0) ||
+          (showViewAll && taskStore.doneTasks.length > 0)
+        "
         type="text"
         text="View all"
         @click="goToAllTasksView"
@@ -12,7 +15,7 @@
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
-        <EmptyStateSvg />
+        <EmptyStateSvg :width="15" />
         <p>No open tasks. Create a new one.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
@@ -30,6 +33,7 @@
             name="edit-task-input"
             id="edit-task-input"
             maxLength="80"
+            label="Task description"
           />
           <AppIcon name="chevronDown" :class="{ rotated: expandedRow === task.id }" />
         </div>
@@ -97,6 +101,7 @@
           v-model="inpNewTask"
           placeholder="Enter your task"
           maxLength="80"
+          label="Task description"
           @keydown.enter.prevent="saveNewTask"
           @keydown.esc.prevent="cancelCreatingTask"
           @blur="
@@ -372,6 +377,8 @@ export default {
         id: this.generateUniqueId(),
         description: newTaskDesc,
         doneState: false,
+        meboId: null,
+        successAt: null,
       }
       this.taskStore.addTask(newTask)
       this.taskStore.saveTasksToStorage()

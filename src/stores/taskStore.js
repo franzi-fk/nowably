@@ -3,6 +3,12 @@ import { defineStore } from 'pinia'
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
     tasks: [], // Full list of tasks
+    // Example task object:
+    // {description: "Test",
+    // doneState: false,
+    // id: "20250313T120344669Z66923",
+    // meboId: null,
+    // successAt: null}
     currentTask: null, // Task currently being worked on
   }),
   getters: {
@@ -34,7 +40,7 @@ export const useTaskStore = defineStore('taskStore', {
     },
     setCurrentTask(task) {
       this.currentTask = task
-      localStorage.setItem('currentTask', JSON.stringify(task)) // Persist across refreshes
+      localStorage.setItem('currentTask', JSON.stringify(task))
     },
     initLoad() {
       const storedCurrentTask = localStorage.getItem('currentTask')

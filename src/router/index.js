@@ -7,6 +7,7 @@ import TaskSuccessView from '../views/TaskSuccessView.vue'
 import AfterHelpView from '../views/AfterHelpView.vue'
 import CompletionCardsView from '../views/CompletionCardsView.vue'
 import AllTasksView from '../views/AllTasksView.vue'
+import CreateMeboView from '../views/CreateMeboView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: '/all-tasks',
       name: 'all-tasks',
       component: AllTasksView,
+    },
+    {
+      path: '/send-message-in-bottle',
+      name: 'send-message-in-bottle',
+      component: CreateMeboView,
     },
   ],
   scrollBehavior() {

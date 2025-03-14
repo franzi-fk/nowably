@@ -1,12 +1,11 @@
 <template>
-  <label :for="id" class="input-label">
+  <label :for="id" class="input-label" id="checkbox-label">
     <input
-      type="radio"
+      type="checkbox"
       :id="id"
       :name="name"
-      :value="value"
       v-model="internalValue"
-      class="custom-input radio"
+      class="custom-input checkbox"
     />
     {{ label }}
   </label>
@@ -14,7 +13,7 @@
 
 <script>
 export default {
-  name: 'InputRadio',
+  name: 'InputCheckbox',
   props: {
     id: {
       type: String,
@@ -23,12 +22,8 @@ export default {
     name: {
       type: String,
     },
-    value: {
-      type: [String, Number, Boolean],
-      required: true,
-    },
     modelValue: {
-      type: [String, Number, Boolean],
+      type: Boolean,
       required: true,
     },
     label: {
@@ -50,7 +45,6 @@ export default {
 </script>
 
 <style scoped>
-/* Label style */
 .input-label {
   cursor: pointer;
   display: flex;
@@ -60,8 +54,7 @@ export default {
   gap: 0.75rem;
 }
 
-/* Default radio button styling with color and size adjustments */
-input[type='radio'] {
+input[type='checkbox'] {
   appearance: radio;
   accent-color: var(--primary);
   -webkit-appearance: radio;
@@ -72,9 +65,9 @@ input[type='radio'] {
   margin: 0.0625rem 0 0 0;
 }
 
-/* Small devices (landscape phones, 576px and up) */
+/* __________________________________________________ */
 @media (min-width: 576px) {
-  input[type='radio'] {
+  input[type='checkbox'] {
     min-width: 1.25rem;
     min-height: 1.25rem;
   }

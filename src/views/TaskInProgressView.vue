@@ -86,6 +86,8 @@ export default {
         // If user marks task as completed, increase successCount in userStore
         if (this.taskComplete) {
           this.userStore.increaseTotalSuccessCount()
+          // Save the timestamp of task completion to task.successAt
+          this.taskStore.updateTask(updatedTask.id, { successAt: new Date().toISOString() })
         }
 
         // Update currentTask
