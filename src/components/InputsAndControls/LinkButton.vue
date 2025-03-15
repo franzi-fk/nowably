@@ -91,6 +91,27 @@ export default {
   font-weight: 500;
   letter-spacing: 0.02rem;
   min-height: 3.125rem;
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
+.btn-icon-text:before,
+.btn-text:before {
+  content: '';
+  position: absolute;
+  top: 80%;
+  left: 1%;
+  width: calc(100% + 0.1rem);
+  height: 2px;
+  background-color: currentColor;
+  opacity: 0.3;
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn-icon-text:hover:before,
+.btn-text:hover:before {
+  transform: scaleX(1);
 }
 
 /* Icon-Only Button */

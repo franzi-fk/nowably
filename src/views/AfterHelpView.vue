@@ -34,13 +34,7 @@
           />
         </fieldset>
         <fieldset>
-          <SolidButton
-            type="text"
-            text="Continue"
-            background-color="var(--primary)"
-            textColor="var(--base-white)"
-            id="btn-continue"
-          />
+          <SolidButton type="text" text="Continue" variant="primary" id="btn-continue" />
         </fieldset>
       </form>
     </section>

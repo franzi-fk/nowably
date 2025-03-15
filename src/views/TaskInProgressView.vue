@@ -12,7 +12,7 @@
       type="text"
       text="Stop"
       @click="userStore.setCurrentStep('documentTaskStatus')"
-      backgroundColor="var(--cotton-01)"
+      variant="tertiary"
     />
   </article>
   <article
@@ -40,13 +40,7 @@
           />
         </fieldset>
         <fieldset>
-          <SolidButton
-            id="btn-continue"
-            type="text"
-            text="Save and continue"
-            backgroundColor="var(--primary)"
-            textColor="var(--base-white)"
-          />
+          <SolidButton id="btn-continue" type="text" text="Save and continue" variant="primary" />
         </fieldset>
       </form>
     </section>

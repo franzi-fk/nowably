@@ -159,6 +159,11 @@ input:focus {
   width: 100%;
 }
 
+input:hover,
+textarea:hover {
+  border-color: color-mix(in srgb, var(--sand-03) 80%, var(--base-black) 20%);
+}
+
 input:disabled {
   opacity: 0.5;
 }
@@ -183,11 +188,13 @@ textarea {
   overflow: auto;
   resize: vertical;
   line-height: 150%;
+  background-color: color-mix(in srgb, var(--base-white) 90%, transparent 10%);
 }
 
 textarea:focus {
   outline: none;
   border-color: var(--base-black);
+  background-color: var(--base-white);
 }
 
 textarea:disabled {

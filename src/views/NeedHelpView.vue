@@ -66,8 +66,8 @@
               <SolidButton
                 type="text"
                 text="Save and continue"
-                backgroundColor="var(--primary)"
-                textColor="var(--base-white)"
+                variant="primary"
+                :disabled="!splitTask1 || !splitTask2"
               />
             </fieldset>
           </form>
@@ -102,8 +102,7 @@
             v-if="!relaxExerciseStarted"
             type="text"
             text="Start"
-            backgroundColor="var(--primary)"
-            textColor="var(--base-white)"
+            variant="primary"
             @click="startExercise"
           />
         </section>
@@ -122,8 +121,7 @@
             type="text"
             text="Continue"
             id="btn-continue"
-            backgroundColor="var(--primary)"
-            textColor="var(--base-white)"
+            variant="primary"
             @click="finishHelp"
           />
         </section>
@@ -140,19 +138,19 @@
           type="text"
           text="I feel demotivated"
           @click="userStore.setCurrentEmotion('demotivated')"
-          backgroundColor="var(--cotton-01)"
+          variant="tertiary"
         />
         <SolidButton
           type="text"
           text="I feel overwhelmed"
           @click="userStore.setCurrentEmotion('overwhelmed')"
-          backgroundColor="var(--cotton-01)"
+          variant="tertiary"
         />
         <SolidButton
           type="text"
           text="I feel anxious"
           @click="userStore.setCurrentEmotion('anxious')"
-          backgroundColor="var(--cotton-01)"
+          variant="tertiary"
         />
         <LinkButton type="text" text="Go back" @click="backToCountdown" />
       </div>
@@ -170,7 +168,8 @@
     :isVisible="isModalVisible"
     :text="modalText"
     :headline="modalHeadline"
-    :actions="modalActions"
+    :primaryActionText="modalPrimaryActionText"
+    :primaryAction="modalPrimaryAction"
     @update:isVisible="isModalVisible = $event"
   />
 </template>
@@ -210,14 +209,8 @@ export default {
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
-      modalActions: [
-        {
-          text: 'Confirm',
-          onClick: () => {},
-          backgroundColor: 'var(--primary)',
-          textColor: 'var(--base-white)',
-        },
-      ],
+      modalPrimaryActionText: '',
+      modalPrimaryAction: null,
       relaxExerciseStarted: false,
       animationDuration: 120, // in seconds
       hummingAnimationCompleted: false,
@@ -240,28 +233,14 @@ export default {
       this.modalHeadline = `Replace task`
       this.modalText = `Are you sure you want to replace the current task with the new ones?`
 
-      // Define the actions for the modal dynamically
-      this.modalActions = [
-        {
-          text: 'Cancel',
-          onClick: () => {
-            this.closeModal()
-          },
-          backgroundColor: 'var(--base-sand)',
-          textColor: 'var(--base-black)',
-        },
-        {
-          text: 'Replace task',
-          onClick: () => {
-            this.handleSplitting()
-            this.closeModal()
-          },
-          backgroundColor: 'var(--primary)',
-          textColor: 'white',
-        },
-      ]
-      // Show the modal
-      this.openModal()
+      // Set dynamic action
+      this.modalPrimaryActionText = 'Replace task'
+      ;(this.modalPrimaryAction = () => {
+        this.handleSplitting()
+        this.closeModal()
+      }),
+        // Show the modal
+        this.openModal()
     },
     handleSplitting() {
       // Check if the split task descriptions are not empty
@@ -389,6 +368,11 @@ export default {
   background-color: white;
   background-image: var(--linear-sand-01);
   width: 100vw;
+}
+
+#whats-wrong .btn-link {
+  width: fit-content;
+  align-self: center;
 }
 
 .help-sub-view {

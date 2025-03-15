@@ -9,14 +9,21 @@
         <p>{{ text }}</p>
       </div>
       <div class="modal-footer">
+        <!-- Cancel button -->
         <SolidButton
-          v-for="(action, index) in actions"
-          :key="index"
-          @click="action.onClick"
+          variant="secondary"
           type="text"
-          :text="action.text"
-          :backgroundColor="action.backgroundColor"
-          :textColor="action.textColor"
+          @click="closeModal"
+          text="Cancel"
+          :stopPropagation="true"
+        />
+
+        <!-- Primary Action button (with custom action) -->
+        <SolidButton
+          type="text"
+          variant="primary"
+          @click="primaryAction"
+          :text="primaryActionText"
           :stopPropagation="true"
         />
       </div>
@@ -39,29 +46,13 @@ export default {
       type: String,
       required: true,
     },
-    actions: {
-      type: Array,
-      default: () => [
-        {
-          text: 'Cancel',
-          onClick: () => {},
-          backgroundColor: 'var(--secondary)',
-          textColor: 'var(--base-black)',
-        },
-        {
-          text: 'Confirm',
-          onClick: () => {},
-          backgroundColor: 'var(--primary)',
-          textColor: 'var(--base-white)',
-        },
-      ],
-      validator(actions) {
-        if (actions.length < 1 || actions.length > 3) {
-          console.warn('Modal must have at least 1 and at most 3 actions.')
-          return false
-        }
-        return true
-      },
+    primaryActionText: {
+      type: String,
+      default: 'Confirm',
+    },
+    primaryAction: {
+      type: [Function, null],
+      required: true,
     },
   },
   methods: {
@@ -98,12 +89,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 2.4rem;
 }
 
 .btn-icon {
   position: absolute;
-  top: 0.7rem;
-  right: 0.7rem;
+  top: -0.5rem;
+  right: -1.2rem;
 }
 
 p {
@@ -113,6 +105,7 @@ p {
 .modal-body {
   text-align: left;
   margin-block: 1.5rem 2.2rem;
+  line-height: 140%;
 }
 
 .modal-footer {

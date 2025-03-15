@@ -82,6 +82,12 @@ export default {
   gap: 2rem;
 }
 
+.mebo-banner-container .btn-icon-text:before {
+  transform: none;
+  background-color: transparent;
+  color: inherit;
+}
+
 /*_________________________________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */

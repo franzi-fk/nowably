@@ -43,7 +43,8 @@
       :isVisible="isModalVisible"
       :text="modalText"
       :headline="modalHeadline"
-      :actions="modalActions"
+      :primaryActionText="modalPrimaryActionText"
+      :primaryAction="modalPrimaryAction"
       @update:isVisible="isModalVisible = $event"
     />
   </section>
@@ -82,14 +83,8 @@ export default {
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
-      modalActions: [
-        {
-          text: 'Confirm',
-          onClick: () => {},
-          backgroundColor: 'var(--primary)',
-          textColor: 'var(--base-white)',
-        },
-      ],
+      modalPrimaryActionText: '',
+      modalPrimaryAction: null,
       editingTaskId: null,
       isMobile: window.innerWidth < 576,
       snackbar: {
@@ -112,27 +107,13 @@ export default {
       this.modalHeadline = `Delete all completed tasks`
       this.modalText = `Are you sure you want to delete all completed tasks? You can't bring them back.`
 
-      // Define the actions for the modal dynamically
-      this.modalActions = [
-        {
-          text: 'Cancel',
-          onClick: () => {
-            this.closeModal()
-          },
-          backgroundColor: 'var(--base-sand)',
-          textColor: 'var(--base-black)',
-        },
-        {
-          text: 'Delete tasks',
-          onClick: () => {
-            this.taskStore.deleteAllDoneTasks()
-            this.taskStore.saveTasksToStorage()
-            this.closeModal()
-          },
-          backgroundColor: 'var(--primary)',
-          textColor: 'white',
-        },
-      ]
+      // Set dynamic action
+      this.modalPrimaryActionText = 'Delete tasks'
+      this.modalPrimaryAction = () => {
+        this.taskStore.deleteAllDoneTasks()
+        this.taskStore.saveTasksToStorage()
+        this.closeModal()
+      }
 
       // Show the modal
       this.openModal()

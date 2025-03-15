@@ -1,13 +1,7 @@
 <template>
   <div class="success-view flex-grow page-padding-inline">
     <h1>Great job, you have beaten procrastination.</h1>
-    <SolidButton
-      type="text"
-      text="Back to Home"
-      backgroundColor="var(--primary)"
-      textColor="var(--base-white)"
-      @click="backToHome"
-    />
+    <SolidButton type="text" text="Back to Home" variant="primary" @click="backToHome" />
   </div>
 </template>
 

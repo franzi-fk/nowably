@@ -76,6 +76,7 @@
             type="icon-text"
             text="Start task"
             icon="play"
+            variant="primary"
             background-color="var(--primary)"
             text-color="var(--base-white)"
             id="btn-start-task"
@@ -136,7 +137,8 @@
       :isVisible="isModalVisible"
       :text="modalText"
       :headline="modalHeadline"
-      :actions="modalActions"
+      :primaryActionText="modalPrimaryActionText"
+      :primaryAction="modalPrimaryAction"
       @update:isVisible="isModalVisible = $event"
     />
   </section>
@@ -177,14 +179,8 @@ export default {
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
-      modalActions: [
-        {
-          text: 'Confirm',
-          onClick: () => {},
-          backgroundColor: 'var(--primary)',
-          textColor: 'var(--base-white)',
-        },
-      ],
+      modalPrimaryActionText: '',
+      modalPrimaryAction: null,
       editingTaskId: null,
       editableDescription: '',
       creatingTask: false,
@@ -291,29 +287,15 @@ export default {
       this.modalHeadline = `Delete task`
       this.modalText = `Are you sure you want to delete this task? You can't bring it back.`
 
-      // Define the actions for the modal dynamically
-      this.modalActions = [
-        {
-          text: 'Cancel',
-          onClick: () => {
-            this.closeModal()
-          },
-          backgroundColor: 'var(--base-sand)',
-          textColor: 'var(--base-black)',
-        },
-        {
-          text: 'Delete task',
-          onClick: () => {
-            this.deleteTask(taskId)
-            this.closeModal()
-          },
-          backgroundColor: 'var(--primary)',
-          textColor: 'white',
-        },
-      ]
-
-      // Show the modal
-      this.openModal()
+      // Set dynamic action
+      this.modalPrimaryActionText = 'Delete task'
+      ;(this.modalPrimaryAction = () => {
+        this.deleteTask(taskId)
+        this.taskStore.saveTasksToStorage()
+        this.closeModal()
+      }),
+        // Show the modal
+        this.openModal()
     },
     deleteTask(taskId) {
       const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId)

@@ -7,19 +7,8 @@
     <!-- v-if ensures currentTask is loaded before vue is trying to access it-->
     <TaskCountdown />
     <div class="button-container">
-      <SolidButton
-        type="text"
-        text="I need help"
-        @click="needHelp"
-        backgroundColor="var(--cotton-01)"
-      />
-      <SolidButton
-        type="text"
-        text="I started"
-        backgroundColor="var(--primary)"
-        textColor="var(--base-white)"
-        @click="taskInProgress"
-      />
+      <SolidButton type="text" text="I need help" @click="needHelp" variant="tertiary" />
+      <SolidButton type="text" text="I started" variant="primary" @click="taskInProgress" />
     </div>
   </div>
 </template>

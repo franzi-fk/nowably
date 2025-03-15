@@ -32,26 +32,18 @@
           type="text"
           id="btn-send-message"
           text="Send Message"
-          backgroundColor="var(--primary)"
-          textColor="var(--base-white)"
+          variant="primary"
           :disabled="!meboComplianceApproved || inputMessage.length <= 200"
         />
       </form>
     </section>
   </article>
-  <!-- Modal -->
-  <!-- <DialogOverlay
-    :isVisible="isModalVisible"
-    headline="Confirm Action"
-    text="Are you sure you want to proceed?"
-    :onConfirm="handleConfirm"
-    @update:isVisible="isModalVisible = $event"
-  /> -->
   <ModalOverlay
     :isVisible="isModalVisible"
     :text="modalText"
     :headline="modalHeadline"
-    :actions="modalActions"
+    :primaryActionText="modalPrimaryActionText"
+    :primaryAction="modalPrimaryAction"
     @update:isVisible="isModalVisible = $event"
   />
 </template>
@@ -83,14 +75,8 @@ export default {
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
-      modalActions: [
-        {
-          text: 'Confirm',
-          onClick: () => {},
-          backgroundColor: 'var(--primary)',
-          textColor: 'var(--base-white)',
-        },
-      ],
+      modalPrimaryActionText: '',
+      modalPrimaryAction: null,
     }
   },
   methods: {
@@ -114,32 +100,15 @@ export default {
       this.modalHeadline = `Send Message`
       this.modalText = `Are you sure you want to send your message now? Please be sure your message meets the rules.`
 
-      // Define the actions for the modal dynamically
-      this.modalActions = [
-        {
-          text: 'Cancel',
-          onClick: () => {
-            this.closeModal()
-            console.log('cancel triggered')
-          },
-          backgroundColor: 'var(--base-sand)',
-          textColor: 'var(--base-black)',
-        },
-        {
-          text: 'Send message',
-          onClick: () => {
-            this.meboStore.addNewMebo(this.inputMessage)
-            this.userStore.increaseDailyMeboCreationCount()
-            console.log('confirmMebo triggered')
-            this.closeModal()
-          },
-          backgroundColor: 'var(--primary)',
-          textColor: 'white',
-        },
-      ]
-
-      // Show the modal
-      this.openModal()
+      // Set dynamic action
+      this.modalPrimaryActionText = 'Send Message'
+      ;(this.modalPrimaryAction = () => {
+        this.meboStore.addNewMebo(this.inputMessage)
+        this.userStore.increaseDailyMeboCreationCount()
+        this.closeModal()
+      }),
+        // Show the modal
+        this.openModal()
     },
   },
   mounted() {

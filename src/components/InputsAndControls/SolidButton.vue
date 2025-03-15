@@ -1,11 +1,5 @@
 <template>
-  <button
-    :class="buttonClass"
-    :style="buttonStyle"
-    :disabled="disabled"
-    @click="handleClick"
-    :aria-label="ariaLabel"
-  >
+  <button :class="buttonClass" :disabled="disabled" @click="handleClick" :aria-label="ariaLabel">
     <!-- Icon & Text -->
     <template v-if="type === 'icon-text'">
       <AppIcon v-if="iconPosition === 'left'" :name="icon" :size="iconSize" :color="iconColor" />
@@ -34,8 +28,11 @@ export default {
     text: { type: String, default: '' },
     icon: { type: String, default: 'home' },
     disabled: { type: Boolean, default: false },
-    backgroundColor: { type: String, default: 'var(--secondary)' },
-    textColor: { type: String, default: 'var(--base-black)' },
+    variant: {
+      type: String,
+      default: 'secondary',
+      validator: (value) => ['primary', 'secondary', 'tertiary'].includes(value),
+    },
     iconSize: { type: String, default: '20' },
     iconColor: { type: String, default: 'currentColor' },
     iconPosition: {
@@ -49,17 +46,11 @@ export default {
     },
   },
   computed: {
-    buttonStyle() {
-      return {
-        backgroundColor: this.backgroundColor,
-        color: this.textColor,
-        border: 'none',
-      }
-    },
     buttonClass() {
       return [
-        'btn-solid', // Always keep this class
-        `btn-${this.type}`, // Apply text/icon/text&icon class conditionally
+        'btn-solid', // Base button class
+        `btn-${this.variant}`, // Dynamic class based on variant
+        `btn-${this.type}`, // Class based on type (icon, text, icon-text)
       ]
     },
     ariaLabel() {
@@ -92,6 +83,37 @@ export default {
   font-weight: 500;
   letter-spacing: 0.05rem;
   min-height: 3.125rem;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+/* Primary */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--base-white);
+}
+.btn-primary:hover {
+  background-color: color-mix(in srgb, var(--primary) 60%, var(--ocean-01) 40%);
+}
+
+/* Secondary */
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--base-black);
+}
+.btn-secondary:hover {
+  background-color: color-mix(in srgb, var(--secondary) 80%, var(--terra-01) 20%);
+}
+
+/* Tertiary */
+.btn-tertiary {
+  background-color: var(--cotton-01);
+  color: var(--base-black);
+}
+.btn-tertiary:hover {
+  background-color: color-mix(in srgb, var(--cotton-01) 25%, var(--base-white) 75%);
 }
 
 /* Icon-Only Button */
