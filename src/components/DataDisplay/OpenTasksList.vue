@@ -15,7 +15,7 @@
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
-        <EmptyStateSvg :width="15" />
+        <Illus_EmptyState :width="15" />
         <p>No open tasks. Create a new one.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
@@ -151,7 +151,7 @@ import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
-import EmptyStateSvg from '@/components/Visuals/EmptyStateSvg.vue'
+import Illus_EmptyState from '@/components/Visuals/Illus_EmptyState.vue'
 
 export default {
   name: 'OpenTasksList',
@@ -159,7 +159,7 @@ export default {
     InputText,
     SnackbarOverlay,
     ModalOverlay,
-    EmptyStateSvg,
+    Illus_EmptyState,
   },
   props: {
     listHeadline: {

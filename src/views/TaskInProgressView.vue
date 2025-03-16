@@ -3,11 +3,12 @@
     class="in-progress-view flex-grow page-padding-inline"
     v-if="userStore.currentStep === 'workingOnTask'"
   >
-    <h1 class="sr-only">Start working on the task</h1>
+    <h1 class="sr-only">Work on the task</h1>
     <h2 class="task-progress-headline" v-if="this.taskStore.currentTask">
       {{ this.taskStore.currentTask.description }}
     </h2>
-    <span class="task-progress-body-text">Keep going!</span>
+    <img src="@/assets/illus_taskprogress.gif" alt="You got this" id="you-got-this-gif" />
+    <span id="you-got-this-text">Keep going!</span>
     <SolidButton
       type="text"
       text="Stop"
@@ -165,5 +166,14 @@ export default {
 
 #btn-continue {
   margin-top: 2rem;
+}
+
+#you-got-this-gif {
+  width: 16rem;
+}
+
+#you-got-this-text {
+  font-size: 2rem;
+  font-weight: 700;
 }
 </style>

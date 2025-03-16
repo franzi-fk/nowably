@@ -12,7 +12,7 @@
 
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.doneTasks.length === 0">
-        <EmptyStateSvg />
+        <Illus_EmptyState :width="15" />
         <p>No completed tasks yet.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.doneTasks" :key="task.id">
@@ -56,14 +56,14 @@ import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useRouter } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
-import EmptyStateSvg from '@/components/Visuals/EmptyStateSvg.vue'
+import Illus_EmptyState from '@/components/Visuals/Illus_EmptyState.vue'
 
 export default {
   name: 'DoneTasksList',
   components: {
     SnackbarOverlay,
     ModalOverlay,
-    EmptyStateSvg,
+    Illus_EmptyState,
   },
   props: {
     listHeadline: {

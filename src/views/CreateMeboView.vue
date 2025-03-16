@@ -3,7 +3,10 @@
   <article class="create-mebo-view-container flex-grow view-layout-default">
     <section class="create-mebo-header page-padding-inline">
       <h1>Send a Message in a Bottle</h1>
-      <p>You can write {{ this.userStore.availableMeboTokens }} more messages today.</p>
+      <p v-if="this.userStore.availableMeboTokens === 1">
+        You can write {{ this.userStore.availableMeboTokens }} more message today.
+      </p>
+      <p v-else>You can write {{ this.userStore.availableMeboTokens }} more messages today.</p>
       <p>
         Write what you would tell a friend who is struggling to start a task or simply feeling
         demotivated. Make sure it's in English, anonymous, and neutral, so anyone reading it can

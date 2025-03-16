@@ -1,10 +1,22 @@
 <template>
   <div class="need-help-view flex-grow page-padding-inline" v-if="taskStore.currentTask">
-    <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
-      <h1>demotivated?</h1>
+    <article
+      id="help-demotivated"
+      class="help-sub-view"
+      v-if="userStore.currentEmotion === 'demotivated'"
+    >
+      <section class="intro">
+        <h1>Message in a Bottle</h1>
+        <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
+      </section>
+      <section class="open-mebo help-sub-view-body">
+        <Illus_MeboReceived width="22" />
+        <p>You received a message from another user.</p>
+        <SolidButton type="text" text="Open message" variant="primary" />
+      </section>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip exercise" @click="finishHelp" />
+        <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
     <article
@@ -75,7 +87,7 @@
       </section>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip splitting" @click="finishHelp" />
+        <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
     <article
@@ -128,7 +140,7 @@
       </section>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip exercise" @click="finishHelp" />
+        <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
     <section id="whats-wrong" v-else>
@@ -184,6 +196,7 @@ import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
+import Illus_MeboReceived from '../components/Visuals/Illus_MeboReceived.vue'
 
 export default {
   name: 'NeedHelpView',
@@ -194,6 +207,7 @@ export default {
     SolidButton,
     SnackbarOverlay,
     ModalOverlay,
+    Illus_MeboReceived,
   },
   data() {
     return {
@@ -384,6 +398,10 @@ export default {
   grid-template-rows: auto 1fr auto;
   background-color: var(--linear-sand-01);
   text-align: center;
+}
+
+.open-mebo {
+  gap: 2.2rem;
 }
 
 .intro {
