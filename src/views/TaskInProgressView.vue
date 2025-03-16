@@ -1,26 +1,26 @@
 <template>
+  <TaskProgressHeader />
   <article
-    class="in-progress-view flex-grow page-padding-inline"
+    class="in-progress-view flex-grow task-view-layout"
     v-if="userStore.currentStep === 'workingOnTask'"
   >
-    <h1 class="sr-only">Work on the task</h1>
-    <h2 class="task-progress-headline" v-if="this.taskStore.currentTask">
-      {{ this.taskStore.currentTask.description }}
-    </h2>
-    <img src="@/assets/illus_taskprogress.gif" alt="You got this" id="you-got-this-gif" />
-    <span id="you-got-this-text">Keep going!</span>
-    <SolidButton
-      type="text"
-      text="Stop"
-      @click="userStore.setCurrentStep('documentTaskStatus')"
-      variant="tertiary"
-    />
+    <div class="in-progress-view-body">
+      <h2 class="sr-only">Work on the task</h2>
+      <img src="@/assets/illus_taskprogress.gif" alt="You got this" id="you-got-this-gif" />
+      <span id="you-got-this-text">Keep going!</span>
+      <SolidButton
+        type="text"
+        text="Stop"
+        @click="userStore.setCurrentStep('documentTaskStatus')"
+        variant="tertiary"
+      />
+    </div>
   </article>
   <article
-    class="document-task-status flex-grow page-padding-inline"
+    class="document-task-status flex-grow task-view-layout"
     v-if="userStore.currentStep === 'documentTaskStatus'"
   >
-    <section class="document-task-status-body">
+    <div class="document-task-status-body flex-grow">
       <h1>Document your progress on this task</h1>
 
       <form id="task-status-form" @submit.prevent="submitUserInput">
@@ -44,10 +44,10 @@
           <SolidButton id="btn-continue" type="text" text="Save and continue" variant="primary" />
         </fieldset>
       </form>
-    </section>
-    <section class="actions document-task-status-footer">
+    </div>
+    <div class="actions document-task-status-footer">
       <LinkButton type="text" text="Go back" @click="userStore.setCurrentStep('workingOnTask')" />
-    </section>
+    </div>
   </article>
 </template>
 
@@ -56,11 +56,13 @@ import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
 import { useTaskStore } from '../stores/taskStore'
 import { useUserStore } from '../stores/userStore'
 import { useRouter } from 'vue-router'
+import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
 
 export default {
   name: 'TaskInProgressView',
   components: {
     InputRadio,
+    TaskProgressHeader,
   },
   data() {
     return {
@@ -110,7 +112,7 @@ export default {
 </script>
 
 <style scoped>
-.in-progress-view {
+.in-progress-view-body {
   width: 100%;
   height: 100%;
   display: flex;
@@ -118,27 +120,17 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 3rem;
-}
-
-.in-progress-view {
-  background-image: var(--linear-sand-01);
-}
-
-.document-task-status {
-  width: 100%;
-  min-height: 100vh;
-  background-image: var(--linear-sand-01);
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 2rem;
 }
 
 .document-task-status-body {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 3rem;
+  min-height: 55vh;
+  padding-inline: 1.25rem;
 }
 
 .document-task-status form {
@@ -158,10 +150,11 @@ export default {
 
 .actions {
   padding-inline: 1.25rem;
-  padding-block: 1rem;
+  padding-block: 2rem 0.75rem;
   display: flex;
   justify-content: space-between;
   gap: 2rem;
+  width: 100%;
 }
 
 #btn-continue {
@@ -175,5 +168,33 @@ export default {
 #you-got-this-text {
   font-size: 2rem;
   font-weight: 700;
+}
+
+/*_______________________________________________________*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .actions {
+    padding-inline: 1.8rem;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .document-task-status-body {
+    width: 70vw;
+  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

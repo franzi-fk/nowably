@@ -102,6 +102,11 @@ export default {
   color: inherit;
 }
 
+.mebo-banner-header span {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
 /*_________________________________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */

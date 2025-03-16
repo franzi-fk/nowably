@@ -42,6 +42,5 @@ export default {
   justify-content: center;
   gap: 3rem;
   align-items: center;
-  background-image: var(--linear-sand-01);
 }
 </style>

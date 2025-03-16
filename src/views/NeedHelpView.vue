@@ -1,169 +1,168 @@
 <template>
-  <div class="need-help-view flex-grow page-padding-inline" v-if="taskStore.currentTask">
-    <article
-      id="help-demotivated"
-      class="help-sub-view"
-      v-if="userStore.currentEmotion === 'demotivated'"
-    >
-      <section class="intro">
-        <h1>Message in a Bottle</h1>
-        <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
-      </section>
-      <section class="open-mebo help-sub-view-body">
-        <Illus_MeboReceived width="22" />
-        <p>You received a message from another user.</p>
-        <SolidButton type="text" text="Open message" variant="primary" />
-      </section>
-      <section class="actions">
-        <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip this" @click="finishHelp" />
-      </section>
-    </article>
-    <article
-      id="help-overwhelmed"
-      class="help-sub-view"
-      v-else-if="userStore.currentEmotion === 'overwhelmed'"
-    >
-      <section class="intro">
-        <h1>One step at a time</h1>
-        <p>
-          Maybe your task is just a little bit too big for now. Let’s break it down into smaller
-          sub-tasks, that are easier to handle.
-        </p>
-      </section>
-      <section class="split-task help-sub-view-body">
-        <section class="split-task-form">
-          <p id="current-task">{{ taskStore.currentTask.description }}</p>
-          <p>Create at least 2 tasks that will replace the original task.</p>
-          <form @submit.prevent="confirmSplitting">
-            <fieldset>
-              <InputText
-                v-model="splitTask1"
-                id="sub-task-1"
-                name="sub-task-1"
-                placeholder="Enter task description..."
-                maxLength="80"
-              />
-              <InputText
-                v-model="splitTask2"
-                id="sub-task-2"
-                name="sub-task-2"
-                placeholder="Enter task description..."
-                maxLength="80"
-              />
-              <InputText
-                v-model="splitTask3"
-                id="sub-task-3"
-                name="sub-task-3"
-                placeholder="Enter task description..."
-                maxLength="80"
-                v-show="splitTask1 && splitTask2"
-              />
-              <InputText
-                v-model="splitTask4"
-                id="sub-task-4"
-                name="sub-task-4"
-                placeholder="Enter task description..."
-                maxLength="80"
-                v-show="splitTask1 && splitTask2 && splitTask3"
-              />
-              <InputText
-                v-model="splitTask5"
-                id="sub-task-5"
-                name="sub-task-5"
-                placeholder="Enter task description..."
-                maxLength="80"
-                v-show="splitTask1 && splitTask2 && splitTask3 && splitTask4"
-              />
-              <SolidButton
-                type="text"
-                text="Save and continue"
-                variant="primary"
-                :disabled="!splitTask1 || !splitTask2"
-              />
-            </fieldset>
-          </form>
+  <TaskProgressHeader />
+  <div class="need-help-view flex-grow task-view-layout" v-if="taskStore.currentTask">
+    <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
+      <div class="help-sub-view">
+        <section class="intro">
+          <h1>Message in a Bottle</h1>
+          <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
         </section>
-      </section>
+        <section class="open-mebo help-sub-view-body">
+          <Illus_MeboReceived width="22" />
+          <p>You received a message from another user.</p>
+          <SolidButton type="text" text="Open message" variant="primary" />
+        </section>
+      </div>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
         <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
-    <article
-      id="help-anxious"
-      class="help-sub-view"
-      v-else-if="userStore.currentEmotion === 'anxious'"
-    >
-      <section class="intro">
-        <h1>Calm your mind</h1>
-        <p>
-          Sometimes certain tasks trigger some really intense emotions. Let's try to calm down by
-          doing a relaxation technique for just 2 minutes.
-        </p>
-      </section>
-      <section class="relaxation-exercise help-sub-view-body">
-        <section class="exercise-instructions" v-show="!relaxExerciseStarted">
-          <h2>Humming</h2>
+    <article id="help-overwhelmed" v-else-if="userStore.currentEmotion === 'overwhelmed'">
+      <div class="help-sub-view">
+        <section class="intro">
+          <h1>One step at a time</h1>
           <p>
-            Sit comfortably and relax your body.<br />Inhale deeply through your nose.<br />Exhale
-            with a hum, feeling the vibrations.<br />
-            Relax and repeat.
+            Maybe your task is just a little bit too big for now. Let’s break it down into smaller
+            sub-tasks, that are easier to handle.
           </p>
-          <SolidButton
-            v-if="!relaxExerciseStarted"
-            type="text"
-            text="Start"
-            variant="primary"
-            @click="startExercise"
-          />
         </section>
-        <section id="exercise-progress" v-show="relaxExerciseStarted">
-          <HummingAnimation
-            :disappearAfter="animationDuration * 1000"
-            @fade-out-complete="completeHumming"
-          />
-          <GeneralCountdown
-            :duration="animationDuration"
-            feedbackMessage="Well done!"
-            textColor="var(--primary)"
-          />
-          <SolidButton
-            v-if="hummingAnimationCompleted"
-            type="text"
-            text="Continue"
-            id="btn-continue"
-            variant="primary"
-            @click="finishHelp"
-          />
+        <section class="split-task help-sub-view-body">
+          <section class="split-task-form">
+            <p id="current-task">{{ taskStore.currentTask.description }}</p>
+            <p>Create at least 2 tasks that will replace the original task.</p>
+            <form @submit.prevent="confirmSplitting">
+              <fieldset>
+                <InputText
+                  v-model="splitTask1"
+                  id="sub-task-1"
+                  name="sub-task-1"
+                  placeholder="Enter task description..."
+                  maxLength="80"
+                />
+                <InputText
+                  v-model="splitTask2"
+                  id="sub-task-2"
+                  name="sub-task-2"
+                  placeholder="Enter task description..."
+                  maxLength="80"
+                />
+                <InputText
+                  v-model="splitTask3"
+                  id="sub-task-3"
+                  name="sub-task-3"
+                  placeholder="Enter task description..."
+                  maxLength="80"
+                  v-show="splitTask1 && splitTask2"
+                />
+                <InputText
+                  v-model="splitTask4"
+                  id="sub-task-4"
+                  name="sub-task-4"
+                  placeholder="Enter task description..."
+                  maxLength="80"
+                  v-show="splitTask1 && splitTask2 && splitTask3"
+                />
+                <InputText
+                  v-model="splitTask5"
+                  id="sub-task-5"
+                  name="sub-task-5"
+                  placeholder="Enter task description..."
+                  maxLength="80"
+                  v-show="splitTask1 && splitTask2 && splitTask3 && splitTask4"
+                />
+                <SolidButton
+                  type="text"
+                  text="Save and continue"
+                  variant="primary"
+                  :disabled="!splitTask1 || !splitTask2"
+                />
+              </fieldset>
+            </form>
+          </section>
         </section>
-      </section>
+      </div>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
         <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
-    <section id="whats-wrong" v-else>
-      <h1>How do you feel right now?</h1>
-      <div class="button-container">
-        <SolidButton
-          type="text"
-          text="I feel demotivated"
-          @click="userStore.setCurrentEmotion('demotivated')"
-          variant="tertiary"
-        />
-        <SolidButton
-          type="text"
-          text="I feel overwhelmed"
-          @click="userStore.setCurrentEmotion('overwhelmed')"
-          variant="tertiary"
-        />
-        <SolidButton
-          type="text"
-          text="I feel anxious"
-          @click="userStore.setCurrentEmotion('anxious')"
-          variant="tertiary"
-        />
+    <article id="help-anxious" v-else-if="userStore.currentEmotion === 'anxious'">
+      <div class="help-sub-view">
+        <section class="intro">
+          <h1>Calm your mind</h1>
+          <p>
+            Sometimes certain tasks trigger some really intense emotions. Let's try to calm down by
+            doing a relaxation technique for just 2 minutes.
+          </p>
+        </section>
+        <section class="relaxation-exercise help-sub-view-body">
+          <section class="exercise-instructions" v-show="!relaxExerciseStarted">
+            <h2>Humming</h2>
+            <p>
+              Sit comfortably and relax your body.<br />Inhale deeply through your nose.<br />Exhale
+              with a hum, feeling the vibrations.<br />
+              Relax and repeat.
+            </p>
+            <SolidButton
+              v-if="!relaxExerciseStarted"
+              type="text"
+              text="Start"
+              variant="primary"
+              @click="startExercise"
+            />
+          </section>
+          <section id="exercise-progress" v-show="relaxExerciseStarted">
+            <HummingAnimation
+              :disappearAfter="animationDuration * 1000"
+              @fade-out-complete="completeHumming"
+            />
+            <GeneralCountdown
+              :duration="animationDuration"
+              feedbackMessage="Well done!"
+              textColor="var(--primary)"
+            />
+            <SolidButton
+              v-if="hummingAnimationCompleted"
+              type="text"
+              text="Continue"
+              id="btn-continue"
+              variant="primary"
+              @click="finishHelp"
+            />
+          </section>
+        </section>
+      </div>
+      <section class="actions">
+        <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+        <LinkButton type="text" text="Skip this" @click="finishHelp" />
+      </section>
+    </article>
+    <section id="whats-wrong" class="flex-grow" v-else>
+      <div class="whats-wrong flex-grow">
+        <h1>How do you feel right now?</h1>
+        <div class="button-container">
+          <SolidButton
+            type="text"
+            text="I feel demotivated"
+            @click="userStore.setCurrentEmotion('demotivated')"
+            variant="tertiary"
+          />
+          <SolidButton
+            type="text"
+            text="I feel overwhelmed"
+            @click="userStore.setCurrentEmotion('overwhelmed')"
+            variant="tertiary"
+          />
+          <SolidButton
+            type="text"
+            text="I feel anxious"
+            @click="userStore.setCurrentEmotion('anxious')"
+            variant="tertiary"
+          />
+        </div>
+      </div>
+      <div class="actions whats-wrong-footer">
         <LinkButton type="text" text="Go back" @click="backToCountdown" />
       </div>
     </section>
@@ -197,6 +196,7 @@ import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
 import Illus_MeboReceived from '../components/Visuals/Illus_MeboReceived.vue'
+import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
 
 export default {
   name: 'NeedHelpView',
@@ -208,6 +208,7 @@ export default {
     SnackbarOverlay,
     ModalOverlay,
     Illus_MeboReceived,
+    TaskProgressHeader,
   },
   data() {
     return {
@@ -363,40 +364,55 @@ export default {
 </script>
 
 <style scoped>
-.need-help-view,
-#whats-wrong {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.need-help-view {
-  background-color: white;
-  background-image: var(--linear-sand-01);
-}
-
-#whats-wrong {
-  background-color: white;
-  background-image: var(--linear-sand-01);
-  width: 100vw;
-}
-
-#whats-wrong .btn-link {
+.whats-wrong .btn-link {
   width: fit-content;
   align-self: center;
 }
 
-.help-sub-view {
+.whats-wrong {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  min-height: 55vh;
+  padding-inline: 1.25rem;
+  height: 100%;
+}
+
+.whats-wrong-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  height: 100%;
+  min-height: 55vh;
+  padding-inline: 1.25rem;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  min-height: 100vh;
-  min-width: 100vw;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.help-sub-view {
+  width: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  background-color: var(--linear-sand-01);
   text-align: center;
 }
 
@@ -406,7 +422,7 @@ export default {
 
 .intro {
   padding-inline: 1.25rem;
-  padding-block: 2rem;
+  padding-block: 0 3rem;
 }
 
 h1,
@@ -416,10 +432,12 @@ h2 {
 
 .actions {
   padding-inline: 1.25rem;
-  padding-block: 1rem;
+  padding-block: 2rem 0.75rem;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   gap: 2rem;
+  width: 100%;
 }
 
 #btn-continue {
@@ -429,12 +447,13 @@ h2 {
 .help-sub-view-body {
   background-color: var(--base-white);
   border-radius: 1.5rem;
-  padding-block: 2rem 2.2rem;
+  padding-block: 4rem 4.2rem;
   padding-inline: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 55vh;
 }
 
 .relaxation-exercise p {
@@ -451,7 +470,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin: 3rem;
+  margin-bottom: 4rem;
 }
 
 #current-task {
@@ -465,5 +484,33 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/*_______________________________________________________*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .actions {
+    padding-inline: 1.8rem;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .help-sub-view {
+    width: 70vw;
+  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

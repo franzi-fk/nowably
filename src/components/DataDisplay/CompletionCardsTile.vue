@@ -119,20 +119,20 @@ export default {
 }
 
 .card-visuals-container {
-  display: flex;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
   justify-content: center;
   gap: 1.5rem;
 }
 
 .completion-card-visual {
-  max-width: 17rem;
+  max-width: 15rem;
   width: 100%;
 }
 
-/*_________________________________________________________________________*/
+/*_______________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
@@ -140,15 +140,29 @@ export default {
     padding-inline: 3rem;
   }
 
-  .card-visuals-container {
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
   .completion-card-visual {
-    max-width: 15rem;
+    max-width: 13.9rem;
     width: 100%;
   }
+
+  .card-visuals-container {
+    justify-content: flex-start;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

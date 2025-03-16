@@ -60,7 +60,7 @@
 export default {
   props: {
     width: {
-      type: Number,
+      type: [Number, String],
       default: 10,
     },
   },

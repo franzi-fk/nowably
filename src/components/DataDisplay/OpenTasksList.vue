@@ -121,7 +121,7 @@
             backgroundColor="var(--secondary)"
             @click="cancelCreatingTask()"
           />
-          <SolidButton type="icon-text" text="Add task" icon="plus" submit />
+          <SolidButton type="icon-text" text="Add task" icon="plus" />
         </div>
       </form>
     </div>
@@ -386,10 +386,23 @@ export default {
       }
     },
   },
+  watch: {
+    'taskStore.openTasks.length': function (newLength) {
+      // Watch for changes in the length of taskStore.openTasks
+      if (newLength === 0) {
+        // If there are no open tasks left, set creatingTask to true
+        this.creatingTask = true
+      }
+    },
+  },
   mounted() {
     this.userStore.initLoad()
     this.taskStore.initLoad()
     window.addEventListener('resize', this.updateWindowWidth) // Track window resize
+    // Open the task creation state if no tasks exist
+    if (this.taskStore.openTasks.length === 0) {
+      this.creatingTask = true
+    }
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.updateWindowWidth) // Clean up listener

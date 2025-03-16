@@ -56,7 +56,6 @@ export default {
   gap: 2rem;
   width: 100%;
   height: 100%;
-  background-image: var(--linear-sand-01);
 }
 
 .welcome-message {

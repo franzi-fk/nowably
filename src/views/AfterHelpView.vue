@@ -1,5 +1,6 @@
 <template>
-  <section class="after-help-view page-padding-inline flex-grow">
+  <TaskProgressHeader />
+  <section class="after-help-view flex-grow">
     <section class="after-help-view-body">
       <h1>Do you want to continue right now?</h1>
       <form class="ask-if-continue-form" @submit.prevent="submitUserInput">
@@ -63,12 +64,14 @@ import { useTaskStore } from '../stores/taskStore'
 import { useRouter } from 'vue-router'
 import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
 import { useUserStore } from '../stores/userStore'
+import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
 
 export default {
   components: {
     InputSelect,
     SnackbarOverlay,
     InputRadio,
+    TaskProgressHeader,
   },
   data() {
     return {
@@ -137,7 +140,6 @@ export default {
 .after-help-view {
   width: 100%;
   min-height: 100vh;
-  background-image: var(--linear-sand-01);
   display: flex;
   flex-direction: column;
 }
@@ -149,6 +151,7 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 3rem;
+  padding-inline: 1.25rem;
 }
 
 .ask-if-continue-form {
@@ -168,10 +171,12 @@ export default {
 
 .actions {
   padding-inline: 1.25rem;
-  padding-block: 1rem;
+  padding-block: 2rem 0.75rem;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   gap: 2rem;
+  width: 100%;
 }
 
 #btn-continue {
@@ -186,6 +191,9 @@ export default {
   }
   .ask-if-continue {
     gap: 1.75rem;
+  }
+  .actions {
+    padding-inline: 1.8rem;
   }
 }
 </style>
