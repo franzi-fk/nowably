@@ -57,10 +57,10 @@ export default {
 <style scoped>
 .mebo-banner-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 3.3rem;
+  gap: 2rem;
   width: 100%;
   background-color: var(--cotton-01);
   border-radius: 1.5rem;
@@ -107,12 +107,32 @@ export default {
   margin-bottom: 1rem;
 }
 
-/*_________________________________________________________________________*/
+/*_______________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .mebo-banner-container {
     padding-inline: 3rem;
   }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .mebo-banner-container {
+    flex-direction: row;
+    gap: 3.3rem;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>
