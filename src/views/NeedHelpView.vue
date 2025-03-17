@@ -2,17 +2,41 @@
   <TaskProgressHeader />
   <div class="need-help-view flex-grow task-view-layout" v-if="taskStore.currentTask">
     <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
-      <article id="motivation-alt" v-if="!userStore.canReceiveMebo">test</article>
+      <article
+        id="motivation-alternative"
+        v-if="!userStore.canReceiveMebo || meboStore.mebos.length < 1 || !mebo"
+      >
+        Mebo cannot be received, show alternative here
+      </article>
       <article id="receive-mebo" v-else>
         <div class="help-sub-view">
           <section class="intro">
             <h1>Message in a Bottle</h1>
             <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
           </section>
-          <section class="open-mebo help-sub-view-body">
+          <section class="help-sub-view-body receive-mebo-opened" v-if="meboOpened === true">
+            <h2>Message:</h2>
+            <p id="mebo-text">{{ this.mebo.text }}</p>
+            <SolidButton type="text" text="Continue" variant="primary" @click="finishHelp" />
+          </section>
+          <section class="help-sub-view-body receive-mebo-unopened" v-else>
             <Illus_MeboReceived width="22" />
-            <p>You received a message from another user.</p>
-            <SolidButton type="text" text="Open message" variant="primary" />
+            <SolidButton
+              type="text"
+              text="Open message"
+              variant="primary"
+              id="btn-open-mebo"
+              @click="openMebo"
+              :stopPropagation="true"
+            />
+            <div class="open-mebo-info">
+              <p>You received a message from another user.</p>
+              <HintBadge
+                text="You can open 1 Message in a Bottle per day."
+                icon="info"
+                variant="subtle"
+              />
+            </div>
           </section>
         </div>
         <section class="actions">
@@ -197,9 +221,11 @@ import SolidButton from '@/components/InputsAndControls/SolidButton.vue'
 import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
+import { useMeboStore } from '../stores/meboStore'
 import { useRouter } from 'vue-router'
 import Illus_MeboReceived from '../components/Visuals/Illus_MeboReceived.vue'
 import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
+import HintBadge from '../components/FeedbackAndStatus/HintBadge.vue'
 
 export default {
   name: 'NeedHelpView',
@@ -212,11 +238,13 @@ export default {
     ModalOverlay,
     Illus_MeboReceived,
     TaskProgressHeader,
+    HintBadge,
   },
   data() {
     return {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
+      meboStore: useMeboStore(),
       router: useRouter(),
       snackbar: {
         visible: true,
@@ -229,6 +257,8 @@ export default {
       modalHeadline: '',
       modalPrimaryActionText: '',
       modalPrimaryAction: null,
+      meboOpened: false,
+      mebo: '',
       relaxExerciseStarted: false,
       animationDuration: 120, // in seconds
       hummingAnimationCompleted: false,
@@ -240,6 +270,38 @@ export default {
     }
   },
   methods: {
+    openMebo() {
+      this.meboOpened = true
+      this.userStore.updateAllReceivedMebos(this.mebo.id)
+      this.userStore.updateLastMeboReceived()
+    },
+    getMebo() {
+      const allMebos = this.meboStore.mebos
+      const userId = this.userStore.userId
+      const receivedMebos = new Set(this.userStore.allReceivedMebos)
+
+      if (allMebos.length === 0) return null // No mebos available
+
+      // Admins can receive any random mebo without validation
+      if (this.userStore.role === 'admin') {
+        return (this.mebo = allMebos[Math.floor(Math.random() * allMebos.length)])
+      }
+
+      while (true) {
+        // pick random mebo
+        const randomMebo = allMebos[Math.floor(Math.random() * allMebos.length)]
+
+        // check if it's valid (user is not the author, user has not received this mebo yet)
+        if (randomMebo.author !== userId && !receivedMebos.has(randomMebo.id)) {
+          return (this.mebo = randomMebo)
+        }
+
+        // if all mebos are invalid, return null to prevent infinite loop
+        if (allMebos.every((mebo) => mebo.author === userId || receivedMebos.has(mebo.id))) {
+          return (this.mebo = null)
+        }
+      }
+    },
     openModal() {
       this.isModalVisible = true
     },
@@ -357,6 +419,8 @@ export default {
   mounted() {
     this.userStore.initLoad()
     this.taskStore.initLoad()
+    this.meboStore.initLoad()
+    this.getMebo()
 
     // If there is no currentTask, redirect to the home view
     if (!this.taskStore.currentTask) {
@@ -489,12 +553,30 @@ h2 {
   gap: 1rem;
 }
 
+.open-mebo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#btn-open-mebo {
+  margin-block: 1rem;
+}
+
+#mebo-text {
+  max-width: 65ch;
+  margin-bottom: 3rem;
+}
+
 /*_______________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
   .actions {
     padding-inline: 1.8rem;
+  }
+  .help-sub-view-body {
+    padding-inline: 3rem;
   }
 }
 
@@ -506,6 +588,9 @@ h2 {
 @media (min-width: 992px) {
   .help-sub-view {
     width: 69vw;
+  }
+  .help-sub-view-body {
+    padding-inline: 4rem;
   }
 }
 

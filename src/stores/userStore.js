@@ -3,6 +3,7 @@ import { useTaskStore } from './taskStore'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
+    userId: 'external',
     role: 'user',
     currentEmotion: null,
     currentStep: null,
@@ -13,9 +14,18 @@ export const useUserStore = defineStore('userStore', {
   }),
   getters: {
     canReceiveMebo() {
-      return !this.lastMeboReceived || this.lastMeboReceived !== new Date().toISOString()
-        ? true
-        : false // If last mebo has not been received today, then true, otherwise false
+      if (!this.lastMeboReceived) {
+        return true // if null / no record, return true
+      }
+
+      if (this.role === 'admin') {
+        return true // admins can receive infinite
+      }
+
+      const lastReceivedDate = new Date(this.lastMeboReceived).toISOString().split('T')[0]
+      const todayDate = new Date().toISOString().split('T')[0]
+
+      return lastReceivedDate !== todayDate
     },
     availableMeboTokens() {
       // Tokens (per user) for mebo creation by the user

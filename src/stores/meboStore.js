@@ -15,21 +15,22 @@ export const useMeboStore = defineStore('meboStore', {
     },
     addNewMebo(message) {
       // Check if user tries to add a duplicate (case-insensitive)
-      // const isDuplicate = this.mebos.some(
-      //   (existingMebo) => existingMebo.text.toLowerCase() === message.toLowerCase(),
-      // )
-      // if (isDuplicate) {
-      //   return // prevent adding duplicate
-      // } else {
-      this.mebos.push({
-        id: `mebo-${this.generateUniqueId()}`,
-        author: 'test',
-        text: message,
-        published: true, // change to false as soon as moderation available
-      })
+      const isDuplicate = this.mebos.some(
+        (existingMebo) => existingMebo.text.toLowerCase() === message.toLowerCase(),
+      )
+      if (isDuplicate) {
+        return // prevent adding duplicate
+      } else {
+        this.mebos.push({
+          id: `mebo-${this.generateUniqueId()}`,
+          author: 'userId',
+          text: message,
+          published: true, // change to false as soon as moderation available
+        })
 
-      localStorage.setItem('mebos', JSON.stringify(this.mebos))
-      // }
+        localStorage.setItem('mebos', JSON.stringify(this.mebos))
+        // }
+      }
     },
     initLoad() {
       const storedMebos = localStorage.getItem('mebos')

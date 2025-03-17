@@ -19,7 +19,8 @@ export default {
     variant: {
       type: String,
       default: 'info',
-      validator: (value) => ['info', 'success', 'error', 'warning', 'neutral'].includes(value),
+      validator: (value) =>
+        ['info', 'success', 'error', 'warning', 'neutral', 'subtle'].includes(value),
     },
   },
   computed: {
@@ -30,6 +31,7 @@ export default {
         error: 'badge-error',
         warning: 'badge-warning',
         neutral: 'badge-neutral',
+        subtle: 'badge-subtle',
       }[this.variant]
     },
     iconColor() {
@@ -39,6 +41,7 @@ export default {
         error: 'var(--error-dark)',
         warning: 'var(--warning-dark)',
         neutral: 'var(--base-black)',
+        subtle: 'var(--cloud-04)',
       }[this.variant]
     },
   },
@@ -55,10 +58,6 @@ export default {
   padding: 0.27rem 0.6rem 0.35rem 0.6rem;
   border-radius: 0.625rem;
   width: fit-content !important;
-}
-
-svg {
-  color: currentColor;
 }
 
 .badge-info {
@@ -89,5 +88,11 @@ svg {
   background-color: var(--cloud-01);
   color: var(--base-black);
   border: 2px solid var(--cloud-02);
+}
+
+.badge-subtle {
+  background-color: transparent;
+  color: var(--cloud-04);
+  border: none;
 }
 </style>

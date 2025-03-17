@@ -1,11 +1,5 @@
 <template>
-  <button
-    :class="buttonClass"
-    :style="buttonStyle"
-    :disabled="disabled"
-    @click="handleClick"
-    :aria-label="ariaLabel"
-  >
+  <button :class="buttonClass" :style="buttonStyle" :disabled="disabled" :aria-label="ariaLabel">
     <!-- Icon & Text -->
     <template v-if="type === 'icon-text'">
       <AppIcon v-if="iconPosition === 'left'" :name="icon" :size="iconSize" :color="iconColor" />
@@ -42,10 +36,6 @@ export default {
       default: 'left',
       validator: (value) => ['left', 'right'].includes(value),
     },
-    stopPropagation: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     buttonStyle() {
@@ -63,16 +53,6 @@ export default {
     },
     ariaLabel() {
       return this.text || this.icon || 'Button'
-    },
-  },
-  methods: {
-    handleClick(event) {
-      if (this.stopPropagation) {
-        event.stopPropagation() // Prevent event bubbling if stopPropagation is true
-      }
-      if (!this.stopPropagation) {
-        this.$emit('click', event) // Only emit if we didn't stop the propagation
-      }
     },
   },
 }
