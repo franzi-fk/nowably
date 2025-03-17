@@ -49,6 +49,14 @@
             id="btn-edit-task"
           />
           <!-- Save and Cancel buttons appear when editing -->
+
+          <SolidButton
+            v-show="editingTaskId === task.id"
+            type="icon"
+            icon="x"
+            @click="abortEditing(task)"
+            id="btn-cancel-edit-task"
+          />
           <SolidButton
             v-show="editingTaskId === task.id"
             type="icon-text"
@@ -56,14 +64,6 @@
             text="Save"
             @click="saveEditing(task)"
             id="btn-save-edited-task"
-          />
-          <SolidButton
-            v-show="editingTaskId === task.id"
-            type="icon-text"
-            text="Cancel"
-            icon="x"
-            @click="abortEditing(task)"
-            id="btn-cancel-edit-task"
           />
           <SolidButton
             v-show="editingTaskId !== task.id"
@@ -115,9 +115,8 @@
         />
         <div class="form-actions">
           <SolidButton
-            type="icon-text"
+            type="icon"
             icon="x"
-            text="Cancel"
             backgroundColor="var(--secondary)"
             @click="cancelCreatingTask()"
           />

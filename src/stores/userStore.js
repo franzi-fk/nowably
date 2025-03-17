@@ -12,7 +12,13 @@ export const useUserStore = defineStore('userStore', {
     allReceivedMebos: [],
   }),
   getters: {
+    canReceiveMebo() {
+      return !this.lastMeboReceived || this.lastMeboReceived !== new Date().toISOString()
+        ? true
+        : false // If last mebo has not been received today, then true, otherwise false
+    },
     availableMeboTokens() {
+      // Tokens (per user) for mebo creation by the user
       if (this.role === 'admin') {
         return Infinity // Admins have unlimited tokens
       }

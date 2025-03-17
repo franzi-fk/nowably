@@ -80,15 +80,8 @@ export default {
         // Update the task's doneState in the tasks array
         this.taskStore.updateTask(updatedTask.id, { doneState: this.taskComplete })
 
-        // If user marks task as completed, increase successCount in userStore
-        if (this.taskComplete) {
-          this.userStore.increaseTotalSuccessCount()
-          // Save the timestamp of task completion to task.successAt
-          this.taskStore.updateTask(updatedTask.id, { successAt: new Date().toISOString() })
-        }
-
-        // Update currentTask
-        this.taskStore.setCurrentTask(updatedTask)
+        // Update state
+        this.taskStore.setCurrentTask(updatedTask) // Update currentTask
         this.taskStore.saveTasksToStorage()
         this.userStore.setCurrentStep('success')
         this.router.push({ name: 'task-success' })

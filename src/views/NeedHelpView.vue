@@ -2,21 +2,24 @@
   <TaskProgressHeader />
   <div class="need-help-view flex-grow task-view-layout" v-if="taskStore.currentTask">
     <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
-      <div class="help-sub-view">
-        <section class="intro">
-          <h1>Message in a Bottle</h1>
-          <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
+      <article id="motivation-alt" v-if="!userStore.canReceiveMebo">test</article>
+      <article id="receive-mebo" v-else>
+        <div class="help-sub-view">
+          <section class="intro">
+            <h1>Message in a Bottle</h1>
+            <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
+          </section>
+          <section class="open-mebo help-sub-view-body">
+            <Illus_MeboReceived width="22" />
+            <p>You received a message from another user.</p>
+            <SolidButton type="text" text="Open message" variant="primary" />
+          </section>
+        </div>
+        <section class="actions">
+          <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+          <LinkButton type="text" text="Skip this" @click="finishHelp" />
         </section>
-        <section class="open-mebo help-sub-view-body">
-          <Illus_MeboReceived width="22" />
-          <p>You received a message from another user.</p>
-          <SolidButton type="text" text="Open message" variant="primary" />
-        </section>
-      </div>
-      <section class="actions">
-        <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip this" @click="finishHelp" />
-      </section>
+      </article>
     </article>
     <article id="help-overwhelmed" v-else-if="userStore.currentEmotion === 'overwhelmed'">
       <div class="help-sub-view">
