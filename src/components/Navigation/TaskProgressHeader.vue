@@ -9,24 +9,61 @@
       icon="x"
       iconSize="28"
       iconColor="var(--terra-04)"
-      @click="cancelTaskProgression"
+      @click="confirmCancel"
     />
   </section>
+  <ModalOverlay
+    :isVisible="isModalVisible"
+    :text="modalText"
+    :headline="modalHeadline"
+    :primaryActionText="modalPrimaryActionText"
+    :primaryAction="modalPrimaryAction"
+    @update:isVisible="isModalVisible = $event"
+  />
 </template>
 
 <script>
 import { useTaskStore } from '@/stores/taskStore'
 import { useRouter } from 'vue-router'
+import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 
 export default {
+  components: {
+    ModalOverlay,
+  },
   data() {
     return {
       taskStore: useTaskStore(),
       router: useRouter(),
+      isModalVisible: false,
+      modalText: '',
+      modalHeadline: '',
+      modalPrimaryActionText: '',
+      modalPrimaryAction: null,
     }
   },
   methods: {
-    cancelTaskProgression() {
+    openModal() {
+      this.isModalVisible = true
+    },
+    closeModal() {
+      this.isModalVisible = false
+    },
+    confirmCancel() {
+      // Define the modal content dynamically
+      this.modalHeadline = `Stop task`
+      this.modalText = `Do you want to stop and return to the home screen?`
+
+      // Set dynamic action
+      this.modalPrimaryActionText = 'Stop task'
+      ;(this.modalPrimaryAction = () => {
+        this.goToHome()
+        this.closeModal()
+      }),
+        // Show the modal
+        this.openModal()
+    },
+    goToHome() {
       this.router.push({ name: 'home' })
     },
   },

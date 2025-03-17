@@ -75,6 +75,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  z-index: 9999; /* Ensure it's higher than other content */
 }
 
 .modal {

@@ -110,20 +110,11 @@ export default {
     }
   },
   methods: {
-    handleConfirm() {
-      this.sendMebo()
-      this.closeModal()
-    },
     openModal() {
       this.isModalVisible = true
     },
     closeModal() {
       this.isModalVisible = false
-    },
-    sendMebo() {
-      this.meboStore.addNewMebo(this.inputMessage)
-      this.userStore.increaseDailyMeboCreationCount()
-      console.log('mebo sent')
     },
     confirmMebo() {
       // Define the modal content dynamically
