@@ -111,11 +111,9 @@ export default {
   transform: translateY(-50%) rotate(180deg);
 }
 
-/* .select-style:disabled {
-  background-color: var(--cloud-01);
-  cursor: default;
-  border: 2px solid var(--cloud-02);
-} */
+select:hover {
+  border-color: color-mix(in srgb, var(--sand-03) 80%, var(--base-black) 20%);
+}
 
 .select-style:disabled {
   opacity: 50%;
