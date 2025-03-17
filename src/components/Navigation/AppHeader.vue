@@ -56,7 +56,6 @@ export default {
   padding: 1rem 0.6rem 1rem 1.25rem;
   height: 4.5rem;
   position: relative;
-  background-color: var(--base-sand);
   backdrop-filter: blur(20px);
   top: 0;
   left: 0;

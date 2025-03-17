@@ -8,9 +8,21 @@
 
   /* App General */
   --error: rgb(199, 28, 28);
+  --error-border: rgb(233, 198, 198);
+  --error-dark: rgb(129, 34, 34);
+  --error-light: rgb(255, 234, 234);
   --warning: rgb(206, 148, 23);
+  --warning-border: rgb(219, 204, 167);
+  --warning-dark: rgb(107, 74, 23);
+  --warning-light: rgb(255, 244, 223);
   --success: rgb(17, 142, 71);
+  --success-border: rgb(188, 219, 201);
+  --success-dark: rgb(18, 81, 45);
+  --success-light: rgb(224, 248, 234);
   --info: rgb(87, 87, 175);
+  --info-border: rgb(198, 198, 228);
+  --info-dark: rgb(32, 32, 106);
+  --info-light: rgb(233, 233, 255);
 
   /* Other */
   --cotton-01: #f9f2ee;
@@ -22,6 +34,7 @@
   --terra-02: #a8766c;
   --terra-03: #9e605a;
   --terra-04: #7d625a;
+  --terra-05: #433530;
   --sky-01: #9dd1fe;
   --ocean-01: #3136b7;
   --cloud-01: #f2f2f2;
@@ -33,11 +46,6 @@
     0deg,
     color-mix(in srgb, var(--terra-01) 50%, transparent),
     var(--base-sand)
-  );
-  --linear-sand-02: linear-gradient(
-    0deg,
-    color-mix(in srgb, var(--terra-01) 40%, var(--sand-04)),
-    var(--sand-04)
   );
 }
 
@@ -89,6 +97,8 @@ p {
 
 p {
   white-space: normal;
+  line-height: 140%;
+  letter-spacing: 0.0063rem;
 }
 
 h1 {

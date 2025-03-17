@@ -438,7 +438,7 @@ export default {
 }
 
 .task-list-row {
-  padding: 0.25rem 1.25rem;
+  padding: 0 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -452,7 +452,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block: 1.35rem;
+  margin-block: 0.75rem;
   cursor: pointer;
   text-align: left;
 }
@@ -535,6 +535,13 @@ export default {
   flex-direction: column;
   gap: 1.25rem;
   justify-content: center;
+  align-items: center;
+}
+
+.task-desc-text,
+.task-input {
+  min-height: 3.125rem; /* button height */
+  display: flex;
   align-items: center;
 }
 

@@ -502,7 +502,7 @@ h2 {
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .help-sub-view {
-    width: 70vw;
+    width: 69vw;
   }
 }
 

@@ -186,7 +186,7 @@ export default {
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .document-task-status-body {
-    width: 70vw;
+    width: 69vw;
   }
 }
 
