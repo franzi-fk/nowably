@@ -8,7 +8,7 @@
       >
         <div class="help-sub-view">
           <section class="intro">
-            <h1>Stuck? Let's find your spark again!</h1>
+            <h1>Let's find your spark again</h1>
             <p>
               You have already opened a Message in a Bottle today, but here are some other quick
               ways to recharge your motivation.
@@ -87,7 +87,14 @@
           <section class="help-sub-view-body receive-mebo-opened" v-if="meboOpened === true">
             <h2>Message:</h2>
             <p id="mebo-text">{{ this.mebo.text }}</p>
-            <SolidButton type="text" text="Continue" variant="primary" @click="finishHelp" />
+            <small>— written by another user</small>
+            <SolidButton
+              type="text"
+              text="Continue"
+              variant="primary"
+              @click="finishHelp"
+              class="btn-continue"
+            />
           </section>
           <section class="help-sub-view-body receive-mebo-unopened" v-else>
             <Illus_MeboReceived width="22" />
@@ -386,6 +393,7 @@ export default {
       this.meboOpened = true
       this.userStore.updateAllReceivedMebos(this.mebo.id)
       this.userStore.updateLastMeboReceived()
+      this.userStore.setCurrentStep('openedMebo')
     },
     getMebo() {
       const allMebos = this.meboStore.mebos
@@ -394,7 +402,7 @@ export default {
 
       if (allMebos.length === 0) return null // No mebos available
 
-      // Admins can receive any random mebo without validation
+      // Admins can receive any random mebo without validation, but they should still not overwrite an existing mebo
       if (this.userStore.role === 'admin') {
         return (this.mebo = allMebos[Math.floor(Math.random() * allMebos.length)])
       }
@@ -677,7 +685,11 @@ h2 {
 
 #mebo-text {
   max-width: 65ch;
-  margin-bottom: 3rem;
+}
+
+small {
+  margin-top: 1rem;
+  color: var(--cloud-04);
 }
 
 .slot-content {

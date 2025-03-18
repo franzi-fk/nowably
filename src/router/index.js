@@ -8,6 +8,7 @@ import AfterHelpView from '../views/AfterHelpView.vue'
 import CompletionCardsView from '../views/CompletionCardsView.vue'
 import AllTasksView from '../views/AllTasksView.vue'
 import CreateMeboView from '../views/CreateMeboView.vue'
+import ReceivedMebosView from '../views/ReceivedMebosView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: '/send-message-in-bottle',
       name: 'send-message-in-bottle',
       component: CreateMeboView,
+    },
+    {
+      path: '/received-messages',
+      name: 'received-messages',
+      component: ReceivedMebosView,
     },
   ],
   scrollBehavior() {

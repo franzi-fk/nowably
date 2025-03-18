@@ -14,6 +14,7 @@
         "
       />
       <CompletionCardsTile />
+      <ReceivedMebosTile />
     </div>
   </div>
 </template>
@@ -25,12 +26,14 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import CompletionCardsTile from '@/components/DataDisplay/CompletionCardsTile.vue'
 import CreateMeboBanner from '@/components/DataDisplay/CreateMeboBanner.vue'
+import ReceivedMebosTile from '../components/DataDisplay/ReceivedMebosTile.vue'
 
 export default {
   components: {
     OpenTasksList,
     CompletionCardsTile,
     CreateMeboBanner,
+    ReceivedMebosTile,
   },
   data() {
     return {
