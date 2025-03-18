@@ -1,15 +1,18 @@
 <template>
-  <AppHeader />
-  <div class="all-mebos-container flex-grow view-layout-default">
-    <section class="welcome-message page-padding-inline">
-      <h1>Received Messages in a Bottle</h1>
-    </section>
-    <div class="tile-container">
-      <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
-        <p class="mebo-text">
-          {{ mebo.text }}
-        </p>
+  <div class="wrapper">
+    <SidebarNavi variant="user" />
+    <AppHeader />
+    <div class="all-mebos-container flex-grow view-layout-default">
+      <section class="welcome-message page-padding-inline">
+        <h1>Received Messages in a Bottle</h1>
       </section>
+      <div class="tile-container">
+        <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
+          <p class="mebo-text">
+            {{ mebo.text }}
+          </p>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -19,9 +22,12 @@ import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
 import { useMeboStore } from '../stores/meboStore'
 import { useRouter } from 'vue-router'
+import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 
 export default {
-  components: {},
+  components: {
+    SidebarNavi,
+  },
   data() {
     return {
       taskStore: useTaskStore(),
@@ -52,6 +58,8 @@ export default {
 
 <style scoped>
 .all-mebos-container {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -84,7 +92,7 @@ export default {
   justify-content: flex-start;
   gap: 0.2rem;
   width: 100%;
-  background-color: var(--white-33);
+  background-color: var(--t-white-33);
   border-radius: 1.5rem;
   padding: 2.8rem 1.25rem 3rem 1.25rem;
   text-align: left;

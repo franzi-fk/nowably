@@ -1,47 +1,52 @@
 <template>
-  <AppHeader />
-  <article class="cards-view-container flex-grow view-layout-default">
-    <section class="cards-view-header page-padding-inline">
-      <h1>Completion Cards</h1>
-    </section>
-    <section class="cards-tile cards-container">
-      <!-- Render cards for reached milestones -->
-      <CompletionCard
-        v-for="(milestone, index) in reachedMilestones"
-        :key="`reached-${index}`"
-        :milestone="milestone"
-        :isFlipped="false"
-      />
+  <div class="wrapper">
+    <SidebarNavi variant="user" />
+    <AppHeader />
+    <article class="cards-view-container flex-grow view-layout-default">
+      <section class="cards-view-header page-padding-inline">
+        <h1>Completion Cards</h1>
+      </section>
+      <section class="cards-tile cards-container">
+        <!-- Render cards for reached milestones -->
+        <CompletionCard
+          v-for="(milestone, index) in reachedMilestones"
+          :key="`reached-${index}`"
+          :milestone="milestone"
+          :isFlipped="false"
+        />
 
-      <!-- Render card for next milestone -->
-      <CompletionCard
-        v-if="nextMilestone"
-        :key="'next-milestone'"
-        :milestone="nextMilestone"
-        :isFlipped="true"
-        :backText="`Complete ${nextMilestoneDistance} more tasks to unlock this card`"
-      />
+        <!-- Render card for next milestone -->
+        <CompletionCard
+          v-if="nextMilestone"
+          :key="'next-milestone'"
+          :milestone="nextMilestone"
+          :isFlipped="true"
+          :backText="`Complete ${nextMilestoneDistance} more tasks to unlock this card`"
+        />
 
-      <!-- Render cards for closed milestones -->
-      <CompletionCard
-        v-for="(milestone, index) in closedMilestones"
-        :key="`closed-${index}`"
-        :milestone="milestone"
-        :isFlipped="true"
-      />
-    </section>
-  </article>
+        <!-- Render cards for closed milestones -->
+        <CompletionCard
+          v-for="(milestone, index) in closedMilestones"
+          :key="`closed-${index}`"
+          :milestone="milestone"
+          :isFlipped="true"
+        />
+      </section>
+    </article>
+  </div>
 </template>
 
 <script>
 import { useRouter } from 'vue-router'
 import CompletionCard from '@/components/DataDisplay/CompletionCard.vue'
 import { useUserStore } from '../stores/userStore'
+import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 
 export default {
   name: 'CompletionCardsView',
   components: {
     CompletionCard,
+    SidebarNavi,
   },
   data() {
     return {
@@ -82,6 +87,8 @@ export default {
 
 <style scoped>
 .cards-view-container {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -89,6 +96,7 @@ export default {
   gap: 2rem;
   width: 100%;
   height: 100%;
+  padding-inline: 2rem;
 }
 
 .cards-view-header {

@@ -1,86 +1,89 @@
 <template>
-  <AppHeader />
-  <article class="mebo-sent-view-container flex-grow view-layout-default" v-if="messageSent">
-    <div class="mebo-sent-header page-padding-inline">
-      <h1>Your Message in a Bottle has been sent.</h1>
-    </div>
-    <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
-      <p v-if="this.userStore.availableMeboTokens === 1">
-        You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today. Do you
-        want to write another message now?
-      </p>
-      <p v-else>
-        You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today. Do
-        you want to write another message now?
-      </p>
-      <div class="mebo-sent-actions">
-        <SolidButton
-          text="Write another message"
-          type="text"
-          variant="primary"
-          @click="messageSent = false"
-        />
-        <LinkButton text="Go to Home" type="text" @click="goToHome" />
+  <div class="wrapper">
+    <SidebarNavi variant="user" />
+    <AppHeader />
+    <article class="mebo-sent-view-container flex-grow view-layout-default" v-if="messageSent">
+      <div class="mebo-sent-header page-padding-inline">
+        <h1>Your Message in a Bottle has been sent.</h1>
       </div>
-    </div>
-    <div class="mebo-sent-body page-padding-inline" v-else>
-      <div class="mebo-sent-actions">
-        <LinkButton text="Go to Home" type="text" @click="goToHome" />
+      <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
+        <p v-if="this.userStore.availableMeboTokens === 1">
+          You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today. Do
+          you want to write another message now?
+        </p>
+        <p v-else>
+          You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today. Do
+          you want to write another message now?
+        </p>
+        <div class="mebo-sent-actions">
+          <SolidButton
+            text="Write another message"
+            type="text"
+            variant="primary"
+            @click="messageSent = false"
+          />
+          <LinkButton text="Go to Home" type="text" @click="goToHome" />
+        </div>
       </div>
-    </div>
-  </article>
-  <article class="create-mebo-view-container flex-grow view-layout-default" v-else>
-    <section class="create-mebo-header page-padding-inline">
-      <h1>Send a Message in a Bottle</h1>
-      <p>Another user who's in need of some motivational words can receive your message.</p>
-    </section>
-    <section class="tile-container">
-      <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
-        You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today.
-      </p>
-      <p v-else class="tile-headline">
-        You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today.
-      </p>
-      <p>
-        Write what you would tell a friend who is struggling to start a task or simply feeling
-        demotivated. Make sure it's in English, anonymous, and neutral, so anyone reading it can
-        understand and find it helpful.
-      </p>
-      <form class="write-message-form" @submit.prevent="confirmMebo">
-        <label for="input-message" class="sr-only">Your message</label>
-        <InputText
-          id="input-message"
-          v-model="inputMessage"
-          name="input-message"
-          variant="multi-line"
-          maxLength="1000"
-          minLength="200"
-        />
-        <InputCheckbox
-          id="mebo-compliance"
-          v-model="meboComplianceApproved"
-          label="My message is free of hate speech, discrimination, or harm. I maintain a positive,
+      <div class="mebo-sent-body page-padding-inline" v-else>
+        <div class="mebo-sent-actions">
+          <LinkButton text="Go to Home" type="text" @click="goToHome" />
+        </div>
+      </div>
+    </article>
+    <article class="create-mebo-view-container flex-grow view-layout-default" v-else>
+      <section class="create-mebo-header page-padding-inline">
+        <h1>Send a Message in a Bottle</h1>
+        <p>Another user who's in need of some motivational words can receive your message.</p>
+      </section>
+      <section class="tile-container">
+        <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
+          You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today.
+        </p>
+        <p v-else class="tile-headline">
+          You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today.
+        </p>
+        <p>
+          Write what you would tell a friend who is struggling to start a task or simply feeling
+          demotivated. Make sure it's in English, anonymous, and neutral, so anyone reading it can
+          understand and find it helpful.
+        </p>
+        <form class="write-message-form" @submit.prevent="confirmMebo">
+          <label for="input-message" class="sr-only">Your message</label>
+          <InputText
+            id="input-message"
+            v-model="inputMessage"
+            name="input-message"
+            variant="multi-line"
+            maxLength="1000"
+            minLength="200"
+          />
+          <InputCheckbox
+            id="mebo-compliance"
+            v-model="meboComplianceApproved"
+            label="My message is free of hate speech, discrimination, or harm. I maintain a positive,
           supportive tone and exclude personal details like phone numbers or addresses, as well as
           links."
-        />
-        <SolidButton
-          type="text"
-          id="btn-send-message"
-          text="Send Message"
-          variant="primary"
-          :disabled="!meboComplianceApproved || inputMessage.length <= 200"
-        />
-      </form>
-    </section>
-  </article>
-  <ModalOverlay
-    :isVisible="isModalVisible"
-    :text="modalText"
-    :headline="modalHeadline"
-    :primaryActionText="modalPrimaryActionText"
-    :primaryAction="modalPrimaryAction"
-    @update:isVisible="isModalVisible = $event"
-  />
+          />
+          <SolidButton
+            type="text"
+            id="btn-send-message"
+            text="Send Message"
+            variant="primary"
+            :disabled="!meboComplianceApproved || inputMessage.length <= 200"
+          />
+        </form>
+      </section>
+    </article>
+    <ModalOverlay
+      :isVisible="isModalVisible"
+      :text="modalText"
+      :headline="modalHeadline"
+      :primaryActionText="modalPrimaryActionText"
+      :primaryAction="modalPrimaryAction"
+      @update:isVisible="isModalVisible = $event"
+    />
+  </div>
 </template>
 
 <script>
@@ -91,6 +94,7 @@ import { useMeboStore } from '@/stores/meboStore'
 import InputText from '@/components/InputsAndControls/InputText.vue'
 import InputCheckbox from '@/components/InputsAndControls/InputCheckbox.vue'
 import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
+import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 
 export default {
   name: 'CreateMeboView',
@@ -98,6 +102,7 @@ export default {
     InputText,
     InputCheckbox,
     ModalOverlay,
+    SidebarNavi,
   },
   data() {
     return {
@@ -157,7 +162,19 @@ export default {
 </script>
 
 <style scoped>
+.sidebar {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.app-header {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .create-mebo-view-container {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

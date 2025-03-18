@@ -1,5 +1,11 @@
 <template>
-  <component v-if="iconComponent" :is="iconComponent" :size="iconSize" :color="props.color" />
+  <component
+    v-if="iconComponent"
+    :is="iconComponent"
+    :size="iconSize"
+    :color="props.color"
+    class="icon"
+  />
   <span v-else>⚠️</span>
   <!-- Fallback if icon not found -->
 </template>

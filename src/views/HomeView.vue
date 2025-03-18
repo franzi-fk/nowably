@@ -1,20 +1,23 @@
 <template>
-  <AppHeader />
-  <div class="home-container flex-grow view-layout-default">
-    <section class="welcome-message page-padding-inline">
-      <h1>Welcome</h1>
-      <span>Let's defeat procrastination now.</span>
-    </section>
-    <div class="tile-container">
-      <OpenTasksList listHeadline="Tasks" />
-      <CreateMeboBanner
-        v-if="
-          this.userStore.role === 'admin' ||
-          (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens > 0)
-        "
-      />
-      <CompletionCardsTile />
-      <ReceivedMebosTile />
+  <div class="wrapper">
+    <SidebarNavi variant="user" />
+    <AppHeader />
+    <div class="home-container flex-grow view-layout-default">
+      <section class="welcome-message page-padding-inline">
+        <h1>Welcome</h1>
+        <span>Let's defeat procrastination now.</span>
+      </section>
+      <div class="tile-container">
+        <OpenTasksList listHeadline="Tasks" />
+        <CreateMeboBanner
+          v-if="
+            this.userStore.role === 'admin' ||
+            (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens > 0)
+          "
+        />
+        <CompletionCardsTile />
+        <ReceivedMebosTile />
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +30,7 @@ import { useUserStore } from '@/stores/userStore'
 import CompletionCardsTile from '@/components/DataDisplay/CompletionCardsTile.vue'
 import CreateMeboBanner from '@/components/DataDisplay/CreateMeboBanner.vue'
 import ReceivedMebosTile from '../components/DataDisplay/ReceivedMebosTile.vue'
+import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 
 export default {
   components: {
@@ -34,6 +38,7 @@ export default {
     CompletionCardsTile,
     CreateMeboBanner,
     ReceivedMebosTile,
+    SidebarNavi,
   },
   data() {
     return {
@@ -52,6 +57,8 @@ export default {
 
 <style scoped>
 .home-container {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -59,6 +66,7 @@ export default {
   gap: 2rem;
   width: 100%;
   height: 100%;
+  padding-inline: 2rem;
 }
 
 .welcome-message {

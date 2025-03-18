@@ -1,8 +1,5 @@
 <template>
-  <div class="header-container">
-    <h1>
-      <img src="@/assets/logo-nowably.svg" alt="Logo Nowably" id="logo" @click="goToHome()" />
-    </h1>
+  <div class="app-header header-container">
     <div class="role-container">
       <LinkButton type="text" text="Make me User" @click="setRoleToUser" />
       <LinkButton type="text" text="Make me Admin" @click="setRoleToAdmin" />
@@ -12,25 +9,16 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-import LinkButton from '@/components/InputsAndControls/LinkButton.vue'
 import { useUserStore } from '@/stores/userStore'
 
 export default {
   name: 'AppHeader',
-  components: {
-    LinkButton,
-  },
   data() {
     return {
-      router: useRouter(),
       userStore: useUserStore(),
     }
   },
   methods: {
-    goToHome() {
-      this.router.push({ name: 'home' })
-    },
     setRoleToAdmin() {
       this.userStore.setRoleToAdmin()
     },
@@ -42,21 +30,15 @@ export default {
 </script>
 
 <style scoped>
-#logo {
-  margin-top: 0.75rem;
-  cursor: pointer;
-}
-
 .header-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   width: 100%;
   padding: 1rem 0.6rem 1rem 1.25rem;
-  height: 4.5rem;
+  height: 4rem;
   position: relative;
-  backdrop-filter: blur(20px);
   top: 0;
   left: 0;
 }

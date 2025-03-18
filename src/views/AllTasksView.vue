@@ -1,16 +1,19 @@
 <template>
-  <AppHeader />
-  <article class="tasks-view-container flex-grow view-layout-default">
-    <section class="tasks-view-header page-padding-inline">
-      <h1>Tasks</h1>
-    </section>
-    <div class="tile-container">
-      <section class="open-tasks">
-        <OpenTasksList :showViewAll="false" />
+  <div class="wrapper">
+    <SidebarNavi variant="user" />
+    <AppHeader />
+    <article class="tasks-view-container flex-grow view-layout-default">
+      <section class="tasks-view-header page-padding-inline">
+        <h1>Tasks</h1>
       </section>
-      <section class="done-tasks"><DoneTasksList :showViewAll="false" /></section>
-    </div>
-  </article>
+      <div class="tile-container">
+        <section class="open-tasks">
+          <OpenTasksList :showViewAll="false" />
+        </section>
+        <section class="done-tasks"><DoneTasksList :showViewAll="false" /></section>
+      </div>
+    </article>
+  </div>
 </template>
 
 <script>
@@ -19,12 +22,14 @@ import { useUserStore } from '../stores/userStore'
 import { useTaskStore } from '../stores/taskStore'
 import OpenTasksList from '@/components/DataDisplay/OpenTasksList.vue'
 import DoneTasksList from '@/components/DataDisplay/DoneTasksList.vue'
+import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 
 export default {
   name: 'CompletionCardsView',
   components: {
     OpenTasksList,
     DoneTasksList,
+    SidebarNavi,
   },
   data() {
     return {
@@ -42,6 +47,8 @@ export default {
 
 <style scoped>
 .tasks-view-container {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
