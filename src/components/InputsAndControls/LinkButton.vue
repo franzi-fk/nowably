@@ -68,7 +68,7 @@ export default {
   background: transparent;
   cursor: pointer;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.02rem;
   min-height: 3.125rem;
   position: relative;

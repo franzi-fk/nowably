@@ -3,10 +3,80 @@
   <div class="need-help-view flex-grow task-view-layout" v-if="taskStore.currentTask">
     <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
       <article
-        id="motivation-alternative"
+        id="motivation-alt"
         v-if="!userStore.canReceiveMebo || meboStore.mebos.length < 1 || !mebo"
       >
-        Mebo cannot be received, show alternative here
+        <div class="help-sub-view">
+          <section class="intro">
+            <h1>Stuck? Let's find your spark again!</h1>
+            <p>
+              You have already opened a Message in a Bottle today, but here are some other quick
+              ways to recharge your motivation.
+            </p>
+          </section>
+          <section class="motivation-alt-body help-sub-view-body">
+            <section class="own-achievements" v-if="this.userStore.totalSuccessCount > 9">
+              <div class="motivation-intro">
+                <AppIcon name="history" color="var(--terra-06)" size="18" /><span
+                  class="sub-view-headline"
+                  >Take a look back</span
+                >
+              </div>
+              <p>
+                You have already completed
+                <strong>{{ this.userStore.totalSuccessCount }} tasks</strong> — you can do it again!
+              </p>
+            </section>
+            <section class="motivation-techniques">
+              <div class="motivation-intro">
+                <AppIcon name="playCircle" color="var(--terra-06)" size="18" /><span
+                  class="sub-view-headline"
+                  >Take an action</span
+                >
+              </div>
+              <ContentRotator
+                :contentItems="contentItems"
+                btnText="Show another action"
+                btnIcon="iterationCcw"
+              >
+                <!-- Default slot for rendering the full content -->
+                <template #default="{ currentContent }">
+                  <article class="slot-content">
+                    <!-- Title of the content -->
+                    <span class="slot-headline">{{ currentContent.title }}</span>
+
+                    <!-- "How to do it" section -->
+                    <div class="how-to-do-it">
+                      <span class="content-subheading">How to do it</span>
+                      <slot name="howTo" :content="currentContent.howTo">{{
+                        currentContent.howTo
+                      }}</slot>
+                    </div>
+
+                    <!-- "Why it works" section -->
+                    <div class="why-it-works">
+                      <span class="content-subheading">Why it works</span>
+                      <slot name="whyItWorks" :content="currentContent.whyItWorks">{{
+                        currentContent.whyItWorks
+                      }}</slot>
+                    </div>
+                  </article>
+                </template>
+              </ContentRotator>
+            </section>
+            <SolidButton
+              type="text"
+              text="Continue"
+              variant="primary"
+              class="btn-continue"
+              @click="finishHelp"
+            />
+          </section>
+        </div>
+        <section class="actions">
+          <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+          <LinkButton type="text" text="Skip this" @click="finishHelp" />
+        </section>
       </article>
       <article id="receive-mebo" v-else>
         <div class="help-sub-view">
@@ -153,7 +223,7 @@
               v-if="hummingAnimationCompleted"
               type="text"
               text="Continue"
-              id="btn-continue"
+              class="btn-continue"
               variant="primary"
               @click="finishHelp"
             />
@@ -226,6 +296,7 @@ import { useRouter } from 'vue-router'
 import Illus_MeboReceived from '../components/Visuals/Illus_MeboReceived.vue'
 import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
 import HintBadge from '../components/FeedbackAndStatus/HintBadge.vue'
+import ContentRotator from '../components/ContainersAndLayouts/ContentRotator.vue'
 
 export default {
   name: 'NeedHelpView',
@@ -239,6 +310,7 @@ export default {
     Illus_MeboReceived,
     TaskProgressHeader,
     HintBadge,
+    ContentRotator,
   },
   data() {
     return {
@@ -262,6 +334,46 @@ export default {
       relaxExerciseStarted: false,
       animationDuration: 120, // in seconds
       hummingAnimationCompleted: false,
+      contentItems: [
+        {
+          title: 'Power Posing',
+          howTo:
+            'Stand tall with hands on hips, shoulders back, and chest open. Hold for 2 minutes.',
+          whyItWorks:
+            'Boosts confidence and motivation by triggering the release of hormones that make you feel powerful.',
+        },
+        {
+          title: 'Listening to Energizing Music',
+          howTo: 'Play a high-energy playlist with upbeat songs before or during a task.',
+          whyItWorks: 'Fast-tempo, uplifting music releases dopamine, enhancing mood and energy.',
+        },
+        {
+          title: 'Quick Physical Activity',
+          howTo: 'Do 30 seconds of jumping jacks or stretch your body.',
+          whyItWorks:
+            'Boosts circulation and releases endorphins, which increase energy and motivation.',
+        },
+        {
+          title: 'Visualization',
+          howTo:
+            'Close your eyes for 30 seconds and vividly imagine yourself completing the task successfully.',
+          whyItWorks:
+            'Visualization activates brain regions associated with goal achievement, making you more motivated to act.',
+        },
+        {
+          title: 'Box Breathing',
+          howTo:
+            'Inhale for 4 seconds, hold for 4, exhale for 4, hold for 4. Repeat for 4-5 cycles.',
+          whyItWorks:
+            'Calms the nervous system and helps you refocus, reducing anxiety and boosting motivation.',
+        },
+        {
+          title: 'Change Your Space',
+          howTo: 'Move to a new spot or tidy up your space.',
+          whyItWorks:
+            'A fresh environment brings new energy and a renewed mindset, helping you feel more motivated and focused.',
+        },
+      ],
       splitTask1: '',
       splitTask2: '',
       splitTask3: '',
@@ -507,7 +619,7 @@ h2 {
   width: 100%;
 }
 
-#btn-continue {
+.btn-continue {
   margin-top: 2.4rem;
 }
 
@@ -566,6 +678,66 @@ h2 {
 #mebo-text {
   max-width: 65ch;
   margin-bottom: 3rem;
+}
+
+.slot-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 50ch;
+}
+
+.content-subheading {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 0.0313rem;
+  color: var(--terra-06);
+}
+
+.how-to-do-it,
+.why-it-works {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.own-achievements,
+.motivation-techniques {
+  padding: 2.4rem 2.5rem 2.8rem 2.5rem;
+  border: 4px solid var(--cotton-01);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.own-achievements {
+  margin-bottom: 2rem;
+}
+
+.sub-view-headline {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--terra-06);
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+.slot-headline {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.0313rem;
+  color: var(--terra-05);
+  margin-block: 0.5rem 0.2rem;
+}
+
+.motivation-intro {
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+  justify-content: center;
 }
 
 /*_______________________________________________________*/

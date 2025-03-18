@@ -28,19 +28,11 @@ export const useUserStore = defineStore('userStore', {
       return lastReceivedDate !== todayDate
     },
     availableMeboTokens() {
-      // Tokens (per user) for mebo creation by the user
+      // Tokens (per user) for mebo creation by the user; maximum is 3
       if (this.role === 'admin') {
         return Infinity // Admins have unlimited tokens
       }
-      // maximum available tokens per user per day: 3
       const taskStore = useTaskStore()
-
-      // Ensure the daily counter resets when a new day starts
-      const today = new Date().toISOString().split('T')[0]
-      if (this.dailyMeboCreation.currentDay !== today) {
-        this.dailyMeboCreation = { currentDay: today, meboCount: 0 }
-        localStorage.setItem('dailyMeboCreation', JSON.stringify(this.dailyMeboCreation))
-      }
 
       // Get the number of completed tasks in the last 24h, cap at 3
       const earnedTokens = Math.min(taskStore.completedTasksCountLast24h, 3)
@@ -50,7 +42,7 @@ export const useUserStore = defineStore('userStore', {
         return 0
       }
 
-      // Return the remaining tokens the user can use (subtract spent tokens (meboCount) from earnedTokens)
+      // Return the remaining tokens the user can use
       return Math.max(0, earnedTokens - this.dailyMeboCreation.meboCount)
     },
   },
@@ -86,6 +78,13 @@ export const useUserStore = defineStore('userStore', {
         localStorage.setItem('dailyMeboCreation', JSON.stringify(this.dailyMeboCreation))
       }
     },
+    resetDailyMeboCount() {
+      const today = new Date().toISOString().split('T')[0]
+      if (this.dailyMeboCreation.currentDay !== today) {
+        this.dailyMeboCreation = { currentDay: today, meboCount: 0 }
+        localStorage.setItem('dailyMeboCreation', JSON.stringify(this.dailyMeboCreation))
+      }
+    },
     updateLastMeboReceived() {
       this.lastMeboReceived = new Date().toISOString()
       // Save to localStorage
@@ -97,13 +96,15 @@ export const useUserStore = defineStore('userStore', {
       localStorage.setItem('allReceivedMebos', JSON.stringify(this.allReceivedMebos))
     },
     initLoad() {
-      // Initialize dailyMeboCreation with today's date and load any saved data
-      this.dailyMeboCreation.currentDay = new Date().toISOString().split('T')[0] // Ensure it updates on each load
+      this.resetDailyMeboCount() // Ensure reset on load
       const savedDailyMebo = JSON.parse(localStorage.getItem('dailyMeboCreation')) || {
         currentDay: this.dailyMeboCreation.currentDay,
         meboCount: 0,
       }
-      this.dailyMeboCreation.meboCount = savedDailyMebo.meboCount
+      this.dailyMeboCreation.meboCount =
+        savedDailyMebo.currentDay === this.dailyMeboCreation.currentDay
+          ? savedDailyMebo.meboCount
+          : 0 // Reset if it's a new day
 
       this.role = JSON.parse(localStorage.getItem('role')) || 'user'
       this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null
