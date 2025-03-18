@@ -4,9 +4,10 @@
     <div class="mebo-sent-header page-padding-inline">
       <h1>Your Message in a Bottle has been sent.</h1>
     </div>
-    <div class="mebo-sent-body page-padding-inline">
+    <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
       <p v-if="this.userStore.availableMeboTokens === 1">
-        You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today.
+        You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today. Do you
+        want to write another message now?
       </p>
       <p v-else>
         You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today. Do
@@ -19,6 +20,11 @@
           variant="primary"
           @click="messageSent = false"
         />
+        <LinkButton text="Go to Home" type="text" @click="goToHome" />
+      </div>
+    </div>
+    <div class="mebo-sent-body page-padding-inline" v-else>
+      <div class="mebo-sent-actions">
         <LinkButton text="Go to Home" type="text" @click="goToHome" />
       </div>
     </div>

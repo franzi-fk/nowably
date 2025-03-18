@@ -5,7 +5,12 @@
       <LinkButton type="text" text="View all" @click="goToReceivedMessages()" />
     </div>
     <div class="received-mebos-body">
-      <p>
+      <p v-if="this.userStore.allReceivedMebos.length === 1">
+        Need a little boost to keep going? You have
+        <span>{{ this.userStore.allReceivedMebos.length }} motivational message</span> waiting for
+        you. Check it out to stay inspired and keep moving forward. You've got this!
+      </p>
+      <p v-if="this.userStore.allReceivedMebos.length > 1">
         Need a little boost to keep going? You have
         <span>{{ this.userStore.allReceivedMebos.length }} motivational messages</span> waiting for
         you. Check them out to stay inspired and keep moving forward. You've got this!
