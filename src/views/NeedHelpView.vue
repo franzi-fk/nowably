@@ -10,8 +10,9 @@
           <section class="intro">
             <h1>Let's find your spark again</h1>
             <p>
-              You have already opened a Message in a Bottle today, but here are some other quick
-              ways to recharge your motivation.
+              Looks like you've already opened a Message in a Bottle today, or there isn't one
+              available right now. <br />But here are some other quick ways to boost your
+              motivation!
             </p>
           </section>
           <section class="motivation-alt-body help-sub-view-body">
@@ -390,9 +391,12 @@ export default {
   },
   methods: {
     openMebo() {
+      if (!this.mebo) {
+        return // Ensure that there's a valid mebo before proceeding
+      }
       this.meboOpened = true
+
       this.userStore.updateAllReceivedMebos(this.mebo.id)
-      this.userStore.updateLastMeboReceived()
       this.userStore.setCurrentStep('openedMebo')
     },
     getMebo() {
@@ -418,9 +422,13 @@ export default {
 
         // if all mebos are invalid, return null to prevent infinite loop
         if (allMebos.every((mebo) => mebo.author === userId || receivedMebos.has(mebo.id))) {
+          console.log('No valid mebo found')
           return (this.mebo = null)
         }
       }
+    },
+    updateLastMeboReceived() {
+      this.userStore.updateLastMeboReceived()
     },
     openModal() {
       this.isModalVisible = true
@@ -539,6 +547,19 @@ export default {
     if (!this.taskStore.currentTask) {
       this.$router.push({ name: 'home' })
     }
+
+    // Detect when the user is about to leave the page (refresh/close tab)
+    window.addEventListener('beforeunload', this.updateLastMeboReceived)
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.updateLastMeboReceived)
+  },
+  beforeRouteLeave(to, from, next) {
+    // Ensure we clean up any state before leaving the route
+    if (this.meboOpened) {
+      this.updateLastMeboReceived() // update lastMeboReceived before leaving
+    }
+    next() // Continue with route navigation
   },
 }
 </script>
