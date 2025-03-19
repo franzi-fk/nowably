@@ -197,6 +197,7 @@ export default {
     transform 0.4s ease-in-out,
     box-shadow 0.4s ease-in-out;
   transform-origin: center;
+  flex-grow: 1;
 }
 
 .aspect-ratio {
@@ -218,6 +219,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 0.7rem;
+  flex-grow: 1;
 }
 
 .completion-card-image {
@@ -226,18 +228,27 @@ export default {
   object-fit: cover;
   border-radius: 0.3rem;
   overflow: hidden;
+  height: fit-content;
 }
 
 .completion-card-title {
-  font-weight: 700;
-  margin: 0.5rem 0;
+  font-weight: 600;
+  margin-block: 0.75rem 0.25rem;
+  font-size: 1.5rem;
 }
 
 .completion-card-content {
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
   padding-inline: 0.125rem;
   text-align: center;
+  height: fit-content;
+  margin-block: auto;
+}
+
+.completion-card-content p {
+  font-size: 1.1rem;
+  line-height: 120%;
+  letter-spacing: 0;
+  margin-block: 0.3rem;
 }
 
 /* Back Side */
@@ -263,16 +274,32 @@ export default {
   font-size: 1.1rem;
 }
 
-/*_________________________________________________________________________*/
+/*_______________________________________________________*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
   .completion-card-back-text {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
-  .completion-card-content {
-    font-size: 1rem;
+  .completion-card-content p {
+    font-size: 1.1rem;
   }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

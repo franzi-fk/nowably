@@ -117,7 +117,7 @@ export default {
   .cards-tile {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 0;
+    padding: 1.25rem;
   }
 }
 
@@ -125,8 +125,8 @@ export default {
 @media (min-width: 768px) {
   .cards-tile {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 1.25rem;
   }
 }
 
@@ -141,14 +141,14 @@ export default {
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
   .cards-tile {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 0;
   }
-}
-
-/* XX-Large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) {
 }
 </style>
