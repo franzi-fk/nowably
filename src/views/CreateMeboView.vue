@@ -8,12 +8,12 @@
       </div>
       <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
         <p v-if="this.userStore.availableMeboTokens === 1">
-          You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today. Do
-          you want to write another message now?
+          You can send another {{ this.userStore.availableMeboTokens }} Message in a Bottle. Do you
+          want to write another message now?
         </p>
         <p v-else>
-          You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today. Do
-          you want to write another message now?
+          You can send another {{ this.userStore.availableMeboTokens }} Messages in a Bottle. Do you
+          want to write another message now?
         </p>
         <div class="mebo-sent-actions">
           <SolidButton
@@ -31,17 +31,20 @@
         </div>
       </div>
     </article>
-    <article class="create-mebo-view-container flex-grow view-layout-default" v-else>
+    <article
+      class="create-mebo-view-container flex-grow view-layout-default"
+      v-if="!messageSent && this.userStore.availableMeboTokens > 0"
+    >
       <section class="create-mebo-header page-padding-inline">
         <h1>Send a Message in a Bottle</h1>
         <p>Another user who's in need of some motivational words can receive your message.</p>
       </section>
       <section class="tile-container">
         <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
-          You can send {{ this.userStore.availableMeboTokens }} more Message in a Bottle today.
+          You can send {{ this.userStore.availableMeboTokens }} Message in a Bottle.
         </p>
         <p v-else class="tile-headline">
-          You can send {{ this.userStore.availableMeboTokens }} more Messages in a Bottle today.
+          You can send {{ this.userStore.availableMeboTokens }} Messages in a Bottle.
         </p>
         <p>
           Write what you would tell a friend who is struggling to start a task or simply feeling
@@ -73,6 +76,19 @@
             :disabled="!meboComplianceApproved || inputMessage.length <= 200"
           />
         </form>
+      </section>
+    </article>
+    <article
+      class="create-mebo-view-container flex-grow view-layout-default"
+      v-if="
+        !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
+      "
+    >
+      <section class="create-mebo-header page-padding-inline">
+        <h1>Send a Message in a Bottle</h1>
+        <p>
+          Complete a task to unlock sending a Message in a Bottle. You can send up to 3 per day.
+        </p>
       </section>
     </article>
     <ModalOverlay
@@ -153,10 +169,6 @@ export default {
     this.userStore.initLoad()
     this.taskStore.initLoad()
     this.meboStore.initLoad()
-    // If role is not admin and dailyMeboCreation count >= 3
-    if (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0) {
-      this.$router.push({ name: 'home' })
-    }
   },
 }
 </script>

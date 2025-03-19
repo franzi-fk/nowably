@@ -1,5 +1,5 @@
+<!-- Desktop Navi (mobile Navi is in AppHeader) -->
 <template>
-  <!-- Desktop version (mobile Version is in AppHeader) -->
   <nav
     :class="['sidebar', { collapsed: isCollapsed }]"
     aria-label="Main navigation"
@@ -14,19 +14,16 @@
       </h1>
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
-      <li
+      <router-link
         v-for="(item, index) in userMenu"
         :key="index"
-        role="none"
-        :class="{ active: isActive(item.link) }"
+        :to="item.link"
+        role="menuitem"
+        :aria-label="'Go to ' + item.name"
+        active-class="active-link"
+        class="menu-item"
       >
-        <router-link
-          :to="item.link"
-          role="menuitem"
-          :aria-label="'Go to ' + item.name"
-          active-class="active-link"
-          class="menu-item"
-        >
+        <li role="none" :class="{ active: isActive(item.link) }">
           <AppIcon
             v-if="item.icon"
             :class="['icon', item.icon]"
@@ -34,23 +31,20 @@
             color="currentColor"
           />
           <span>{{ item.name }}</span>
-        </router-link>
-      </li>
+        </li>
+      </router-link>
     </ul>
     <ul v-else role="menu" aria-label="Collapsed menu">
-      <li
+      <router-link
         v-for="(item, index) in userMenu"
         :key="index"
-        role="none"
-        :class="{ active: isActive(item.link) }"
+        :to="item.link"
+        role="menuitem"
+        :aria-label="'Go to ' + item.name"
+        active-class="active-link"
+        class="menu-item"
       >
-        <router-link
-          :to="item.link"
-          role="menuitem"
-          :aria-label="'Go to ' + item.name"
-          active-class="active-link"
-          class="menu-item"
-        >
+        <li role="none" :class="{ active: isActive(item.link) }">
           <AppIcon
             v-if="item.icon"
             :class="['icon', item.icon]"
@@ -58,8 +52,8 @@
             color="currentColor"
           />
           <span class="sr-only">{{ item.name }}</span>
-        </router-link>
-      </li>
+        </li>
+      </router-link>
     </ul>
     <LinkButton
       @click="toggleCollapse"
@@ -147,10 +141,10 @@ h1 {
 
 .sidebar {
   width: fit-content;
-  max-width: 14.5rem;
+  max-width: 13.5rem;
   background-color: var(--t-white-50);
   color: var(--base-black);
-  padding: 1.5rem 1.5rem 2rem 1.5rem;
+  padding: 1.5rem 1rem 2rem 1rem;
   transition: all 0.4s linear;
   overflow: hidden;
   border-top-right-radius: 1.5rem;
@@ -172,18 +166,24 @@ h1 {
 .sidebar.collapsed {
   width: 5rem;
   padding: 1.5rem 0.75rem 2rem 0.75rem;
+  transition: all 0.4s linear;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  width: 100%;
+  transition: all 0.4s linear;
 }
 
 .sidebar li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
   padding: 0.9rem 0.6rem;
   border-radius: 0.85rem;
   cursor: pointer;
@@ -194,6 +194,7 @@ h1 {
   transition: all 0.3s linear;
   min-width: 3.5rem;
   min-height: 3.5rem;
+  transition: all 0.4s linear;
 }
 
 .menu-item {
@@ -210,7 +211,7 @@ h1 {
 }
 
 .sidebar li:hover:not(.active) {
-  background-color: var(--t-white-50);
+  background-color: var(--t-white-66);
 }
 
 .sidebar a {
@@ -235,7 +236,7 @@ h1 {
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .sidebar {
-    display: flex; /* Show desktop sidebar on mobile */
+    display: flex;
   }
 }
 

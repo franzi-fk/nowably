@@ -4,7 +4,7 @@
     <AppHeader />
     <article class="main-view-container tasks-view-container flex-grow view-layout-default">
       <section class="tasks-view-header page-padding-inline">
-        <h1>Tasks</h1>
+        <h1>All Tasks</h1>
       </section>
       <div class="tile-container">
         <section class="open-tasks">

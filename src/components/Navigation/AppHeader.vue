@@ -175,8 +175,8 @@ export default {
 
 .mobile-header {
   position: absolute;
-  top: 0.75rem;
-  right: 0.5rem;
+  top: 0.8rem;
+  right: 1.5rem;
 }
 
 .mobile-overlay ul {

@@ -3,21 +3,29 @@
     <SidebarNavi variant="user" />
     <AppHeader />
     <div class="main-view-container all-mebos-container flex-grow view-layout-default">
-      <section class="welcome-message page-padding-inline">
-        <h1>Received Messages in a Bottle</h1>
-      </section>
-      <div class="tile-container">
-        <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
-          <p class="mebo-text">
-            {{ mebo.text }}
-          </p>
-          <div class="decoration">
-            <div class="line"></div>
-            <AppIcon name="flower" size="22" color="var(--terra-07)" />
-            <div class="line"></div>
-          </div>
+      <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length > 0">
+        <section class="received-mebos-header page-padding-inline">
+          <h1>Received Messages in a Bottle</h1>
         </section>
-      </div>
+        <div class="tile-container">
+          <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
+            <p class="mebo-text">
+              {{ mebo.text }}
+            </p>
+            <div class="decoration">
+              <div class="line"></div>
+              <AppIcon name="flower" size="22" color="var(--terra-07)" />
+              <div class="line"></div>
+            </div>
+          </section>
+        </div>
+      </article>
+      <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length <= 0">
+        <section class="welcome-message page-padding-inline">
+          <h1>Received Messages in a Bottle</h1>
+          <p>Oops, it's empty here. You haven't received any Messages in a Bottle yet.</p>
+        </section>
+      </article>
     </div>
   </div>
 </template>
@@ -62,11 +70,17 @@ export default {
 </script>
 
 <style scoped>
-.welcome-message {
+.received-mebos {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.received-mebos-header {
   display: flex;
   flex-direction: column;
   text-align: left;
-  gap: 1rem;
+  gap: 1.3rem;
   padding-block: 1.4rem 1rem;
 }
 
