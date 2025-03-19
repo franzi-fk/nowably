@@ -11,6 +11,11 @@
           <p class="mebo-text">
             {{ mebo.text }}
           </p>
+          <div class="decoration">
+            <div class="line"></div>
+            <AppIcon name="flower" size="22" color="var(--terra-07)" />
+            <div class="line"></div>
+          </div>
         </section>
       </div>
     </div>
@@ -22,7 +27,7 @@ import { useTaskStore } from '@/stores/taskStore'
 import { useUserStore } from '@/stores/userStore'
 import { useMeboStore } from '../stores/meboStore'
 import { useRouter } from 'vue-router'
-import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
+import SidebarNavi from '@/components/Navigation/SidebarNavi.vue'
 
 export default {
   components: {
@@ -77,19 +82,36 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 0.2rem;
   width: 100%;
   background-color: var(--t-white-33);
   border-radius: 1.5rem;
-  padding: 2.8rem 1.25rem 3rem 1.25rem;
+  padding: 2.8rem 1.25rem 2.3rem 1.25rem;
   text-align: left;
   z-index: 0;
+  position: relative;
 }
 
 .mebo-text {
   max-width: 70ch;
   z-index: 2;
+}
+
+.decoration {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.line {
+  height: 3px;
+  background-color: var(--terra-07);
+  border-radius: 25%;
+  opacity: 0.5;
 }
 
 /*________________________________________________________________________________*/
