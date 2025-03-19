@@ -6,7 +6,7 @@ export const useAppStore = defineStore('appStore', {
       { name: 'Home', link: '/', icon: 'home' },
       { name: 'All tasks', link: '/all-tasks', icon: 'layoutList' },
       { name: 'Completion Cards', link: '/completion-cards', icon: 'galleryHorizontalEnd' },
-      { name: 'Send Message in a Bottle', link: '/send-message-in-bottle', icon: 'send' },
+      { name: 'Send Message in a Bottle', link: '/send-message-in-bottle', icon: 'sendHorizontal' },
       {
         name: 'Received Messages in a Bottle',
         link: '/received-messages',
@@ -17,7 +17,7 @@ export const useAppStore = defineStore('appStore', {
       { name: 'Home', link: '/', icon: 'home' },
       { name: 'All tasks', link: '/all-tasks', icon: 'layoutList' },
       { name: 'Completion Cards', link: '/completion-cards', icon: 'galleryHorizontalEnd' },
-      { name: 'Send Message in a Bottle', link: '/send-message-in-bottle', icon: 'send' },
+      { name: 'Send Message in a Bottle', link: '/send-message-in-bottle', icon: 'sendHorizontal' },
       {
         name: 'Received Messages in a Bottle',
         link: '/received-messages',

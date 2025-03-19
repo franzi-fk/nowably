@@ -5,6 +5,14 @@ export const useMeboStore = defineStore('meboStore', {
   state: () => ({
     mebos: [],
   }),
+  getters: {
+    unpublishedMebos() {
+      return this.mebos.filter((mebo) => mebo.published === false)
+    },
+    publishedMebos() {
+      return this.mebos.filter((mebo) => mebo.published === true)
+    },
+  },
   actions: {
     generateUniqueId() {
       const now = new Date()
@@ -25,7 +33,7 @@ export const useMeboStore = defineStore('meboStore', {
           id: `mebo-${this.generateUniqueId()}`,
           author: 'userId',
           text: message,
-          published: true, // change to false as soon as moderation available
+          published: false,
         })
 
         localStorage.setItem('mebos', JSON.stringify(this.mebos))

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi variant="user" />
+    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
     <article class="mebo-sent-view-container flex-grow view-layout-default" v-if="messageSent">
       <div class="mebo-sent-header page-padding-inline">

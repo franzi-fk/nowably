@@ -9,6 +9,7 @@ import CompletionCardsView from '../views/CompletionCardsView.vue'
 import AllTasksView from '../views/AllTasksView.vue'
 import CreateMeboView from '../views/CreateMeboView.vue'
 import ReceivedMebosView from '../views/ReceivedMebosView.vue'
+import AdminModerateMebosView from '../views/AdminModerateMebosView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +63,11 @@ const router = createRouter({
       path: '/received-messages',
       name: 'received-messages',
       component: ReceivedMebosView,
+    },
+    {
+      path: '/moderate-mebos',
+      name: 'moderate-mebos',
+      component: AdminModerateMebosView,
     },
   ],
   scrollBehavior() {

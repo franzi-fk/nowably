@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi variant="user" />
+    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
     <div class="main-view-container home-container flex-grow view-layout-default">
       <section class="welcome-message page-padding-inline">

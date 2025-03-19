@@ -8,7 +8,6 @@ export const useTaskStore = defineStore('taskStore', {
     // {description: "Test",
     // doneState: false,
     // id: "20250313T120344669Z66923",
-    // meboId: null,
     // successAt: null}
     currentTask: null, // Task currently being worked on
     deletedTasksTemp: [], // Temporarily store deleted completed tasks

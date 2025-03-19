@@ -65,6 +65,71 @@
       id="btn-menu-toggle"
     />
   </nav>
+  <nav
+    :class="['sidebar', { collapsed: isCollapsed }]"
+    aria-label="Main navigation"
+    v-if="variant === 'admin'"
+  >
+    <div class="navi-header">
+      <h1 aria-label="Logo Nowably" @click="goToHome">
+        <NowablyLogo
+          :width="isCollapsed ? '3' : '10'"
+          :variant="isCollapsed ? 'reduced' : 'full'"
+        />
+      </h1>
+    </div>
+    <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
+      <router-link
+        v-for="(item, index) in adminMenu"
+        :key="index"
+        :to="item.link"
+        role="menuitem"
+        :aria-label="'Go to ' + item.name"
+        active-class="active-link"
+        class="menu-item"
+      >
+        <li role="none" :class="{ active: isActive(item.link) }">
+          <AppIcon
+            v-if="item.icon"
+            :class="['icon', item.icon]"
+            :name="item.icon"
+            color="currentColor"
+          />
+          <span>{{ item.name }}</span>
+        </li>
+      </router-link>
+    </ul>
+    <ul v-else role="menu" aria-label="Collapsed menu">
+      <router-link
+        v-for="(item, index) in adminMenu"
+        :key="index"
+        :to="item.link"
+        role="menuitem"
+        :aria-label="'Go to ' + item.name"
+        active-class="active-link"
+        class="menu-item"
+      >
+        <li role="none" :class="{ active: isActive(item.link) }">
+          <AppIcon
+            v-if="item.icon"
+            :class="['icon', item.icon]"
+            :name="item.icon"
+            color="currentColor"
+          />
+          <span class="sr-only">{{ item.name }}</span>
+        </li>
+      </router-link>
+    </ul>
+    <LinkButton
+      @click="toggleCollapse"
+      :aria-expanded="String(!isCollapsed)"
+      :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
+      :icon="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
+      iconSize="24"
+      type="icon"
+      id="btn-menu-toggle"
+    />
+  </nav>
 </template>
 
 <script>

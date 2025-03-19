@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi variant="user" />
+    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
     <div class="main-view-container all-mebos-container flex-grow view-layout-default">
       <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length > 0">
