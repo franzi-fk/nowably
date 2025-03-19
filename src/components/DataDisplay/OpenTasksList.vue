@@ -264,7 +264,6 @@ export default {
 
       // Save the updated task description
       this.taskStore.updateTask(taskId, { description: newTaskDesc })
-      this.taskStore.saveTasksToStorage()
 
       this.stopEditing() // Stop editing after save
     },
@@ -289,32 +288,11 @@ export default {
       // Set dynamic action
       this.modalPrimaryActionText = 'Delete task'
       ;(this.modalPrimaryAction = () => {
-        this.deleteTask(taskId)
-        this.taskStore.saveTasksToStorage()
+        this.taskStore.deleteTask(taskId)
         this.closeModal()
       }),
         // Show the modal
         this.openModal()
-    },
-    deleteTask(taskId) {
-      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId)
-      this.$nextTick(() => {
-        if (!taskToDelete) {
-          this.showSnackbar('error', 'Task not found.', '3000') // properties:  variant, text, duration in ms
-          return
-        } else {
-          this.taskStore.deleteTask(taskId)
-          this.taskStore.saveTasksToStorage()
-          return
-        }
-      })
-    },
-    generateUniqueId() {
-      const now = new Date()
-      const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-      const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
-      const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
-      return `${datePart}${timePart}${randomPart}`
     },
     focusInput(inputElement) {
       this.$nextTick(() => {
@@ -354,15 +332,7 @@ export default {
         return
       }
 
-      const newTask = {
-        id: this.generateUniqueId(),
-        description: newTaskDesc,
-        doneState: false,
-        meboId: null,
-        successAt: null,
-      }
-      this.taskStore.addTask(newTask)
-      this.taskStore.saveTasksToStorage()
+      this.taskStore.addTask(newTaskDesc)
 
       this.inpNewTask = '' // clear input field
       this.focusInput(this.$refs.newTaskInput)

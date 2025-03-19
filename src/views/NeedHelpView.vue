@@ -475,7 +475,6 @@ export default {
         return
       } else {
         this.taskStore.deleteTask(taskId)
-        this.taskStore.saveTasksToStorage()
         return
       }
     },
@@ -497,13 +496,7 @@ export default {
         return
       }
 
-      const newTask = {
-        id: this.generateUniqueId(),
-        description: newTaskDesc,
-        doneState: false,
-      }
-      this.taskStore.addTask(newTask)
-      this.taskStore.saveTasksToStorage()
+      this.taskStore.addTask(newTaskDesc)
     },
     completeHumming() {
       this.hummingAnimationCompleted = true
