@@ -2,7 +2,7 @@
   <div class="wrapper">
     <SidebarNavi variant="user" />
     <AppHeader />
-    <div class="home-container flex-grow view-layout-default">
+    <div class="main-view-container home-container flex-grow view-layout-default">
       <section class="welcome-message page-padding-inline">
         <h1>Welcome</h1>
         <span>Let's defeat procrastination now.</span>
@@ -56,19 +56,6 @@ export default {
 </script>
 
 <style scoped>
-.home-container {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 2rem;
-  width: 100%;
-  height: 100%;
-  padding-inline: 2rem;
-}
-
 .welcome-message {
   display: flex;
   flex-direction: column;
@@ -103,10 +90,6 @@ span {
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .home-container {
-    width: 69vw;
-    margin-inline: auto;
-  }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

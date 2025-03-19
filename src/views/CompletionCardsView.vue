@@ -2,7 +2,7 @@
   <div class="wrapper">
     <SidebarNavi variant="user" />
     <AppHeader />
-    <article class="cards-view-container flex-grow view-layout-default">
+    <article class="main-view-container cards-view-container flex-grow view-layout-default">
       <section class="cards-view-header page-padding-inline">
         <h1>Completion Cards</h1>
       </section>
@@ -86,19 +86,6 @@ export default {
 </script>
 
 <style scoped>
-.cards-view-container {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 2rem;
-  width: 100%;
-  height: 100%;
-  padding-inline: 2rem;
-}
-
 .cards-view-header {
   display: flex;
   flex-direction: column;
@@ -123,16 +110,45 @@ export default {
   width: 100%;
 }
 
-/*________________________________________________________________*/
+/*_______________________________________________________*/
 
-@media (min-width: 992px) {
-  .cards-view-container {
-    padding: 1.5rem min(16rem, 15%);
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .cards-tile {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
   }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .cards-tile {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .cards-tile {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0;
+  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
   .cards-tile {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     padding: 0;
   }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

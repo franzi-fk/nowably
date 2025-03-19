@@ -62,7 +62,7 @@ export default {
   justify-content: flex-start;
   gap: 2rem;
   width: 100%;
-  background-color: var(--cotton-01);
+  background-color: var(--t-white-66);
   border-radius: 1.5rem;
   padding: 2.5rem 1.25rem 3rem 1.25rem;
   cursor: pointer;

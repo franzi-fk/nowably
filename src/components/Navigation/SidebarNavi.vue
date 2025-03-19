@@ -1,4 +1,5 @@
 <template>
+  <!-- Desktop version (mobile Version is in AppHeader) -->
   <nav
     :class="['sidebar', { collapsed: isCollapsed }]"
     aria-label="Main navigation"
@@ -14,7 +15,7 @@
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
       <li
-        v-for="(item, index) in menuUser"
+        v-for="(item, index) in userMenu"
         :key="index"
         role="none"
         :class="{ active: isActive(item.link) }"
@@ -38,7 +39,7 @@
     </ul>
     <ul v-else role="menu" aria-label="Collapsed menu">
       <li
-        v-for="(item, index) in menuUser"
+        v-for="(item, index) in userMenu"
         :key="index"
         role="none"
         :class="{ active: isActive(item.link) }"
@@ -74,6 +75,7 @@
 
 <script>
 import NowablyLogo from '@/components/Visuals/NowablyLogo.vue'
+import { useAppStore } from '@/stores/appStore'
 
 export default {
   components: {
@@ -87,14 +89,16 @@ export default {
   },
   data() {
     return {
-      menuUser: [
-        { name: 'Home', link: '/', icon: 'home' },
-        { name: 'All tasks', link: '/all-tasks', icon: 'layoutList' },
-        { name: 'Completion Cards', link: '/completion-cards', icon: 'galleryHorizontalEnd' },
-        { name: 'Received Messages', link: '/received-messages', icon: 'messageCircleHeart' },
-      ],
+      appStore: useAppStore(),
+      userMenu: [],
+      adminMenu: [],
       isCollapsed: false,
     }
+  },
+  computed: {
+    activePath() {
+      return this.$route.path
+    },
   },
   methods: {
     goToHome() {
@@ -102,10 +106,20 @@ export default {
     },
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed
+      sessionStorage.setItem('sidebarCollapsed', JSON.stringify(this.isCollapsed))
     },
     isActive(link) {
-      return this.$route.path === link // Check if the current route matches the link
+      return this.activePath === link
     },
+  },
+  mounted() {
+    this.userMenu = this.appStore.userMenuNav
+    this.adminMenu = this.appStore.adminMenuNav
+
+    const savedState = sessionStorage.getItem('sidebarCollapsed')
+    if (savedState !== null) {
+      this.isCollapsed = JSON.parse(savedState)
+    }
   },
 }
 </script>
@@ -134,7 +148,7 @@ h1 {
 .sidebar {
   width: fit-content;
   max-width: 14.5rem;
-  background-color: var(--t-white-33);
+  background-color: var(--t-white-50);
   color: var(--base-black);
   padding: 1.5rem 1.5rem 2rem 1.5rem;
   transition: all 0.4s linear;
@@ -148,6 +162,11 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  display: none;
+}
+
+.sidebar:hover {
+  box-shadow: 0 0.5rem 2.5rem 0 rgba(69, 57, 44, 0.07);
 }
 
 .sidebar.collapsed {
@@ -172,6 +191,7 @@ h1 {
   font-weight: 600;
   letter-spacing: 0.0187rem;
   width: 100%;
+  transition: all 0.3s linear;
   min-width: 3.5rem;
   min-height: 3.5rem;
 }
@@ -182,6 +202,7 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
+  transition: all 0.4s linear;
 }
 
 .sidebar li.active {
@@ -201,6 +222,8 @@ h1 {
   color: var(--base-black);
 }
 
+/*_______________________________________________________*/
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 }
@@ -211,6 +234,9 @@ h1 {
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+  .sidebar {
+    display: flex; /* Show desktop sidebar on mobile */
+  }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */

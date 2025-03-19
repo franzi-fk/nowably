@@ -2,7 +2,7 @@
   <div class="wrapper">
     <SidebarNavi variant="user" />
     <AppHeader />
-    <article class="tasks-view-container flex-grow view-layout-default">
+    <article class="main-view-container tasks-view-container flex-grow view-layout-default">
       <section class="tasks-view-header page-padding-inline">
         <h1>Tasks</h1>
       </section>
@@ -46,16 +46,8 @@ export default {
 </script>
 
 <style scoped>
-.tasks-view-container {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 2rem;
-  width: 100%;
-  height: 100%;
+article {
+  padding: 0;
 }
 
 .tasks-view-header {
@@ -80,11 +72,25 @@ export default {
   margin-bottom: 5rem;
 }
 
-/*________________________________________________________________*/
+/*_______________________________________________________*/
 
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .tasks-view-container {
-    padding: 1.5rem min(16rem, 15%);
-  }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
 }
 </style>

@@ -228,8 +228,9 @@ export default {
 
 <style scoped>
 .logo-container {
-  width: 100%;
   min-width: fit-content;
+  margin-block: auto;
+  padding-top: 0.25rem;
 }
 
 .svg-logo-full {

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <SidebarNavi variant="user" />
     <AppHeader />
-    <div class="all-mebos-container flex-grow view-layout-default">
+    <div class="main-view-container all-mebos-container flex-grow view-layout-default">
       <section class="welcome-message page-padding-inline">
         <h1>Received Messages in a Bottle</h1>
       </section>
@@ -57,18 +57,6 @@ export default {
 </script>
 
 <style scoped>
-.all-mebos-container {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 2rem;
-  width: 100%;
-  height: 100%;
-}
-
 .welcome-message {
   display: flex;
   flex-direction: column;
@@ -80,7 +68,7 @@ export default {
 .tile-container {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 3rem;
   margin-bottom: 5rem;
 }
@@ -96,7 +84,6 @@ export default {
   border-radius: 1.5rem;
   padding: 2.8rem 1.25rem 3rem 1.25rem;
   text-align: left;
-  position: relative; /* Allow for absolute positioning of the pseudo-element */
   z-index: 0;
 }
 
@@ -120,14 +107,15 @@ export default {
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .all-mebos-container {
-    width: 69vw;
-    margin-inline: auto;
-  }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+  .tile-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /* XX-Large devices (larger desktops, 1400px and up) */
