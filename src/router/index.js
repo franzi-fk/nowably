@@ -10,10 +10,12 @@ import AllTasksView from '../views/AllTasksView.vue'
 import CreateMeboView from '../views/CreateMeboView.vue'
 import ReceivedMebosView from '../views/ReceivedMebosView.vue'
 import AdminModerateMebosView from '../views/AdminModerateMebosView.vue'
+import NotFoundView from '../views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/:catchAll(.*)', component: NotFoundView },
     {
       path: '/',
       name: 'home',

@@ -82,8 +82,12 @@
     >
       <section class="create-mebo-header page-padding-inline">
         <h1>Send a Message in a Bottle</h1>
+      </section>
+      <section class="tile-container-emptystate">
+        <Illus_Task width="15" />
         <p>
-          Complete a task to unlock sending a Message in a Bottle. You can send up to 3 per day.
+          Complete a task to unlock sending a Message in a Bottle.<br />You can send up to 3 per
+          day.
         </p>
       </section>
     </article>
@@ -108,6 +112,7 @@ import InputCheckbox from '@/components/InputsAndControls/InputCheckbox.vue'
 import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
 import Illus_MeboSent from '../components/Visuals/Illus_MeboSent.vue'
+import Illus_Task from '../components/Visuals/Illus_Task.vue'
 
 export default {
   name: 'CreateMeboView',
@@ -117,6 +122,7 @@ export default {
     ModalOverlay,
     SidebarNavi,
     Illus_MeboSent,
+    Illus_Task,
   },
   data() {
     return {
@@ -223,6 +229,22 @@ export default {
   justify-content: center;
   min-height: 55vh;
   text-align: left;
+}
+
+.tile-container-emptystate {
+  width: 100%;
+  padding-inline: 1.25rem;
+  background-color: var(--base-white);
+  border-radius: 1.5rem;
+  padding-block: 3rem 3.2rem;
+  padding-inline: 1.25rem;
+  display: flex;
+  gap: 1.3rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 55vh;
+  text-align: center;
 }
 
 .write-message-form {
