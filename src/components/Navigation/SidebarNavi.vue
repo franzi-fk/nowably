@@ -55,15 +55,16 @@
         </li>
       </router-link>
     </ul>
-    <LinkButton
-      @click="toggleCollapse"
-      :aria-expanded="String(!isCollapsed)"
-      :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
-      :icon="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
-      iconSize="24"
-      type="icon"
-      id="btn-menu-toggle"
-    />
+    <div class="navi-footer">
+      <button
+        @click="toggleCollapse"
+        :aria-expanded="String(!isCollapsed)"
+        :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
+        id="btn-menu-toggle"
+      >
+        <AppIcon :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'" size="24" />
+      </button>
+    </div>
   </nav>
   <nav
     :class="['sidebar', { collapsed: isCollapsed }]"
@@ -120,15 +121,16 @@
         </li>
       </router-link>
     </ul>
-    <LinkButton
-      @click="toggleCollapse"
-      :aria-expanded="String(!isCollapsed)"
-      :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
-      :icon="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
-      iconSize="24"
-      type="icon"
-      id="btn-menu-toggle"
-    />
+    <div class="navi-footer">
+      <button
+        @click="toggleCollapse"
+        :aria-expanded="String(!isCollapsed)"
+        :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
+        id="btn-menu-toggle"
+      >
+        <AppIcon :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'" size="24" />
+      </button>
+    </div>
   </nav>
 </template>
 
@@ -190,9 +192,21 @@ export default {
 }
 
 #btn-menu-toggle {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+  margin-top: auto;
+  width: 3.5rem;
+  height: 2.75rem;
+  background-color: transparent;
+  padding: 0.9rem 0.6rem;
+  border-radius: 0.85rem;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#btn-menu-toggle:hover {
+  background-color: var(--t-white-66);
 }
 
 .navi-header {
@@ -209,9 +223,7 @@ h1 {
   max-width: 13.5rem;
   background-color: var(--t-white-50);
   color: var(--base-black);
-  padding: 1.5rem 1rem 2rem 1rem;
-  transition: all 0.4s linear;
-  overflow: hidden;
+  padding: 1.5rem 1rem 0 1rem;
   border-top-right-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
   height: 100vh;
@@ -230,18 +242,20 @@ h1 {
 
 .sidebar.collapsed {
   width: 5rem;
-  padding: 1.5rem 0.75rem 2rem 0.75rem;
-  transition: all 0.4s linear;
+  padding: 1.5rem 0.75rem 0 0.75rem;
 }
 
 .sidebar ul {
   list-style: none;
-  padding: 0;
+  padding: 0 0 1rem 0;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  transition: all 0.4s linear;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: white;
 }
 
 .sidebar li {
@@ -256,10 +270,8 @@ h1 {
   font-weight: 600;
   letter-spacing: 0.0187rem;
   width: 100%;
-  transition: all 0.3s linear;
   min-width: 3.5rem;
   min-height: 3.5rem;
-  transition: all 0.4s linear;
 }
 
 .menu-item {
@@ -268,7 +280,6 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  transition: all 0.4s linear;
 }
 
 .sidebar li.active {
@@ -286,6 +297,16 @@ h1 {
 
 .sidebar .active-link {
   color: var(--base-black);
+}
+
+.navi-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-block: 0 0.9rem;
+  position: sticky;
+  bottom: 0;
 }
 
 /*_______________________________________________________*/

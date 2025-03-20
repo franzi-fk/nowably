@@ -400,20 +400,20 @@ export default {
       this.userStore.setCurrentStep('openedMebo')
     },
     getMebo() {
-      const allMebos = this.meboStore.mebos
+      const publishedMebos = this.meboStore.publishedMebos
       const userId = this.userStore.userId
       const receivedMebos = new Set(this.userStore.allReceivedMebos)
 
-      if (allMebos.length === 0) return null // No mebos available
+      if (publishedMebos.length === 0) return null // No mebos available
 
       // Admins can receive any random mebo without validation, but they should still not overwrite an existing mebo
       if (this.userStore.role === 'admin') {
-        return (this.mebo = allMebos[Math.floor(Math.random() * allMebos.length)])
+        return (this.mebo = publishedMebos[Math.floor(Math.random() * publishedMebos.length)])
       }
 
       while (true) {
         // pick random mebo
-        const randomMebo = allMebos[Math.floor(Math.random() * allMebos.length)]
+        const randomMebo = publishedMebos[Math.floor(Math.random() * publishedMebos.length)]
 
         // check if it's valid (user is not the author, user has not received this mebo yet)
         if (randomMebo.author !== userId && !receivedMebos.has(randomMebo.id)) {
@@ -421,7 +421,7 @@ export default {
         }
 
         // if all mebos are invalid, return null to prevent infinite loop
-        if (allMebos.every((mebo) => mebo.author === userId || receivedMebos.has(mebo.id))) {
+        if (publishedMebos.every((mebo) => mebo.author === userId || receivedMebos.has(mebo.id))) {
           console.log('No valid mebo found')
           return (this.mebo = null)
         }

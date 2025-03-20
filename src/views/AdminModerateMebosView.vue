@@ -6,7 +6,13 @@
       <div class="moderate-mebos-header page-padding-inline">
         <h1>Moderate Messages in a Bottle</h1>
       </div>
-      <article class="moderate-mebos-body">
+      <article
+        class="moderate-mebos-body page-padding-inline moderate-mebo-empty-state"
+        v-if="this.meboStore.unpublishedMebos.length <= 0"
+      >
+        <p>There are no unpublished Messages in a Bottle.</p>
+      </article>
+      <article class="moderate-mebos-body" v-else>
         <div v-for="mebo in this.meboStore.unpublishedMebos" :key="mebo.id" class="mebo-tile">
           <p>{{ mebo.text }}</p>
           <div class="mebo-metadata">
@@ -15,8 +21,20 @@
             <small>published: {{ mebo.published }}</small>
           </div>
           <div class="mebo-actions">
-            <SolidButton type="icon-text" text="Publish" icon="check" id="btn-publish" />
-            <SolidButton type="icon-text" text="Delete" icon="x" id="btn-delete" />
+            <SolidButton
+              type="icon-text"
+              text="Publish"
+              icon="check"
+              id="btn-publish"
+              @click="publishMebo(mebo.id)"
+            />
+            <SolidButton
+              type="icon-text"
+              text="Delete"
+              icon="x"
+              id="btn-delete"
+              @click="deleteMebo(mebo.id)"
+            />
           </div>
         </div>
       </article>
@@ -39,8 +57,15 @@ export default {
       userStore: useUserStore(),
       meboStore: useMeboStore(),
       router: useRouter(),
-      // mebosToModerate: [],
     }
+  },
+  methods: {
+    publishMebo(meboId) {
+      this.meboStore.publishMebo(meboId)
+    },
+    deleteMebo(meboId) {
+      this.meboStore.deleteMebo(meboId)
+    },
   },
   watch: {
     'userStore.role': function (newValue, oldValue) {
@@ -65,6 +90,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+}
+
+.moderate-mebos-header {
+  padding-block: 1.4rem 1rem;
 }
 
 .mebo-tile {
@@ -97,15 +126,18 @@ export default {
 }
 
 #btn-publish {
-  background-color: var(--success) !important;
+  background-color: var(--success-light);
+  color: var(--success-dark);
+  border-bottom: 0.375rem solid var(--success);
 }
 #btn-delete {
-  background-color: var(--error) !important;
+  background-color: var(--error-light);
+  color: var(--error-dark);
+  border-bottom: 0.375rem solid var(--error);
 }
 
 #btn-delete,
 #btn-publish {
-  color: var(--base-white) !important;
   height: 3.5rem;
   flex-grow: 1;
 }

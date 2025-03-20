@@ -36,9 +36,22 @@ export const useMeboStore = defineStore('meboStore', {
           published: false,
         })
 
-        localStorage.setItem('mebos', JSON.stringify(this.mebos))
-        // }
+        this.saveToLocalStorage()
       }
+    },
+    deleteMebo(meboId) {
+      this.mebos = this.mebos.filter((mebo) => mebo.id !== meboId)
+      this.saveToLocalStorage()
+    },
+    publishMebo(meboId) {
+      const mebo = this.mebos.find((mebo) => mebo.id === meboId)
+      if (mebo) {
+        mebo.published = true
+        this.saveToLocalStorage()
+      }
+    },
+    saveToLocalStorage() {
+      localStorage.setItem('mebos', JSON.stringify(this.mebos))
     },
     initLoad() {
       const storedMebos = localStorage.getItem('mebos')

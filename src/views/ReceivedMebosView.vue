@@ -21,7 +21,7 @@
         </div>
       </article>
       <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length <= 0">
-        <section class="welcome-message page-padding-inline">
+        <section class="received-mebos-header page-padding-inline">
           <h1>Received Messages in a Bottle</h1>
           <p>Oops, it's empty here. You haven't received any Messages in a Bottle yet.</p>
         </section>
@@ -74,6 +74,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
 }
 
 .received-mebos-header {

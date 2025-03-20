@@ -2,19 +2,12 @@
   <div class="wrapper">
     <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
-    <article class="mebo-sent-view-container flex-grow view-layout-default" v-if="messageSent">
-      <div class="mebo-sent-header page-padding-inline">
-        <h1>Your Message in a Bottle has been sent.</h1>
+    <article class="create-mebo-view-container flex-grow view-layout-default" v-if="messageSent">
+      <div class="create-mebo-header page-padding-inline">
+        <h1>Your Message in a Bottle has been sent</h1>
       </div>
       <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
-        <p v-if="this.userStore.availableMeboTokens === 1">
-          You can send another {{ this.userStore.availableMeboTokens }} Message in a Bottle. Do you
-          want to write another message now?
-        </p>
-        <p v-else>
-          You can send another {{ this.userStore.availableMeboTokens }} Messages in a Bottle. Do you
-          want to write another message now?
-        </p>
+        <p>You can send another Message in a Bottle. Do you want to write another one now?</p>
         <div class="mebo-sent-actions">
           <SolidButton
             text="Write another message"
@@ -22,13 +15,10 @@
             variant="primary"
             @click="messageSent = false"
           />
-          <LinkButton text="Go to Home" type="text" @click="goToHome" />
         </div>
       </div>
       <div class="mebo-sent-body page-padding-inline" v-else>
-        <div class="mebo-sent-actions">
-          <LinkButton text="Go to Home" type="text" @click="goToHome" />
-        </div>
+        <p>Illustration</p>
       </div>
     </article>
     <article
@@ -252,14 +242,6 @@ input-message {
   font-size: 0.95rem;
 }
 
-.mebo-sent-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.3rem;
-  padding-block: 1.4rem 1rem;
-}
-
 .mebo-sent-view-container {
   display: flex;
   flex-direction: column;
@@ -275,7 +257,7 @@ input-message {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   width: 100%;
 }
@@ -285,7 +267,7 @@ input-message {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   width: 100%;
 }
