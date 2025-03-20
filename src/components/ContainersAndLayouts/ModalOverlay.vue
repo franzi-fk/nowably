@@ -90,6 +90,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: left;
   max-height: 2.4rem;
 }
 
