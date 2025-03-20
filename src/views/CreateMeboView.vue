@@ -6,19 +6,25 @@
       <div class="create-mebo-header page-padding-inline">
         <h1>Your Message in a Bottle has been sent</h1>
       </div>
-      <div class="mebo-sent-body page-padding-inline" v-if="this.userStore.availableMeboTokens > 0">
-        <p>You can send another Message in a Bottle. Do you want to write another one now?</p>
-        <div class="mebo-sent-actions">
-          <SolidButton
-            text="Write another message"
-            type="text"
-            variant="primary"
-            @click="messageSent = false"
-          />
-        </div>
+      <div class="mebo-sent-body" v-if="this.userStore.availableMeboTokens > 0">
+        <section class="tile-container content-center">
+          <Illus_MeboSent width="22" />
+          <p>You can send another Message in a Bottle. Do you want to write another one now?</p>
+          <div class="mebo-sent-actions">
+            <SolidButton
+              text="Write another message"
+              type="text"
+              variant="primary"
+              @click="messageSent = false"
+            />
+          </div>
+        </section>
       </div>
-      <div class="mebo-sent-body page-padding-inline" v-else>
-        <p>Illustration</p>
+      <div class="mebo-sent-body" v-else>
+        <section class="tile-container content-center">
+          <Illus_MeboSent width="22" />
+          <p>Thanks for putting some kindness out there!</p>
+        </section>
       </div>
     </article>
     <article
@@ -101,6 +107,7 @@ import InputText from '@/components/InputsAndControls/InputText.vue'
 import InputCheckbox from '@/components/InputsAndControls/InputCheckbox.vue'
 import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
 import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
+import Illus_MeboSent from '../components/Visuals/Illus_MeboSent.vue'
 
 export default {
   name: 'CreateMeboView',
@@ -109,6 +116,7 @@ export default {
     InputCheckbox,
     ModalOverlay,
     SidebarNavi,
+    Illus_MeboSent,
   },
   data() {
     return {
@@ -242,17 +250,6 @@ input-message {
   font-size: 0.95rem;
 }
 
-.mebo-sent-view-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 1.3rem;
-  width: 100%;
-  height: 100%;
-  margin-bottom: 5rem;
-}
-
 .mebo-sent-body {
   display: flex;
   flex-direction: column;
@@ -267,9 +264,14 @@ input-message {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: start;
+  align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+.content-center {
+  align-items: center;
+  justify-content: center;
 }
 
 /*_______________________________________________________*/

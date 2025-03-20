@@ -13,7 +13,7 @@
     <div class="task-list-body">
       <div class="empty-state" v-if="this.taskStore.doneTasks.length === 0">
         <Illus_EmptyState :width="15" />
-        <p>No completed tasks yet.</p>
+        <p>No completed tasks.</p>
       </div>
       <div class="task-list-row" v-for="task in this.taskStore.doneTasks" :key="task.id">
         <div class="task-desc">
