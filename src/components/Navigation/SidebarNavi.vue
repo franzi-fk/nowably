@@ -116,26 +116,32 @@
         active-class="active-link"
         class="menu-item"
       >
-        <li role="none" :class="{ active: isActive(item.link) }">
-          <AppIcon
-            v-if="item.icon"
-            :class="['icon', item.icon]"
-            :name="item.icon"
-            color="currentColor"
-          />
-          <span class="sr-only">{{ item.name }}</span>
-        </li>
+        <TooltipOverlay :text="item.name" position="right">
+          <li role="none" :class="{ active: isActive(item.link) }">
+            <AppIcon
+              v-if="item.icon"
+              :class="['icon', item.icon]"
+              :name="item.icon"
+              color="currentColor"
+            />
+            <span class="sr-only">{{ item.name }}</span>
+          </li>
+        </TooltipOverlay>
       </router-link>
     </ul>
     <div class="navi-footer">
-      <button
-        @click="toggleCollapse"
-        :aria-expanded="String(!isCollapsed)"
-        :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
-        id="btn-menu-toggle"
-      >
-        <AppIcon :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'" size="24" />
-      </button>
+      <TooltipOverlay text="Toggle Menu" position="right">
+        <button
+          @click="toggleCollapse"
+          :aria-expanded="String(!isCollapsed)"
+          :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
+          id="btn-menu-toggle"
+        >
+          <AppIcon
+            :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
+            size="24"
+          /></button
+      ></TooltipOverlay>
     </div>
   </nav>
 </template>
