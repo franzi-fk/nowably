@@ -46,10 +46,6 @@ export default {
 </script>
 
 <style scoped>
-article {
-  padding: 0;
-}
-
 .tasks-view-header {
   display: flex;
   flex-direction: column;

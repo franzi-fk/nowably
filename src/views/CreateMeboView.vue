@@ -2,7 +2,10 @@
   <div class="wrapper">
     <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
-    <article class="create-mebo-view-container flex-grow view-layout-default" v-if="messageSent">
+    <article
+      class="create-mebo-view-container main-view-container flex-grow view-layout-default"
+      v-if="messageSent"
+    >
       <div class="create-mebo-header page-padding-inline">
         <h1>Your Message in a Bottle has been sent</h1>
       </div>
@@ -28,7 +31,7 @@
       </div>
     </article>
     <article
-      class="create-mebo-view-container flex-grow view-layout-default"
+      class="create-mebo-view-container main-view-container flex-grow view-layout-default"
       v-if="!messageSent && this.userStore.availableMeboTokens > 0"
     >
       <section class="create-mebo-header page-padding-inline">
@@ -75,7 +78,7 @@
       </section>
     </article>
     <article
-      class="create-mebo-view-container flex-grow view-layout-default"
+      class="create-mebo-view-container main-view-container flex-grow view-layout-default"
       v-if="
         !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
       "
@@ -178,24 +181,12 @@ export default {
 </script>
 
 <style scoped>
-.sidebar {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-}
-
-.app-header {
-  grid-column: 2;
-  grid-row: 1;
-}
-
 .create-mebo-view-container {
-  grid-column: 2;
-  grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 1.3rem;
+  gap: 2rem;
   width: 100%;
   height: 100%;
   margin-bottom: 5rem;

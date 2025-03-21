@@ -23,7 +23,10 @@
       <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length <= 0">
         <section class="received-mebos-header page-padding-inline">
           <h1>Received Messages in a Bottle</h1>
-          <p>Oops, it's empty here. You haven't received any Messages in a Bottle yet.</p>
+        </section>
+        <section class="tile-container-empty-state">
+          <Illus_EmptyState width="15" />
+          <p>No received any Messages in a Bottle.</p>
         </section>
       </article>
     </div>
@@ -36,10 +39,12 @@ import { useUserStore } from '@/stores/userStore'
 import { useMeboStore } from '../stores/meboStore'
 import { useRouter } from 'vue-router'
 import SidebarNavi from '@/components/Navigation/SidebarNavi.vue'
+import Illus_EmptyState from '../components/Visuals/Illus_EmptyState.vue'
 
 export default {
   components: {
     SidebarNavi,
+    Illus_EmptyState,
   },
   data() {
     return {
@@ -91,6 +96,20 @@ export default {
   grid-template-columns: 1fr;
   gap: 3rem;
   margin-bottom: 5rem;
+}
+
+.tile-container-empty-state {
+  width: 100%;
+  padding: 3rem 1.25rem 3.2rem 1.25rem;
+  background-color: var(--base-white);
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 55vh;
+  text-align: center;
 }
 
 .mebo-tile {
