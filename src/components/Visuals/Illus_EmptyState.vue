@@ -339,7 +339,7 @@ export default {
   },
   data() {
     return {
-      randomIndex: Math.floor(Math.random() * 2),
+      randomIndex: Math.floor(Math.random() * 2), // Increase multiplier by 1 for each added illustration
     }
   },
 }
