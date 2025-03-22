@@ -7,8 +7,12 @@ import { updateDoc } from 'firebase/firestore'
 import { query, where, getDocs } from 'firebase/firestore'
 import { setDoc } from 'firebase/firestore'
 
+/*_______________________________________*/
+/*________ TASK STORE OPERATIONS ________*/
+/*_______________________________________*/
+
 // Add a new task to the Firestore database
-async function addTaskFs(task) {
+export async function addTaskFs(task) {
   try {
     // `addDoc` adds a new document to the "tasks" collection in Firestore
     const docRef = await addDoc(collection(db, 'tasks'), task)
@@ -22,12 +26,10 @@ async function addTaskFs(task) {
   }
 }
 
-export { addTaskFs }
-
 /*________________________*/
 
 // Get tasks from Firestore
-async function getTasksFromFirestore() {
+export async function getTasksFromFirestore() {
   try {
     const querySnapshot = await getDocs(collection(db, 'tasks'))
     const tasks = []
@@ -41,12 +43,10 @@ async function getTasksFromFirestore() {
   }
 }
 
-export { getTasksFromFirestore }
-
 /*________________________*/
 
 // Delete a task from Firestore by its ID
-async function deleteTaskFs(taskId) {
+export async function deleteTaskFs(taskId) {
   try {
     // Get the document reference from Firestore using the task's ID
     const taskRef = doc(db, 'tasks', taskId)
@@ -70,12 +70,10 @@ async function deleteTaskFs(taskId) {
   }
 }
 
-export { deleteTaskFs }
-
 /*________________________*/
 
 // Update an existing task in Firestore by its ID
-async function updateTaskFs(taskId, updatedProperties) {
+export async function updateTaskFs(taskId, updatedProperties) {
   // If you want to update a date or other timestamp, handle it here (without Firestore Timestamp)
   if (updatedProperties.successAt) {
     updatedProperties.successAt = new Date(updatedProperties.successAt).toISOString() // Store as ISO string
@@ -98,12 +96,10 @@ async function updateTaskFs(taskId, updatedProperties) {
   }
 }
 
-export { updateTaskFs }
-
 /*________________________*/
 
 // Delete all tasks that are marked as doneState: true in Firestore
-async function deleteAllDoneTasksFs() {
+export async function deleteAllDoneTasksFs() {
   try {
     // Get a reference to the 'tasks' collection
     const tasksCollectionRef = collection(db, 'tasks')
@@ -136,12 +132,10 @@ async function deleteAllDoneTasksFs() {
   }
 }
 
-export { deleteAllDoneTasksFs } // Export deleteAllDoneTasks function
-
 /*________________________*/
 
 // Temporarily store deleted tasks in Firestore (cleared after 48h)
-async function storeDeletedCompletedTaskFs(task) {
+export async function storeDeletedCompletedTaskFs(task) {
   try {
     const deletedCompletedTaskRef = doc(collection(db, 'deletedCompletedTasksTemp'))
 
@@ -163,12 +157,10 @@ async function storeDeletedCompletedTaskFs(task) {
   }
 }
 
-export { storeDeletedCompletedTaskFs }
-
 /*________________________*/
 
 // Function to clear deleted tasks older than 48 hours from Firestore
-async function clearDeletedCompletedTasksFs() {
+export async function clearDeletedCompletedTasksFs() {
   const twoDaysAgo = new Date(new Date() - 48 * 60 * 60 * 1000) // 48 hours ago
 
   try {
@@ -198,12 +190,10 @@ async function clearDeletedCompletedTasksFs() {
   }
 }
 
-export { clearDeletedCompletedTasksFs }
-
 /*________________________*/
 
 // Function to get deleted tasks from Firestore
-async function getDeletedCompletedTasksFromFirestore() {
+export async function getDeletedCompletedTasksFromFirestore() {
   try {
     const deletedTasksRef = collection(db, 'deletedTasksTemp')
 
@@ -221,4 +211,52 @@ async function getDeletedCompletedTasksFromFirestore() {
   }
 }
 
-export { getDeletedCompletedTasksFromFirestore }
+/*_______________________________________*/
+/*________ MEBO STORE OPERATIONS ________*/
+/*_______________________________________*/
+
+const mebosCollection = collection(db, 'mebos')
+
+// Fetch all mebos
+export async function getMebosFromFirestore() {
+  try {
+    const snapshot = await getDocs(mebosCollection)
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  } catch (e) {
+    console.error('Error fetching mebos:', e)
+    throw e
+  }
+}
+
+// Add a new mebo
+export async function addMeboFs(mebo) {
+  try {
+    await addDoc(mebosCollection, mebo)
+    return await getMebosFromFirestore()
+  } catch (e) {
+    console.error('Error adding mebo:', e)
+    throw e
+  }
+}
+
+// Delete a mebo
+export async function deleteMeboFs(meboId) {
+  try {
+    await deleteDoc(doc(mebosCollection, meboId))
+    return await getMebosFromFirestore()
+  } catch (e) {
+    console.error('Error deleting mebo:', e)
+    throw e
+  }
+}
+
+// Publish a mebo
+export async function publishMeboFs(meboId) {
+  try {
+    await updateDoc(doc(mebosCollection, meboId), { published: true })
+    return await getMebosFromFirestore()
+  } catch (e) {
+    console.error('Error publishing mebo:', e)
+    throw e
+  }
+}
