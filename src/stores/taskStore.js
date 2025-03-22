@@ -1,16 +1,26 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
+import {
+  getTasksFromFirestore,
+  addTaskFs,
+  updateTaskFs,
+  deleteTaskFs,
+  deleteAllDoneTasksFs,
+  storeDeletedCompletedTaskFs,
+  clearDeletedCompletedTasksFs,
+  getDeletedCompletedTasksFromFirestore,
+} from '../firestoreService'
 
 export const useTaskStore = defineStore('taskStore', {
   state: () => ({
-    tasks: [], // Full list of tasks
+    tasks: [], // Full list of tasks, stored in Firestore
     // Example task object:
     // {description: "Test",
     // doneState: false,
     // id: "20250313T120344669Z66923",
     // successAt: null}
-    currentTask: null, // Task currently being worked on
-    deletedTasksTemp: [], // Temporarily store deleted completed tasks
+    currentTask: null, // Task currently being worked on, stored in SessionStorage
+    deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks, stored in Firestore
   }),
   getters: {
     openTasks() {
@@ -25,32 +35,40 @@ export const useTaskStore = defineStore('taskStore', {
       const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000) // 24 hours ago
       const allCompletedTasks = [
         ...this.tasks.filter((task) => task.successAt && new Date(task.successAt) >= oneDayAgo),
-        ...this.deletedTasksTemp.filter((task) => new Date(task.successAt) >= oneDayAgo),
+        ...this.deletedCompletedTasksTemp.filter((task) => new Date(task.successAt) >= oneDayAgo),
       ]
       return allCompletedTasks.length
     },
   },
   actions: {
-    generateUniqueId() {
-      const now = new Date()
-      const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-      const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
-      const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
-      return `task-${datePart}${timePart}${randomPart}`
-    },
-    addTask(descriptionInput) {
+    // generateUniqueId() {
+    //   const now = new Date()
+    //   const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
+    //   const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
+    //   const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
+    //   return `task-${datePart}${timePart}${randomPart}`
+    // },
+    async addTask(descriptionInput) {
       const newTask = {
-        id: this.generateUniqueId(),
         description: descriptionInput,
         doneState: false,
         successAt: null,
       }
-      this.tasks.push(newTask)
-      this.saveTasksToStorage()
+
+      try {
+        // Add task to Firestore and get the task with id
+        const addedTask = await addTaskFs(newTask)
+
+        // Add to local state
+        this.tasks.push(addedTask)
+      } catch (e) {
+        console.error('Error adding task:', e)
+      }
     },
-    updateTask(taskId, updatedProperties) {
+    async updateTask(taskId, updatedProperties) {
       const task = this.tasks.find((task) => task.id === taskId)
       let userStore = useUserStore()
+
       if (task) {
         // If marking task as completed, update successAt and increase totalSuccessCount
         if (updatedProperties.doneState === true && !task.doneState) {
@@ -58,69 +76,106 @@ export const useTaskStore = defineStore('taskStore', {
           userStore.increaseTotalSuccessCount() // Increase totalSuccessCount
         }
 
-        // apply the updates to the task
-        Object.assign(task, updatedProperties)
-        this.saveTasksToStorage()
+        try {
+          // Update Firestore task
+          const updatedTask = await updateTaskFs(task.id, updatedProperties)
+
+          // Update the local state
+          Object.assign(task, updatedTask)
+        } catch (e) {
+          console.error('Error updating task:', e)
+        }
       }
     },
-    deleteTask(taskId) {
+    async deleteTask(taskId) {
       const task = this.tasks.find((task) => task.id === taskId)
-      if (task && task.doneState) {
-        // Temporarily store the task in the completedTasksTemp
-        this.deletedTasksTemp.push({ ...task, deletedAt: new Date().toISOString() })
+
+      if (task) {
+        try {
+          // If the task is done, temporarily store it in deletedCompletedTasksTemp and Firestore
+          if (task.doneState) {
+            const deletedTask = { ...task, deletedAt: new Date().toISOString() }
+            const updatedDeletedTask = await storeDeletedCompletedTaskFs(deletedTask) // Store the task in Firestore
+
+            // Keep local store in sync with Firestore data
+            this.deletedCompletedTasksTemp.push(updatedDeletedTask)
+          }
+
+          // Delete the task from Firestore
+          const updatedTasks = await deleteTaskFs(task.id)
+
+          // Update the local state to reflect the deletion from Firestore
+          this.tasks = updatedTasks
+        } catch (e) {
+          console.error('Error deleting task:', e)
+        }
       }
-      // Delete the task
-      this.tasks = this.tasks.filter((task) => task.id !== taskId)
-      this.saveTasksToStorage()
     },
-    deleteAllDoneTasks() {
-      const completedTasksToDelete = this.tasks.filter((task) => task.doneState === true)
-      // Temporarily store deleted tasks
-      this.deletedTasksTemp.push(
-        ...completedTasksToDelete.map((task) => ({
+    async deleteAllDoneTasks() {
+      try {
+        const completedTasksToDelete = this.doneTasks // needed for deletedCompletedTasksTemp
+
+        // Temporarily store deleted tasks and add to Firestore
+        const deletedTasks = completedTasksToDelete.map((task) => ({
           ...task,
           deletedAt: new Date().toISOString(),
-        })),
-      )
-      // Delete all done tasks
-      this.tasks = this.tasks.filter((task) => task.doneState === false)
-      this.saveTasksToStorage()
+        }))
+        // Add all deleted tasks to Firestore and update the local store
+        const storedDeletedTasks = await Promise.all(
+          deletedTasks.map((task) => storeDeletedCompletedTaskFs(task)),
+        )
+
+        // Update the local state with Firestore IDs
+        this.deletedCompletedTasksTemp.push(...storedDeletedTasks)
+
+        const updatedTasks = await deleteAllDoneTasksFs() // delete all done tasks from Firestore, returns updated tasks
+
+        this.tasks = updatedTasks // Keep local state in sync
+      } catch (e) {
+        console.error('Error deleting tasks: ', e)
+      }
     },
-    clearDeletedTasksTemp() {
-      const twoDaysAgo = new Date(new Date() - 48 * 60 * 60 * 1000) // 48 hours ago
-      // Remove tasks older than 48 hours from deletedTasksTemp
-      this.deletedTasksTemp = this.deletedTasksTemp.filter(
-        (task) => new Date(task.deletedAt) >= twoDaysAgo,
-      )
-      this.saveTasksToStorage()
+    async clearDeletedCompletedTasksTemp() {
+      try {
+        // Fetch deleted tasks from Firestore
+        const updatedDeletedCompletedTasks = await clearDeletedCompletedTasksFs()
+
+        // Update the local state with the tasks that are not older than 48 hours
+        this.deletedCompletedTasksTemp = updatedDeletedCompletedTasks
+      } catch (e) {
+        console.error('Error clearing deleted tasks:', e)
+      }
     },
     setCurrentTask(task) {
       this.currentTask = task
-      this.saveTasksToStorage()
+      this.saveToSessionStorage()
+    },
+    saveToSessionStorage() {
+      sessionStorage.setItem('currentTask', JSON.stringify(this.currentTask))
     },
     saveTasksToStorage() {
-      localStorage.setItem('currentTask', JSON.stringify(this.currentTask))
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
-      localStorage.setItem('deletedTasksTemp', JSON.stringify(this.deletedTasksTemp))
+      localStorage.setItem(
+        'deletedCompletedTasksTemp',
+        JSON.stringify(this.deletedCompletedTasksTemp),
+      )
     },
-    initLoad() {
+    async initLoad() {
       try {
-        const storedCurrentTask = localStorage.getItem('currentTask')
+        // Load current task from localStorage
+        const storedCurrentTask = sessionStorage.getItem('currentTask')
         if (storedCurrentTask) {
           this.currentTask = JSON.parse(storedCurrentTask)
         }
-        const storedTasks = localStorage.getItem('tasks')
-        if (storedTasks) {
-          this.tasks = JSON.parse(storedTasks)
-        }
-        const storedCompletedTasksTemp = localStorage.getItem('deletedTasksTemp')
-        if (storedCompletedTasksTemp) {
-          this.deletedTasksTemp = JSON.parse(storedCompletedTasksTemp)
-        }
+
+        // Load tasks from Firestore
+        this.tasks = await getTasksFromFirestore()
+
+        // Load deleted tasks temp from Firestore
+        this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFromFirestore()
       } catch (error) {
-        console.error('Error loading data from localStorage:', error)
+        console.error('Error loading data:', error)
       }
-      this.clearDeletedTasksTemp() // Clear old tasks after loading
+      this.clearDeletedCompletedTasksTemp() // Clear old tasks after loading
     },
   },
 })

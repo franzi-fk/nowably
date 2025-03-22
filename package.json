@@ -16,6 +16,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@firebase/firestore": "^4.7.10",
+    "firebase": "^11.5.0",
     "lucide-vue-next": "^0.476.0",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
