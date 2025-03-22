@@ -1,14 +1,23 @@
 /* Manage all Firestore-related operations */
 
+import {
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  getDoc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  arrayUnion,
+} from 'firebase/firestore'
 import { db } from './firebaseConfig'
-import { collection, addDoc } from 'firebase/firestore' // collection is like a table, addDoc adds a row to the collection
-import { doc, deleteDoc, getDoc } from 'firebase/firestore'
-import { updateDoc } from 'firebase/firestore'
-import { query, where, getDocs } from 'firebase/firestore'
-import { setDoc } from 'firebase/firestore'
 
 /*_______________________________________*/
 /*________ TASK STORE OPERATIONS ________*/
+/*____ corresponds with taskStore.js ____*/
 /*_______________________________________*/
 
 // Add a new task to the Firestore database
@@ -213,6 +222,7 @@ export async function getDeletedCompletedTasksFromFirestore() {
 
 /*_______________________________________*/
 /*________ MEBO STORE OPERATIONS ________*/
+/*____ corresponds with meboStore.js ____*/
 /*_______________________________________*/
 
 const mebosCollection = collection(db, 'mebos')
@@ -257,6 +267,76 @@ export async function publishMeboFs(meboId) {
     return await getMebosFromFirestore()
   } catch (e) {
     console.error('Error publishing mebo:', e)
+    throw e
+  }
+}
+
+/*_______________________________________*/
+/*________ USER STORE OPERATIONS ________*/
+/*____ corresponds with userStore.js ____*/
+/*_______________________________________*/
+
+export const userDocRef = (userId) => doc(db, 'users', userId)
+
+// Get user data from Firestore
+export async function getUserFromFirestore(userId) {
+  try {
+    const userDoc = await getDoc(userDocRef(userId))
+    return userDoc.exists() ? userDoc.data() : null
+  } catch (e) {
+    console.error('Error getting user data:', e)
+    throw e
+  }
+}
+
+// Add a new user to Firestore
+export async function addUserFs(userId, userData) {
+  try {
+    // Set the user document with the provided data
+    await setDoc(userDocRef(userId), userData)
+
+    // Return the user data after it has been added
+    return await getUserFromFirestore(userId)
+  } catch (e) {
+    console.error('Error adding user:', e)
+    throw e
+  }
+}
+
+// Generalized function to update multiple fields for a user
+// used to update totalSuccessCount, dailyMeboCreation, lastMeboReceived and allReceivedMebos
+export async function updateUserFieldsFs(userId, updatedFields) {
+  try {
+    // Special handling for 'external' user (temporary solution until authentication is added)
+    if (userId === 'external') {
+      const defaultFields = {
+        totalSuccessCount: 0, // default value
+        role: 'user', // default value
+        lastMeboReceived: null, // default value
+        allReceivedMebos: [], // empty array to start
+        dailyMeboCreation: { currentDay: new Date().toISOString().split('T')[0], meboCount: 0 }, // default mebo count
+      }
+
+      // Check if the user document exists, if not create it for the 'external' user (temporary solution until authentication is added)
+      const userDoc = await getDoc(userDocRef(userId))
+      if (!userDoc.exists()) {
+        console.log(`User document not found for ${userId}, creating document...`)
+        await setDoc(userDocRef(userId), defaultFields)
+      }
+    }
+
+    // Check if allReceivedMebos is being updated and handle it with arrayUnion
+    if (updatedFields.allReceivedMebos) {
+      updatedFields.allReceivedMebos = arrayUnion(...updatedFields.allReceivedMebos)
+    }
+
+    // Update the user document with the provided fields
+    await updateDoc(userDocRef(userId), updatedFields)
+
+    // Return the updated user data
+    return await getUserFromFirestore(userId)
+  } catch (e) {
+    console.error('Error updating user fields:', e)
     throw e
   }
 }

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useTaskStore } from './taskStore'
+import { updateUserFieldsFs, getUserFromFirestore } from '../firestoreService'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -47,15 +48,25 @@ export const useUserStore = defineStore('userStore', {
     },
   },
   actions: {
-    setRoleToAdmin() {
-      this.role = 'admin'
-      // Save to localStorage
-      localStorage.setItem('role', JSON.stringify(this.role))
+    async setRoleToAdmin() {
+      try {
+        this.role = 'admin'
+        const updatedUser = await updateUserFieldsFs(this.userId, { role: this.role })
+        // Update local state with the returned data
+        this.role = updatedUser.role
+      } catch (e) {
+        console.error('Error setting role to admin:', e)
+      }
     },
-    setRoleToUser() {
-      this.role = 'user'
-      // Save to localStorage
-      localStorage.setItem('role', JSON.stringify(this.role))
+    async setRoleToUser() {
+      try {
+        this.role = 'user'
+        const updatedUser = await updateUserFieldsFs(this.userId, { role: this.role })
+        // Update local state with the returned data
+        this.role = updatedUser.role
+      } catch (e) {
+        console.error('Error setting role to user:', e)
+      }
     },
     setCurrentStep(step) {
       this.currentStep = step
@@ -67,51 +78,96 @@ export const useUserStore = defineStore('userStore', {
       // Save to sessionStorage
       sessionStorage.setItem('currentEmotion', JSON.stringify(emotion))
     },
-    increaseTotalSuccessCount() {
-      this.totalSuccessCount++
-      // Save to sessionStorage
-      localStorage.setItem('totalSuccessCount', JSON.stringify(this.totalSuccessCount))
-    },
-    increaseDailyMeboCreationCount() {
-      if (this.role === 'admin' || this.availableMeboTokens > 0) {
-        this.dailyMeboCreation.meboCount++
-        localStorage.setItem('dailyMeboCreation', JSON.stringify(this.dailyMeboCreation))
+    async increaseTotalSuccessCount() {
+      try {
+        this.totalSuccessCount++
+        const updatedUser = await updateUserFieldsFs(this.userId, {
+          totalSuccessCount: this.totalSuccessCount,
+        })
+        // Update local state with the returned data
+        this.totalSuccessCount = updatedUser.totalSuccessCount
+      } catch (e) {
+        console.error('Error increasing total success count:', e)
       }
     },
-    resetDailyMeboCount() {
-      const today = new Date().toISOString().split('T')[0]
-      if (this.dailyMeboCreation.currentDay !== today) {
-        this.dailyMeboCreation = { currentDay: today, meboCount: 0 }
-        localStorage.setItem('dailyMeboCreation', JSON.stringify(this.dailyMeboCreation))
+    async increaseDailyMeboCreationCount() {
+      try {
+        if (this.role === 'admin' || this.availableMeboTokens > 0) {
+          this.dailyMeboCreation.meboCount++
+          const updatedUser = await updateUserFieldsFs(this.userId, {
+            dailyMeboCreation: this.dailyMeboCreation,
+          })
+          // Update local state with the returned data
+          this.dailyMeboCreation = updatedUser.dailyMeboCreation
+        }
+      } catch (e) {
+        console.error('Error increasing daily mebo creation count:', e)
       }
     },
-    updateLastMeboReceived() {
-      this.lastMeboReceived = new Date().toISOString()
-      // Save to localStorage
-      localStorage.setItem('lastMeboReceived', JSON.stringify(this.lastMeboReceived))
-    },
-    updateAllReceivedMebos(meboId) {
-      this.allReceivedMebos.push(meboId)
-      // Save to localStorage
-      localStorage.setItem('allReceivedMebos', JSON.stringify(this.allReceivedMebos))
-    },
-    initLoad() {
-      this.resetDailyMeboCount() // Ensure reset on load
-      const savedDailyMebo = JSON.parse(localStorage.getItem('dailyMeboCreation')) || {
-        currentDay: this.dailyMeboCreation.currentDay,
-        meboCount: 0,
+    async resetDailyMeboCount() {
+      try {
+        const today = new Date().toISOString().split('T')[0]
+        if (this.dailyMeboCreation.currentDay !== today) {
+          this.dailyMeboCreation = { currentDay: today, meboCount: 0 }
+          const updatedUser = await updateUserFieldsFs(this.userId, {
+            dailyMeboCreation: this.dailyMeboCreation,
+          })
+          // Update local state with the returned data
+          this.dailyMeboCreation = updatedUser.dailyMeboCreation
+        }
+      } catch (e) {
+        console.error('Error resetting daily mebo count:', e)
       }
-      this.dailyMeboCreation.meboCount =
-        savedDailyMebo.currentDay === this.dailyMeboCreation.currentDay
-          ? savedDailyMebo.meboCount
-          : 0 // Reset if it's a new day
+    },
+    async updateLastMeboReceived() {
+      try {
+        this.lastMeboReceived = new Date().toISOString()
+        const updatedUser = await updateUserFieldsFs(this.userId, {
+          lastMeboReceived: this.lastMeboReceived,
+        })
+        // Update local state with the returned data
+        this.lastMeboReceived = updatedUser.lastMeboReceived
+      } catch (e) {
+        console.error('Error updating last mebo received:', e)
+      }
+    },
+    async updateAllReceivedMebos(meboId) {
+      try {
+        this.allReceivedMebos.push(meboId)
+        const updatedUser = await updateUserFieldsFs(this.userId, {
+          allReceivedMebos: this.allReceivedMebos,
+        })
+        // Update local state with the returned data
+        this.allReceivedMebos = updatedUser.allReceivedMebos
+      } catch (e) {
+        console.error('Error updating all received mebos:', e)
+      }
+    },
+    async initLoad() {
+      try {
+        // Retrieve user data from Firestore
+        const userData = await getUserFromFirestore(this.userId)
+        if (userData) {
+          // Load data from Firestore into local state
+          this.role = userData.role || 'user'
+          this.totalSuccessCount = userData.totalSuccessCount || 0
+          this.dailyMeboCreation = userData.dailyMeboCreation || {
+            currentDay: new Date().toISOString().split('T')[0],
+            meboCount: 0,
+          }
+          this.lastMeboReceived = userData.lastMeboReceived || null
+          this.allReceivedMebos = userData.allReceivedMebos || []
+        }
 
-      this.role = JSON.parse(localStorage.getItem('role')) || 'user'
-      this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null
-      this.currentStep = JSON.parse(sessionStorage.getItem('currentStep')) || null
-      this.totalSuccessCount = JSON.parse(localStorage.getItem('totalSuccessCount')) || 0
-      this.lastMeboReceived = JSON.parse(localStorage.getItem('lastMeboReceived')) || null
-      this.allReceivedMebos = JSON.parse(localStorage.getItem('allReceivedMebos')) || []
+        // Load currentEmotion and currentStep from sessionStorage
+        this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null
+        this.currentStep = JSON.parse(sessionStorage.getItem('currentStep')) || null
+
+        // Reset daily mebo count if necessary
+        this.resetDailyMeboCount()
+      } catch (e) {
+        console.error('Error initializing user data:', e)
+      }
     },
   },
 })
