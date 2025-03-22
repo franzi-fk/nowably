@@ -111,7 +111,6 @@ export default {
       this.modalPrimaryActionText = 'Delete tasks'
       this.modalPrimaryAction = () => {
         this.taskStore.deleteAllDoneTasks()
-        this.taskStore.saveTasksToStorage()
         this.closeModal()
       }
 
@@ -127,7 +126,6 @@ export default {
       this.modalPrimaryActionText = 'Delete task'
       ;(this.modalPrimaryAction = () => {
         this.deleteTask(taskId)
-        this.taskStore.saveTasksToStorage()
         this.closeModal()
       }),
         // Show the modal
@@ -141,7 +139,6 @@ export default {
           return
         } else {
           this.taskStore.deleteTask(taskId)
-          this.taskStore.saveTasksToStorage()
           return
         }
       })

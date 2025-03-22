@@ -148,16 +148,7 @@ export const useTaskStore = defineStore('taskStore', {
     },
     setCurrentTask(task) {
       this.currentTask = task
-      this.saveToSessionStorage()
-    },
-    saveToSessionStorage() {
       sessionStorage.setItem('currentTask', JSON.stringify(this.currentTask))
-    },
-    saveTasksToStorage() {
-      localStorage.setItem(
-        'deletedCompletedTasksTemp',
-        JSON.stringify(this.deletedCompletedTasksTemp),
-      )
     },
     async initLoad() {
       try {

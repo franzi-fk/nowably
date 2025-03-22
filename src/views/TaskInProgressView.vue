@@ -82,7 +82,6 @@ export default {
 
         // Update state
         this.taskStore.setCurrentTask(updatedTask) // Update currentTask
-        this.taskStore.saveTasksToStorage()
         this.userStore.setCurrentStep('success')
         this.router.push({ name: 'task-success' })
       }
