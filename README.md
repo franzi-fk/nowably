@@ -17,7 +17,7 @@ A productivity app designed to help users defeat procrastination, start to their
 - Frontend: Vue 3 (Vite)
 - Routing: Vue Router
 - State Management: Pinia
-- Backend: tbd
+- Backend: Firestore
 
 ### Design
 
