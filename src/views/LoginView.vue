@@ -105,7 +105,7 @@ export default {
   justify-content: center;
   gap: 2rem;
   background-color: var(--base-white);
-  padding: 1.2rem 3rem 3rem 3rem;
+  padding: 1rem 3rem 3rem 3rem;
   min-height: 100vh;
   width: 100%;
 }
@@ -127,7 +127,7 @@ h1,
   font-weight: 500;
   letter-spacing: 0.05rem;
   min-height: 3.125rem;
-  transition: background-color 0.3s ease;
+  transition: border 0.3s ease;
   color: var(--base-black);
   background-color: var(--base-white);
   display: flex;
