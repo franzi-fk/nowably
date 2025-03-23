@@ -1,8 +1,12 @@
 <template>
   <div class="app-header header-container user-header" v-if="variant === 'user'">
-    <div class="role-container" v-if="!isMobile">
-      <LinkButton type="text" text="Make me User" @click="setRoleToUser" />
-      <LinkButton type="text" text="Make me Admin" @click="setRoleToAdmin" />
+    <div class="user-container" v-if="!isMobile">
+      <small
+        >logged in as: {{ this.userStore.user.displayName }} ({{
+          this.userStore.user.role || 'role not found'
+        }})</small
+      >
+      <LinkButton type="text" text="Logout" @click="userLogout" />
     </div>
 
     <!-- Mobile Navigation -->
@@ -86,6 +90,14 @@ export default {
     },
   },
   methods: {
+    async userLogout() {
+      try {
+        await this.userStore.logout()
+        this.router.push({ name: 'login' })
+      } catch (error) {
+        console.error('Error logging out:', error)
+      }
+    },
     setRoleToAdmin() {
       this.userStore.setRoleToAdmin()
     },
@@ -141,11 +153,12 @@ export default {
   left: 0;
 }
 
-.role-container {
+.user-container {
   display: flex;
   gap: 2rem;
   margin-left: auto;
   margin-right: 1rem;
+  align-items: center;
 }
 
 /* Mobile navigation */

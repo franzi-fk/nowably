@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getMebosFromFirestore, addMeboFs, deleteMeboFs, publishMeboFs } from '../firestoreService'
+import { useUserStore } from './userStore' // Import the userStore
 
 export const useMeboStore = defineStore('meboStore', {
   // mebo stands for Message in a Bottle
@@ -16,6 +17,9 @@ export const useMeboStore = defineStore('meboStore', {
   },
   actions: {
     async addNewMebo(message) {
+      const userStore = useUserStore()
+      const userId = userStore.userId // Get user ID from userStore
+
       // Check if user tries to add a duplicate (case-insensitive)
       const isDuplicate = this.mebos.some(
         (existingMebo) => existingMebo.text.toLowerCase() === message.toLowerCase(),
@@ -24,7 +28,7 @@ export const useMeboStore = defineStore('meboStore', {
 
       try {
         this.mebos = await addMeboFs({
-          author: 'userId',
+          author: userId,
           text: message,
           published: false,
         })
@@ -48,8 +52,17 @@ export const useMeboStore = defineStore('meboStore', {
     },
     async initLoad() {
       try {
+        // Load all mebos from Firestore
         const mebos = await getMebosFromFirestore()
-        this.mebos = mebos || [] // Fallback to an empty array if no mebos are found
+
+        // Get the current user data from the user store
+        const userStore = useUserStore()
+        const userId = userStore.user ? userStore.user.uid : null
+
+        // Filter mebos:
+        // - Published
+        // - Not created by the current user
+        this.mebos = mebos.filter((mebo) => mebo.published === true && mebo.author !== userId) || [] // Fallback to an empty array if no mebos match
       } catch (error) {
         console.error('Error loading mebos from Firestore:', error)
       }

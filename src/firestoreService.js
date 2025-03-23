@@ -143,26 +143,20 @@ export async function deleteAllDoneTasksFs() {
 
 /*________________________*/
 
-// Temporarily store deleted tasks in Firestore (cleared after 48h)
-export async function storeDeletedCompletedTaskFs(task) {
+// Temporarily store deleted tasks in Firestore under the user's collection (cleared after 48h)
+export const storeDeletedCompletedTaskFs = async (task) => {
   try {
-    const deletedCompletedTaskRef = doc(collection(db, 'deletedCompletedTasksTemp'))
+    const userRef = db.collection('users').doc(task.userId) // Access the user's document using userId
+    const deletedTasksRef = userRef.collection('deletedCompletedTasks') // Sub-collection for deleted tasks
 
-    // Remove fields that are not needed anymore
-    const taskData = { ...task }
-    delete taskData.doneState
-    delete taskData.id
+    // Add the deleted task to the user's deletedCompletedTasks collection
+    const docRef = await deletedTasksRef.add(task)
 
-    // Add the task with the deletedAt date (as ISO string, not Firestore Timestamp)
-    await setDoc(deletedCompletedTaskRef, {
-      ...taskData, // Use cleaned-up data
-      deletedAt: new Date(task.deletedAt).toISOString(), // Store as ISO string
-    })
-
-    return { ...taskData, id: deletedCompletedTaskRef.id } // Return updated task with Firestore-generated ID
-  } catch (e) {
-    console.error('Error adding deleted task to Firestore:', e)
-    throw e
+    // Return the stored task with its Firestore document ID
+    return { ...task, id: docRef.id }
+  } catch (error) {
+    console.error('Error storing deleted completed task in Firestore:', error)
+    throw error
   }
 }
 
@@ -227,10 +221,17 @@ export async function getDeletedCompletedTasksFromFirestore() {
 
 const mebosCollection = collection(db, 'mebos')
 
-// Fetch all mebos
-export async function getMebosFromFirestore() {
+// Fetch all mebos, filtered by userId (for published mebos, excluding user's own)
+export async function getMebosFromFirestore(userId) {
   try {
-    const snapshot = await getDocs(mebosCollection)
+    // Create a query to get published mebos, excluding those created by the current user
+    const mebosQuery = query(
+      mebosCollection,
+      where('published', '==', true), // Only published mebos
+      where('author', '!=', userId), // Exclude mebos authored by the current user
+    )
+
+    const snapshot = await getDocs(mebosQuery)
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   } catch (e) {
     console.error('Error fetching mebos:', e)
@@ -242,7 +243,7 @@ export async function getMebosFromFirestore() {
 export async function addMeboFs(mebo) {
   try {
     await addDoc(mebosCollection, mebo)
-    return await getMebosFromFirestore()
+    return await getMebosFromFirestore(mebo.author)
   } catch (e) {
     console.error('Error adding mebo:', e)
     throw e
@@ -280,12 +281,24 @@ export const userDocRef = (userId) => doc(db, 'users', userId)
 
 // Get user data from Firestore
 export async function getUserFromFirestore(userId) {
+  if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+    console.error('Invalid userId provided.')
+    return null // or handle it gracefully
+  }
+
   try {
-    const userDoc = await getDoc(userDocRef(userId))
-    return userDoc.exists() ? userDoc.data() : null
-  } catch (e) {
-    console.error('Error getting user data:', e)
-    throw e
+    const userRef = userDocRef(userId) // This line was causing the error
+    const userSnap = await getDoc(userRef)
+
+    if (!userSnap.exists()) {
+      console.warn('User not found in Firestore.')
+      return null
+    }
+
+    return userSnap.data()
+  } catch (error) {
+    console.error('Error getting user data:', error)
+    return null
   }
 }
 

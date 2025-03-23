@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
+
 import {
   getTasksFromFirestore,
   addTaskFs,
@@ -10,17 +11,21 @@ import {
   clearDeletedCompletedTasksFs,
   getDeletedCompletedTasksFromFirestore,
 } from '../firestoreService'
+import { watch } from 'vue'
 
 export const useTaskStore = defineStore('taskStore', {
+  id: 'taskStore',
   state: () => ({
     tasks: [], // Full list of tasks, stored in Firestore
     // Example task object:
     // {description: "Test",
     // doneState: false,
+    // userId: user.uid,
     // id: "20250313T120344669Z66923",
     // successAt: null}
     currentTask: null, // Task currently being worked on, stored in SessionStorage
     deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks, stored in Firestore
+    userId: null,
   }),
   getters: {
     openTasks() {
@@ -41,18 +46,12 @@ export const useTaskStore = defineStore('taskStore', {
     },
   },
   actions: {
-    // generateUniqueId() {
-    //   const now = new Date()
-    //   const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-    //   const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
-    //   const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
-    //   return `task-${datePart}${timePart}${randomPart}`
-    // },
     async addTask(descriptionInput) {
       const newTask = {
         description: descriptionInput,
         doneState: false,
         successAt: null,
+        userId: this.userId, // Ensure tasks are linked to the current user
       }
 
       try {
@@ -95,7 +94,11 @@ export const useTaskStore = defineStore('taskStore', {
           // If the task is done, temporarily store it in deletedCompletedTasksTemp and Firestore
           if (task.doneState) {
             const deletedTask = { ...task, deletedAt: new Date().toISOString() }
-            const updatedDeletedTask = await storeDeletedCompletedTaskFs(deletedTask) // Store the task in Firestore
+            // Pass userId to storeDeletedCompletedTaskFs
+            const updatedDeletedTask = await storeDeletedCompletedTaskFs(
+              deletedTask,
+              this.userId, // Use the user ID here
+            )
 
             // Keep local store in sync with Firestore data
             this.deletedCompletedTasksTemp.push(updatedDeletedTask)
@@ -122,7 +125,7 @@ export const useTaskStore = defineStore('taskStore', {
         }))
         // Add all deleted tasks to Firestore and update the local store
         const storedDeletedTasks = await Promise.all(
-          deletedTasks.map((task) => storeDeletedCompletedTaskFs(task)),
+          deletedTasks.map((task) => storeDeletedCompletedTaskFs(task, this.userId)), // Pass user ID
         )
 
         // Update the local state with Firestore IDs
@@ -136,9 +139,15 @@ export const useTaskStore = defineStore('taskStore', {
       }
     },
     async clearDeletedCompletedTasksTemp() {
+      const userStore = useUserStore()
+      const userId = userStore.userId
+      if (!userId) {
+        console.error('User ID is null. Cannot clear tasks.')
+        return
+      }
       try {
         // Fetch deleted tasks from Firestore
-        const updatedDeletedCompletedTasks = await clearDeletedCompletedTasksFs()
+        const updatedDeletedCompletedTasks = await clearDeletedCompletedTasksFs(userId)
 
         // Update the local state with the tasks that are not older than 48 hours
         this.deletedCompletedTasksTemp = updatedDeletedCompletedTasks
@@ -151,22 +160,27 @@ export const useTaskStore = defineStore('taskStore', {
       sessionStorage.setItem('currentTask', JSON.stringify(this.currentTask))
     },
     async initLoad() {
-      try {
-        // Load current task from sessionStorage
-        const storedCurrentTask = sessionStorage.getItem('currentTask')
-        if (storedCurrentTask) {
-          this.currentTask = JSON.parse(storedCurrentTask)
-        }
+      const userStore = useUserStore()
 
-        // Load tasks from Firestore
-        this.tasks = await getTasksFromFirestore()
-
-        // Load deleted tasks temp from Firestore
-        this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFromFirestore()
-      } catch (error) {
-        console.error('Error loading data:', error)
-      }
-      this.clearDeletedCompletedTasksTemp() // Clear old tasks after loading
+      watch(
+        () => userStore.userId,
+        async (newUserId) => {
+          if (newUserId) {
+            this.userId = newUserId
+            try {
+              this.tasks = await getTasksFromFirestore(this.userId)
+              this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFromFirestore(
+                this.userId,
+              )
+            } catch (error) {
+              console.error('Error fetching tasks:', error)
+            }
+          } else {
+            console.error('User is not authenticated, userId is null.')
+          }
+        },
+        { immediate: true },
+      )
     },
   },
 })

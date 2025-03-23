@@ -38,10 +38,7 @@
         <h1>Send a Message in a Bottle</h1>
         <p>Another user who's in need of some motivational words can receive your message.</p>
       </section>
-      <section
-        class="tile-container"
-        v-if="!loading && !messageSent && this.userStore.availableMeboTokens > 0"
-      >
+      <section class="tile-container" v-if="!messageSent && this.userStore.availableMeboTokens > 0">
         <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
           You can send {{ this.userStore.availableMeboTokens }} Message in a Bottle.
         </p>
@@ -83,10 +80,7 @@
       <section
         class="tile-container-emptystate"
         v-else-if="
-          !loading &&
-          !messageSent &&
-          this.userStore.role !== 'admin' &&
-          this.userStore.availableMeboTokens <= 0
+          !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
         "
       >
         <Illus_Task width="15" />
