@@ -450,7 +450,7 @@ export default {
         // Show the modal
         this.openModal()
     },
-    handleSplitting() {
+    async handleSplitting() {
       // Check if the split task descriptions are not empty
       const splitTasks = [
         this.splitTask1,
@@ -463,14 +463,16 @@ export default {
       if (splitTasks.length > 0) {
         this.deleteTask(this.taskStore.currentTask.id)
         // Add each split task to taskStore
-        splitTasks.forEach((splitTask) => {
+        // Wait for each split task to be added to the store
+        for (let splitTask of splitTasks) {
           if (splitTask.trim()) {
-            this.addNewTask(splitTask)
+            await this.addNewTask(splitTask) // Ensure each task is added before continuing
           }
-        })
+        }
         // Set the first task (splitTask1) as the new current task
         const newCurrentTask = this.taskStore.tasks.find((t) => t.description === splitTasks[0])
         this.taskStore.setCurrentTask(newCurrentTask)
+
         this.finishHelp()
       } else {
         this.finishHelp()
@@ -486,7 +488,7 @@ export default {
         return
       }
     },
-    addNewTask(description) {
+    async addNewTask(description) {
       const newTaskDesc = description.trim() // Removes spaces from input value
 
       // Check if user input is empty
@@ -504,7 +506,7 @@ export default {
         return
       }
 
-      this.taskStore.addTask(newTaskDesc)
+      await this.taskStore.addTask(newTaskDesc)
     },
     completeHumming() {
       this.hummingAnimationCompleted = true

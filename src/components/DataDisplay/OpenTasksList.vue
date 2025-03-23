@@ -13,11 +13,17 @@
       />
     </div>
 
-    <div class="task-list-body">
-      <div class="empty-state" v-if="this.taskStore.openTasks.length === 0">
+    <!-- Show loader space (white space) when loading -->
+    <div class="loader-space" v-if="loading"></div>
+    <!-- Show task list content after loading -->
+    <div class="task-list-body" v-else>
+      <!-- Show empty state only if NOT loading and there are no tasks -->
+      <div class="empty-state" v-if="!loading && this.taskStore.openTasks.length === 0">
         <Illus_EmptyState :width="15" />
         <p>No open tasks. Create a new one.</p>
       </div>
+
+      <!-- Show task list when not loading and tasks exist -->
       <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
         <div class="task-desc" @click="toggleRow(task.id)">
           <div class="task-desc-text" v-if="editingTaskId !== task.id">
@@ -124,6 +130,7 @@
         </div>
       </form>
     </div>
+
     <!-- Snackbar -->
     <SnackbarOverlay
       ref="snackbar"
@@ -175,6 +182,7 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
+      loading: true,
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
@@ -365,13 +373,18 @@ export default {
     },
   },
   mounted() {
-    this.userStore.initLoad()
-    this.taskStore.initLoad()
+    this.loading = true
+
+    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(() => {
+      this.loading = false
+
+      // Open the task creation state if no tasks exist
+      if (this.taskStore.openTasks.length === 0) {
+        this.creatingTask = true
+      }
+    })
+
     window.addEventListener('resize', this.updateWindowWidth) // Track window resize
-    // Open the task creation state if no tasks exist
-    if (this.taskStore.openTasks.length === 0) {
-      this.creatingTask = true
-    }
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.updateWindowWidth) // Clean up listener
@@ -384,12 +397,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: start;
-  justify-content: center;
+  justify-content: start;
   gap: 0.2rem;
   width: 100%;
   background-color: var(--base-white);
   padding-block: 2.5rem 3rem;
   border-radius: 1.5rem;
+  min-height: 16.6rem;
 }
 
 .task-list-header {
@@ -505,6 +519,12 @@ export default {
   gap: 1.25rem;
   justify-content: center;
   align-items: center;
+}
+
+.loader-space {
+  width: 100%;
+  height: 100%;
+  min-height: 6rem;
 }
 
 .task-desc-text,

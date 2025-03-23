@@ -152,7 +152,7 @@ export const useTaskStore = defineStore('taskStore', {
     },
     async initLoad() {
       try {
-        // Load current task from localStorage
+        // Load current task from sessionStorage
         const storedCurrentTask = sessionStorage.getItem('currentTask')
         if (storedCurrentTask) {
           this.currentTask = JSON.parse(storedCurrentTask)

@@ -10,7 +10,10 @@
       />
     </div>
 
-    <div class="task-list-body">
+    <!-- Show loader space (white space) when loading -->
+    <div class="loader-space" v-if="loading"></div>
+    <!-- Show task list content after loading -->
+    <div class="task-list-body" v-else>
       <div class="empty-state" v-if="this.taskStore.doneTasks.length === 0">
         <Illus_EmptyState :width="15" />
         <p>No completed tasks.</p>
@@ -80,6 +83,7 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
+      loading: true,
       isModalVisible: false,
       modalText: '',
       modalHeadline: '',
@@ -158,8 +162,12 @@ export default {
     },
   },
   mounted() {
-    this.userStore.initLoad()
-    this.taskStore.initLoad()
+    this.loading = true
+
+    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(() => {
+      this.loading = false
+    })
+
     window.addEventListener('resize', this.updateWindowWidth) // Track window resize
   },
   beforeUnmount() {
@@ -278,6 +286,12 @@ export default {
   gap: 1.25rem;
   justify-content: center;
   align-items: center;
+}
+
+.loader-space {
+  width: 100%;
+  height: 100%;
+  min-height: 6rem;
 }
 
 /*_________________________________________________________________________*/

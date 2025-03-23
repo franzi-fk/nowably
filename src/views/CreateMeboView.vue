@@ -32,13 +32,16 @@
     </article>
     <article
       class="create-mebo-view-container main-view-container flex-grow view-layout-default"
-      v-if="!messageSent && this.userStore.availableMeboTokens > 0"
+      v-if="!messageSent"
     >
       <section class="create-mebo-header page-padding-inline">
         <h1>Send a Message in a Bottle</h1>
         <p>Another user who's in need of some motivational words can receive your message.</p>
       </section>
-      <section class="tile-container">
+      <section
+        class="tile-container"
+        v-if="!loading && !messageSent && this.userStore.availableMeboTokens > 0"
+      >
         <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
           You can send {{ this.userStore.availableMeboTokens }} Message in a Bottle.
         </p>
@@ -76,17 +79,16 @@
           />
         </form>
       </section>
-    </article>
-    <article
-      class="create-mebo-view-container main-view-container flex-grow view-layout-default"
-      v-if="
-        !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
-      "
-    >
-      <section class="create-mebo-header page-padding-inline">
-        <h1>Send a Message in a Bottle</h1>
-      </section>
-      <section class="tile-container-emptystate">
+
+      <section
+        class="tile-container-emptystate"
+        v-else-if="
+          !loading &&
+          !messageSent &&
+          this.userStore.role !== 'admin' &&
+          this.userStore.availableMeboTokens <= 0
+        "
+      >
         <Illus_Task width="15" />
         <p>
           Complete a task to unlock sending a Message in a Bottle.<br />You can send up to 3 per
@@ -173,9 +175,7 @@ export default {
     },
   },
   mounted() {
-    this.userStore.initLoad()
-    this.taskStore.initLoad()
-    this.meboStore.initLoad()
+    Promise.all([this.userStore.initLoad(), this.meboStore.initLoad(), this.taskStore.initLoad()])
   },
 }
 </script>

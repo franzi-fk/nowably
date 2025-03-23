@@ -3,11 +3,13 @@
     <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
     <AppHeader />
     <div class="main-view-container all-mebos-container flex-grow view-layout-default">
-      <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length > 0">
+      <article class="received-mebos">
         <section class="received-mebos-header page-padding-inline">
           <h1>Received Messages in a Bottle</h1>
         </section>
-        <div class="tile-container">
+        <!-- Show loader space (white space) when loading -->
+        <div class="loader-space" v-if="loading"></div>
+        <div class="tile-container" v-else-if="this.userStore.allReceivedMebos.length > 0">
           <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
             <p class="mebo-text">
               {{ mebo.text }}
@@ -19,12 +21,7 @@
             </div>
           </section>
         </div>
-      </article>
-      <article class="received-mebos" v-if="this.userStore.allReceivedMebos.length <= 0">
-        <section class="received-mebos-header page-padding-inline">
-          <h1>Received Messages in a Bottle</h1>
-        </section>
-        <section class="tile-container-empty-state">
+        <section class="tile-container-empty-state" v-else>
           <Illus_EmptyState width="15" />
           <p>No received any Messages in a Bottle.</p>
         </section>
@@ -52,6 +49,7 @@ export default {
       userStore: useUserStore(),
       meboStore: useMeboStore(),
       router: useRouter(),
+      loading: true,
       allReceivedMebos: [],
     }
   },
@@ -61,15 +59,20 @@ export default {
     },
   },
   mounted() {
-    this.taskStore.initLoad()
-    this.userStore.initLoad()
-    this.meboStore.initLoad()
+    this.loading = true
+    Promise.all([
+      this.userStore.initLoad(),
+      this.meboStore.initLoad(),
+      this.taskStore.initLoad(),
+    ]).then(() => {
+      this.loading = false
 
-    // Load allReceivedMebos from storage
-    const receivedMebosIds = this.userStore.allReceivedMebos
-    const allMebos = this.meboStore.mebos
-    // Filter mebos that match the received IDs
-    this.allReceivedMebos = allMebos.filter((mebo) => receivedMebosIds.includes(mebo.id))
+      // Load allReceivedMebos from storage
+      const receivedMebosIds = this.userStore.allReceivedMebos
+      const allMebos = this.meboStore.mebos
+      // Filter mebos that match the received IDs
+      this.allReceivedMebos = allMebos.filter((mebo) => receivedMebosIds.includes(mebo.id))
+    })
   },
 }
 </script>

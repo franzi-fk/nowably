@@ -84,7 +84,7 @@ export default {
   background-color: var(--base-white);
   color: var(--base-black);
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.085);
-  padding: 0.375rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.3rem 0.55rem 0.4rem 0.55rem;
   border-radius: 0.375rem;
   white-space: nowrap;
   opacity: 0;
