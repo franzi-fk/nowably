@@ -2,14 +2,14 @@ import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
 
 import {
-  getTasksFromFirestore,
-  addTaskFs,
+  getTasksForUserFs,
+  storeTaskForUserFs,
   updateTaskFs,
   deleteTaskFs,
   deleteAllDoneTasksFs,
   storeDeletedCompletedTaskFs,
   clearDeletedCompletedTasksFs,
-  getDeletedCompletedTasksFromFirestore,
+  getDeletedCompletedTasksFs,
 } from '../firestoreService'
 import { watch } from 'vue'
 
@@ -29,18 +29,25 @@ export const useTaskStore = defineStore('taskStore', {
   }),
   getters: {
     openTasks() {
-      return this.tasks.filter((task) => task.doneState === false)
+      // open tasks of the current user
+      return this.tasks.filter((task) => task.doneState === false && task.userId === this.userId)
     },
     doneTasks() {
-      return this.tasks.filter((task) => task.doneState === true)
+      // done tasks of the current user
+      return this.tasks.filter((task) => task.doneState === true && task.userId === this.userId)
     },
     // Get count of completed tasks in the last 24 hours
     completedTasksCountLast24h() {
       const now = new Date()
       const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000) // 24 hours ago
       const allCompletedTasks = [
-        ...this.tasks.filter((task) => task.successAt && new Date(task.successAt) >= oneDayAgo),
-        ...this.deletedCompletedTasksTemp.filter((task) => new Date(task.successAt) >= oneDayAgo),
+        ...this.tasks.filter(
+          (task) =>
+            task.successAt && new Date(task.successAt) >= oneDayAgo && task.userId === this.userId,
+        ),
+        ...this.deletedCompletedTasksTemp.filter(
+          (task) => new Date(task.successAt) >= oneDayAgo && task.userId === this.userId,
+        ),
       ]
       return allCompletedTasks.length
     },
@@ -56,7 +63,7 @@ export const useTaskStore = defineStore('taskStore', {
 
       try {
         // Add task to Firestore and get the task with id
-        const addedTask = await addTaskFs(newTask)
+        const addedTask = await storeTaskForUserFs(newTask)
 
         // Add to local state
         this.tasks.push(addedTask)
@@ -168,15 +175,11 @@ export const useTaskStore = defineStore('taskStore', {
           if (newUserId) {
             this.userId = newUserId
             try {
-              this.tasks = await getTasksFromFirestore(this.userId)
-              this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFromFirestore(
-                this.userId,
-              )
+              this.tasks = await getTasksForUserFs(this.userId)
+              this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFs(this.userId)
             } catch (error) {
               console.error('Error fetching tasks:', error)
             }
-          } else {
-            console.error('User is not authenticated, userId is null.')
           }
         },
         { immediate: true },

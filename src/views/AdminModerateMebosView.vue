@@ -8,12 +8,12 @@
       </div>
       <article
         class="moderate-mebos-body page-padding-inline moderate-mebo-empty-state"
-        v-if="this.meboStore.unpublishedMebos.length <= 0"
+        v-if="this.meboStore.allUnpublishedMebos.length <= 0"
       >
         <p>There are no unpublished Messages in a Bottle.</p>
       </article>
       <article class="moderate-mebos-body" v-else>
-        <div v-for="mebo in this.meboStore.unpublishedMebos" :key="mebo.id" class="mebo-tile">
+        <div v-for="mebo in this.meboStore.allUnpublishedMebos" :key="mebo.id" class="mebo-tile">
           <p>{{ mebo.text }}</p>
           <div class="mebo-metadata">
             <small>Mebo ID: {{ mebo.id }}</small>

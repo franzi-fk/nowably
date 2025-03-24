@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { useTaskStore } from './taskStore'
-import { updateUserFieldsFs, getUserFromFirestore } from '../firestoreService'
+import {
+  updateUserFieldsFs,
+  getUserFs,
+  getAllReceivedMebosForUserFs,
+  storeReceivedMeboForUserFs,
+} from '../firestoreService'
 import { signInWithGoogle, signOutUser } from '../firebaseService'
 
 export const useUserStore = defineStore('userStore', {
@@ -74,7 +79,6 @@ export const useUserStore = defineStore('userStore', {
           totalSuccessCount: this.totalSuccessCount,
           dailyMeboCreation: this.dailyMeboCreation,
           lastMeboReceived: this.lastMeboReceived,
-          allReceivedMebos: this.allReceivedMebos,
         })
 
         Object.assign(this, updatedUser) // Update local state
@@ -84,34 +88,38 @@ export const useUserStore = defineStore('userStore', {
     },
     async increaseTotalSuccessCount() {
       this.totalSuccessCount++
-      await this.updateUserFields()
+      const updatedField = { totalSuccessCount: this.totalSuccessCount }
+      await this.updateUserFields(this.userId, updatedField)
     },
     async increaseDailyMeboCreationCount() {
       if (this.role === 'admin' || this.availableMeboTokens > 0) {
         this.dailyMeboCreation.meboCount++
-        await this.updateUserFields()
+        const updatedField = { dailyMeboCreation: this.dailyMeboCreation }
+        await this.updateUserFields(this.userId, updatedField)
       }
     },
     async resetDailyMeboCount() {
       const today = new Date().toISOString().split('T')[0]
       if (this.dailyMeboCreation.currentDay !== today) {
         this.dailyMeboCreation = { currentDay: today, meboCount: 0 }
-        await this.updateUserFields()
+        const updatedField = { dailyMeboCreation: this.dailyMeboCreation }
+        await this.updateUserFields(this.userId, updatedField)
       }
     },
     async updateLastMeboReceived() {
       this.lastMeboReceived = new Date().toISOString()
-      await this.updateUserFields()
+      const updatedField = { lastMeboReceived: this.lastMeboReceived }
+      await this.updateUserFields(this.userId, updatedField)
     },
-    async updateAllReceivedMebos(meboId) {
+    async storeAllReceivedMebos(meboId) {
       this.allReceivedMebos.push(meboId)
-      await this.updateUserFields()
+      await storeReceivedMeboForUserFs(this.userId, meboId)
     },
     async initLoad() {
       if (!this.userId) return
 
       try {
-        const userData = await getUserFromFirestore(this.userId)
+        const userData = await getUserFs(this.userId)
 
         if (userData) {
           Object.assign(this, {
@@ -122,11 +130,10 @@ export const useUserStore = defineStore('userStore', {
               meboCount: 0,
             },
             lastMeboReceived: userData.lastMeboReceived || null,
-            allReceivedMebos: userData.allReceivedMebos || [],
           })
         }
-
-        this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null
+        ;(this.allReceivedMebos = getAllReceivedMebosForUserFs(this.userId) || []),
+          (this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null)
         this.currentStep = JSON.parse(sessionStorage.getItem('currentStep')) || null
 
         this.resetDailyMeboCount()

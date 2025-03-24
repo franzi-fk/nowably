@@ -4,7 +4,7 @@
     <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
       <article
         id="motivation-alt"
-        v-if="!userStore.canReceiveMebo || meboStore.mebos.length < 1 || !mebo"
+        v-if="!userStore.canReceiveMebo || meboStore.mebosToReceive.length < 1 || !mebo"
       >
         <div class="help-sub-view">
           <section class="intro">
@@ -400,32 +400,22 @@ export default {
       this.userStore.setCurrentStep('openedMebo')
     },
     getMebo() {
-      const publishedMebos = this.meboStore.publishedMebos
-      const userId = this.userStore.userId
+      const potentialMebos = this.meboStore.mebosToReceive
       const receivedMebos = new Set(this.userStore.allReceivedMebos)
 
-      if (publishedMebos.length === 0) return null // No mebos available
+      if (potentialMebos.length === 0) return null // No mebos available
 
-      // Admins can receive any random mebo without validation, but they should still not overwrite an existing mebo
-      if (this.userStore.role === 'admin') {
-        return (this.mebo = publishedMebos[Math.floor(Math.random() * publishedMebos.length)])
+      // Filter out any mebos the user has already received
+      const validMebos = potentialMebos.filter((mebo) => !receivedMebos.has(mebo.id))
+      console.log(validMebos)
+
+      if (validMebos.length === 0) {
+        console.log('No valid mebo found')
+        return (this.mebo = null)
       }
 
-      while (true) {
-        // pick random mebo
-        const randomMebo = publishedMebos[Math.floor(Math.random() * publishedMebos.length)]
-
-        // check if it's valid (user is not the author, user has not received this mebo yet)
-        if (randomMebo.author !== userId && !receivedMebos.has(randomMebo.id)) {
-          return (this.mebo = randomMebo)
-        }
-
-        // if all mebos are invalid, return null to prevent infinite loop
-        if (publishedMebos.every((mebo) => mebo.author === userId || receivedMebos.has(mebo.id))) {
-          console.log('No valid mebo found')
-          return (this.mebo = null)
-        }
-      }
+      // Pick a random valid mebo
+      return (this.mebo = validMebos[Math.floor(Math.random() * validMebos.length)])
     },
     updateLastMeboReceived() {
       this.userStore.updateLastMeboReceived()
@@ -539,10 +529,12 @@ export default {
       return `${datePart}${timePart}${randomPart}`
     },
   },
-  mounted() {
-    this.userStore.initLoad()
-    this.taskStore.initLoad()
-    this.meboStore.initLoad()
+  async mounted() {
+    await Promise.all([
+      this.userStore.initLoad(),
+      this.taskStore.initLoad(),
+      this.meboStore.initLoad(),
+    ])
     this.getMebo()
 
     // If there is no currentTask, redirect to the home view

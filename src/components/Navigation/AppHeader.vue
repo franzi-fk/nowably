@@ -3,7 +3,7 @@
     <div class="user-container" v-if="!isMobile">
       <small
         >logged in as: {{ this.userStore.user.displayName }} ({{
-          this.userStore.user.role || 'role not found'
+          this.userStore.role || 'role not found'
         }})</small
       >
       <LinkButton type="text" text="Logout" @click="userLogout" />

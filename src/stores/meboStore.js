@@ -1,70 +1,89 @@
 import { defineStore } from 'pinia'
-import { getMebosFromFirestore, addMeboFs, deleteMeboFs, publishMeboFs } from '../firestoreService'
+import {
+  getPublishedMebosExcludingUserFs,
+  getUnpublishedMebosFs,
+  getPublishedMebosFs,
+  addMeboFs,
+  deleteMeboFs,
+  publishMeboFs,
+} from '../firestoreService'
 import { useUserStore } from './userStore' // Import the userStore
 
 export const useMeboStore = defineStore('meboStore', {
   // mebo stands for Message in a Bottle
   state: () => ({
-    mebos: [],
+    mebosForUsers: [], // standard use case; excludes unpublished mebos and mebos written by current user
+    allUnpublishedMebos: [], // for admin purposes
+    allPublishedMebos: [], // for admin purposes
+    userRole: 'admin',
+    userId: 1244,
   }),
   getters: {
-    unpublishedMebos() {
-      return this.mebos.filter((mebo) => mebo.published === false)
-    },
-    publishedMebos() {
-      return this.mebos.filter((mebo) => mebo.published === true)
+    mebosToReceive() {
+      if (this.userRole === 'admin') return this.allPublishedMebos
+      if (this.userRole === 'user') return this.mebosForUsers
+      return [] // Return an empty array if no valid role
     },
   },
   actions: {
     async addNewMebo(message) {
-      const userStore = useUserStore()
-      const userId = userStore.userId // Get user ID from userStore
-
-      // Check if user tries to add a duplicate (case-insensitive)
-      const isDuplicate = this.mebos.some(
-        (existingMebo) => existingMebo.text.toLowerCase() === message.toLowerCase(),
-      )
-      if (isDuplicate) return // prevent adding duplicate
-
       try {
-        this.mebos = await addMeboFs({
-          author: userId,
-          text: message,
-          published: false,
-        })
+        await addMeboFs(message, this.userId)
       } catch (error) {
         console.error('Error adding mebo:', error)
       }
     },
     async deleteMebo(meboId) {
       try {
-        this.mebos = await deleteMeboFs(meboId)
+        const response = await deleteMeboFs(meboId)
+        this.allUnpublishedMebos = response
       } catch (error) {
         console.error('Error deleting mebo:', error)
       }
     },
     async publishMebo(meboId) {
       try {
-        this.mebos = await publishMeboFs(meboId)
+        const response = await publishMeboFs(meboId)
+        this.allUnpublishedMebos = response
       } catch (error) {
         console.error('Error publishing mebo:', error)
       }
     },
-    async initLoad() {
+    // only for admin purposes (moderation)
+    async fetchUnpublishedMebos() {
       try {
-        // Load all mebos from Firestore
-        const mebos = await getMebosFromFirestore()
-
-        // Get the current user data from the user store
-        const userStore = useUserStore()
-        const userId = userStore.user ? userStore.user.uid : null
-
-        // Filter mebos:
-        // - Published
-        // - Not created by the current user
-        this.mebos = mebos.filter((mebo) => mebo.published === true && mebo.author !== userId) || [] // Fallback to an empty array if no mebos match
+        const fetchedUnpublishedMebos = await getUnpublishedMebosFs()
+        this.allUnpublishedMebos = fetchedUnpublishedMebos
       } catch (error) {
         console.error('Error loading mebos from Firestore:', error)
+      }
+    },
+    // only for admin purposes (testing)
+    async fetchPublishedMebos() {
+      try {
+        const fetchedPublishedMebos = await getPublishedMebosFs()
+        this.allPublishedMebos = fetchedPublishedMebos
+      } catch (error) {
+        console.error('Error loading mebos from Firestore:', error)
+      }
+    },
+    async initLoad() {
+      const userStore = useUserStore()
+      this.userRole = userStore.role // Get user role from userStore
+      this.userId = userStore.userId
+
+      // Load mebosToReceive from Firestore
+      try {
+        const fetchedMebosToReceive = await getPublishedMebosExcludingUserFs(this.userId)
+        this.mebosForUsers = fetchedMebosToReceive
+      } catch (error) {
+        console.error('Error loading mebos from Firestore:', error)
+      }
+
+      // If admin is logged in, load all published and unpublished mebos
+      if (this.userRole === 'admin') {
+        this.allPublishedMebos = this.fetchPublishedMebos()
+        this.allUnpublishedMebos = this.fetchUnpublishedMebos()
       }
     },
   },

@@ -67,9 +67,9 @@ export default {
     ]).then(() => {
       this.loading = false
 
-      // Load allReceivedMebos from storage
-      const receivedMebosIds = this.userStore.allReceivedMebos
-      const allMebos = this.meboStore.mebos
+      // Load allReceivedMebos
+      const receivedMebosIds = this.userStore.allReceivedMebos || []
+      const allMebos = [...this.meboStore.mebosToReceive, ...this.meboStore.allPublishedMebos]
       // Filter mebos that match the received IDs
       this.allReceivedMebos = allMebos.filter((mebo) => receivedMebosIds.includes(mebo.id))
     })
