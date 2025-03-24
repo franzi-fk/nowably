@@ -56,16 +56,16 @@ export async function getTasksForUserFs(userId) {
 /*________________________*/
 
 // Delete a task from Firestore by its ID
-export async function deleteTaskFs(taskId) {
+export async function deleteTaskFs(userId, taskId) {
   try {
-    // Get the document reference from Firestore using the task's ID
-    const taskRef = doc(db, 'tasks', taskId)
+    // Reference the task inside the user's subcollection
+    const taskRef = doc(db, 'users', userId, 'tasks', taskId)
 
-    // Delete the document from Firestore
+    // Delete the task from Firestore
     await deleteDoc(taskRef)
 
-    // Fetch the updated list of tasks (excluding the deleted one)
-    const tasksCollectionRef = collection(db, 'tasks')
+    // Fetch the updated list of tasks for the user
+    const tasksCollectionRef = collection(db, 'users', userId, 'tasks')
     const querySnapshot = await getDocs(tasksCollectionRef)
     const updatedTasks = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -75,42 +75,44 @@ export async function deleteTaskFs(taskId) {
     // Return the updated list of tasks
     return updatedTasks
   } catch (e) {
-    // Log any errors during the delete operation
-    console.error('Error deleting document: ', e)
+    console.error('Error deleting task: ', e)
   }
 }
 
 /*________________________*/
 
 // Update an existing task in Firestore by its ID
-export async function updateTaskFs(taskId, updatedProperties) {
+export async function updateTaskFs(userId, taskId, updatedProperties) {
   if (updatedProperties.successAt) {
     updatedProperties.successAt = new Date(updatedProperties.successAt).toISOString() // Store as ISO string
   }
 
-  const taskRef = doc(db, 'tasks', taskId)
+  // Reference the task within the user's sub-collection
+  const taskRef = doc(db, 'users', userId, 'tasks', taskId)
 
   try {
     // Update the task with the new properties
     await updateDoc(taskRef, updatedProperties)
+
     // Fetch the updated task after the update
     const updatedTaskSnap = await getDoc(taskRef)
     const updatedTask = updatedTaskSnap.data()
 
-    // Return the updated task
-    return { id: taskId, ...updatedTask } // Include the task ID in the returned data
+    // Return the updated task, including the task ID
+    return { id: taskId, ...updatedTask }
   } catch (e) {
-    console.error('Error updating document: ', e)
+    console.error('Error updating task: ', e)
+    throw e
   }
 }
 
 /*________________________*/
 
 // Delete all tasks that are marked as doneState: true in Firestore
-export async function deleteAllDoneTasksFs() {
+export async function deleteAllDoneTasksFs(userId) {
   try {
-    // Get a reference to the 'tasks' collection
-    const tasksCollectionRef = collection(db, 'tasks')
+    // Get a reference to the user's tasks subcollection
+    const tasksCollectionRef = collection(db, 'users', userId, 'tasks')
 
     // Create a query to find tasks that are marked as done
     const q = query(tasksCollectionRef, where('doneState', '==', true))
@@ -119,14 +121,14 @@ export async function deleteAllDoneTasksFs() {
     const querySnapshot = await getDocs(q)
 
     // Collect delete promises
-    const deletePromises = querySnapshot.docs.map((docSnap) => {
-      const taskRef = doc(db, 'tasks', docSnap.id) // Get the reference to the task document
-      return deleteDoc(taskRef) // Return the promise
-    })
+    const deletePromises = querySnapshot.docs.map((docSnap) =>
+      deleteDoc(doc(db, 'users', userId, 'tasks', docSnap.id)),
+    )
+
     // Wait for all deletion operations to finish
     await Promise.all(deletePromises)
 
-    // Retrieve the updated list of tasks
+    // Retrieve the updated list of tasks for the user
     const updatedTasksSnapshot = await getDocs(tasksCollectionRef)
     const updatedTasks = updatedTasksSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -136,7 +138,7 @@ export async function deleteAllDoneTasksFs() {
     // Return the updated tasks list
     return updatedTasks
   } catch (e) {
-    console.error('Error deleting tasks: ', e)
+    console.error('Error deleting done tasks: ', e)
   }
 }
 

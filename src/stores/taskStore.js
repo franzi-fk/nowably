@@ -16,7 +16,7 @@ import { watch } from 'vue'
 export const useTaskStore = defineStore('taskStore', {
   id: 'taskStore',
   state: () => ({
-    tasks: [], // Full list of tasks, stored in Firestore
+    tasks: [], // Full list of tasks per user, stored in Firestore
     // Example task object:
     // {description: "Test",
     // doneState: false,
@@ -24,7 +24,7 @@ export const useTaskStore = defineStore('taskStore', {
     // id: "20250313T120344669Z66923",
     // successAt: null}
     currentTask: null, // Task currently being worked on, stored in SessionStorage
-    deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks, stored in Firestore
+    deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks per user, stored in Firestore
     userId: null,
   }),
   getters: {
@@ -84,7 +84,7 @@ export const useTaskStore = defineStore('taskStore', {
 
         try {
           // Update Firestore task
-          const updatedTask = await updateTaskFs(task.id, updatedProperties)
+          const updatedTask = await updateTaskFs(this.userId, task.id, updatedProperties)
 
           // Update the local state
           Object.assign(task, updatedTask)
@@ -112,7 +112,7 @@ export const useTaskStore = defineStore('taskStore', {
           }
 
           // Delete the task from Firestore
-          const updatedTasks = await deleteTaskFs(task.id)
+          const updatedTasks = await deleteTaskFs(this.userId, task.id)
 
           // Update the local state to reflect the deletion from Firestore
           this.tasks = updatedTasks
@@ -138,7 +138,7 @@ export const useTaskStore = defineStore('taskStore', {
         // Update the local state with Firestore IDs
         this.deletedCompletedTasksTemp.push(...storedDeletedTasks)
 
-        const updatedTasks = await deleteAllDoneTasksFs() // delete all done tasks from Firestore, returns updated tasks
+        const updatedTasks = await deleteAllDoneTasksFs(this.userId) // delete all done tasks from Firestore, returns updated tasks
 
         this.tasks = updatedTasks // Keep local state in sync
       } catch (e) {
