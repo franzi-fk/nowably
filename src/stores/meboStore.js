@@ -15,13 +15,13 @@ export const useMeboStore = defineStore('meboStore', {
     mebosForUsers: [], // standard use case; excludes unpublished mebos and mebos written by current user
     allUnpublishedMebos: [], // for admin purposes
     allPublishedMebos: [], // for admin purposes
-    userRole: 'admin',
-    userId: 1244,
+    userRole: null,
+    userId: null,
   }),
   getters: {
     mebosToReceive() {
-      if (this.userRole === 'admin') return this.allPublishedMebos
-      if (this.userRole === 'user') return this.mebosForUsers
+      if (this.userRole === 'admin') return [...this.allPublishedMebos]
+      if (this.userRole === 'user') return [...this.mebosForUsers]
       return [] // Return an empty array if no valid role
     },
   },
@@ -49,24 +49,6 @@ export const useMeboStore = defineStore('meboStore', {
         console.error('Error publishing mebo:', error)
       }
     },
-    // only for admin purposes (moderation)
-    async fetchUnpublishedMebos() {
-      try {
-        const fetchedUnpublishedMebos = await getUnpublishedMebosFs()
-        this.allUnpublishedMebos = fetchedUnpublishedMebos
-      } catch (error) {
-        console.error('Error loading mebos from Firestore:', error)
-      }
-    },
-    // only for admin purposes (testing)
-    async fetchPublishedMebos() {
-      try {
-        const fetchedPublishedMebos = await getPublishedMebosFs()
-        this.allPublishedMebos = fetchedPublishedMebos
-      } catch (error) {
-        console.error('Error loading mebos from Firestore:', error)
-      }
-    },
     async initLoad() {
       const userStore = useUserStore()
       this.userRole = userStore.role // Get user role from userStore
@@ -74,16 +56,16 @@ export const useMeboStore = defineStore('meboStore', {
 
       // Load mebosToReceive from Firestore
       try {
-        const fetchedMebosToReceive = await getPublishedMebosExcludingUserFs(this.userId)
-        this.mebosForUsers = fetchedMebosToReceive
+        this.mebosForUsers = await getPublishedMebosExcludingUserFs(this.userId)
+        console.log('mebosForUsers', this.mebosForUsers)
       } catch (error) {
         console.error('Error loading mebos from Firestore:', error)
       }
 
       // If admin is logged in, load all published and unpublished mebos
       if (this.userRole === 'admin') {
-        this.allPublishedMebos = this.fetchPublishedMebos()
-        this.allUnpublishedMebos = this.fetchUnpublishedMebos()
+        this.allPublishedMebos = await getPublishedMebosFs()
+        this.allUnpublishedMebos = await getUnpublishedMebosFs()
       }
     },
   },

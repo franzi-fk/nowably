@@ -400,14 +400,22 @@ export default {
       this.userStore.setCurrentStep('openedMebo')
     },
     getMebo() {
+      console.log('User Role:', this.meboStore.userRole)
+
       const potentialMebos = this.meboStore.mebosToReceive
-      const receivedMebos = new Set(this.userStore.allReceivedMebos)
+      console.log('Potential Mebos:', potentialMebos)
 
-      if (potentialMebos.length === 0) return null // No mebos available
+      // Ensure allReceivedMebos is an array
+      const allReceivedMebos = Array.isArray(this.userStore.allReceivedMebos)
+        ? this.userStore.allReceivedMebos
+        : []
 
+      const receivedMebos = new Set(allReceivedMebos)
+
+      if (!potentialMebos || potentialMebos === 0) return null
       // Filter out any mebos the user has already received
       const validMebos = potentialMebos.filter((mebo) => !receivedMebos.has(mebo.id))
-      console.log(validMebos)
+      console.log('Valid Mebos:', validMebos)
 
       if (validMebos.length === 0) {
         console.log('No valid mebo found')

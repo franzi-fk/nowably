@@ -83,7 +83,7 @@
           !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
         "
       >
-        <Illus_Task width="15" />
+        <Illus_Task width="13" />
         <p>
           Complete a task to unlock sending a Message in a Bottle.<br />You can send up to 3 per
           day.

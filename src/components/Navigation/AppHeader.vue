@@ -1,16 +1,16 @@
 <template>
   <div class="app-header header-container user-header" v-if="variant === 'user'">
-    <div class="user-container" v-if="!isMobile">
+    <div class="user-container" v-if="!isMobile && this.userStore.user">
       <small
         >logged in as: {{ this.userStore.user.displayName }} ({{
           this.userStore.role || 'role not found'
         }})</small
       >
-      <LinkButton type="text" text="Logout" @click="userLogout" />
+      <LinkButton type="icon-text" icon="logOut" text="Sign out" @click="userLogout" />
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-if="isMobile" class="mobile-nav">
+    <div v-if="isMobile && this.userStore.user" class="mobile-nav">
       <NowablyLogo width="10" variant="full" @click="goToHome" />
       <LinkButton
         type="icon"
@@ -49,6 +49,7 @@
                 <span>{{ item.name }}</span>
               </li>
             </router-link>
+            <li><LinkButton type="text" text="Sign out" @click="userLogout" id="btn-logout" /></li>
           </ul>
         </nav>
       </div>
@@ -198,6 +199,8 @@ export default {
   text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
 

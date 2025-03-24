@@ -23,7 +23,7 @@
         </div>
         <section class="tile-container-empty-state" v-else>
           <Illus_EmptyState width="15" />
-          <p>No received any Messages in a Bottle.</p>
+          <p>No received Messages in a Bottle.</p>
         </section>
       </article>
     </div>
