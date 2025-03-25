@@ -4,13 +4,7 @@
     <AppHeader />
     <div class="main-view-container home-container flex-grow view-layout-default">
       <section class="welcome-message page-padding-inline">
-        <h1>
-          Welcome
-          <span
-            v-if="this.userStore.user.displayName && this.userStore.user.displayName.length < 30"
-            >{{ this.userStore.user.displayName }}</span
-          >
-        </h1>
+        <h1>Welcome</h1>
         <span id="subheading">Let's defeat procrastination now.</span>
       </section>
       <div class="tile-container">
