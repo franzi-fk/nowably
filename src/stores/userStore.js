@@ -132,8 +132,11 @@ export const useUserStore = defineStore('userStore', {
             lastMeboReceived: userData.lastMeboReceived || null,
           })
         }
-        ;(this.allReceivedMebos = getAllReceivedMebosForUserFs(this.userId) || []),
-          (this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null)
+
+        const receivedMebos = await getAllReceivedMebosForUserFs(this.userId)
+        this.allReceivedMebos = Array.isArray(receivedMebos) ? receivedMebos : []
+
+        this.currentEmotion = JSON.parse(sessionStorage.getItem('currentEmotion')) || null
         this.currentStep = JSON.parse(sessionStorage.getItem('currentStep')) || null
 
         this.resetDailyMeboCount()

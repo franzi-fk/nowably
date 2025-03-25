@@ -403,8 +403,10 @@ export async function storeReceivedMeboForUserFs(userId, meboId) {
     const userRef = doc(db, 'users', userId)
     const receivedMebosRef = collection(userRef, 'receivedMebos')
 
-    const docRef = await addDoc(receivedMebosRef, meboId)
-    return { ...meboId, id: docRef.id }
+    // Store meboId inside an object
+    const docRef = await addDoc(receivedMebosRef, { meboId })
+
+    return { meboId, id: docRef.id } // Now meboId is stored correctly
   } catch (e) {
     console.error('Error storing received mebo in Firestore:', e)
     throw e
