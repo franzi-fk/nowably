@@ -7,10 +7,7 @@
   >
     <div class="navi-header">
       <h1 aria-label="Logo Nowably" @click="goToHome">
-        <NowablyLogo
-          :width="isCollapsed ? '3' : '10'"
-          :variant="isCollapsed ? 'reduced' : 'full'"
-        />
+        <NowablyLogo :width="isCollapsed ? '3' : '10'" :variant="isCollapsed ? 'image' : 'full'" />
       </h1>
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
@@ -79,10 +76,7 @@
   >
     <div class="navi-header">
       <h1 aria-label="Logo Nowably" @click="goToHome">
-        <NowablyLogo
-          :width="isCollapsed ? '3' : '10'"
-          :variant="isCollapsed ? 'reduced' : 'full'"
-        />
+        <NowablyLogo :width="isCollapsed ? '3' : '10'" :variant="isCollapsed ? 'image' : 'full'" />
       </h1>
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">

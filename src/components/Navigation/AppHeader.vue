@@ -1,12 +1,16 @@
 <template>
   <div class="app-header header-container user-header" v-if="variant === 'user'">
-    <div class="role-container" v-if="!isMobile">
-      <LinkButton type="text" text="Make me User" @click="setRoleToUser" />
-      <LinkButton type="text" text="Make me Admin" @click="setRoleToAdmin" />
+    <div class="user-container" v-if="!isMobile && this.userStore.user">
+      <small
+        >logged in as: {{ this.userStore.user.displayName }} ({{
+          this.userStore.role || 'role not found'
+        }})</small
+      >
+      <LinkButton type="icon-text" icon="logOut" text="Sign out" @click="userLogout" />
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-if="isMobile" class="mobile-nav">
+    <div v-if="isMobile && this.userStore.user" class="mobile-nav">
       <NowablyLogo width="10" variant="full" @click="goToHome" />
       <LinkButton
         type="icon"
@@ -45,6 +49,7 @@
                 <span>{{ item.name }}</span>
               </li>
             </router-link>
+            <li><LinkButton type="text" text="Sign out" @click="userLogout" id="btn-logout" /></li>
           </ul>
         </nav>
       </div>
@@ -86,6 +91,14 @@ export default {
     },
   },
   methods: {
+    async userLogout() {
+      try {
+        await this.userStore.logout()
+        this.router.push({ name: 'login' })
+      } catch (error) {
+        console.error('Error logging out:', error)
+      }
+    },
     setRoleToAdmin() {
       this.userStore.setRoleToAdmin()
     },
@@ -141,11 +154,12 @@ export default {
   left: 0;
 }
 
-.role-container {
+.user-container {
   display: flex;
   gap: 2rem;
   margin-left: auto;
   margin-right: 1rem;
+  align-items: center;
 }
 
 /* Mobile navigation */
@@ -185,6 +199,8 @@ export default {
   text-align: center;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
 

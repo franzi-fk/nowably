@@ -23,7 +23,7 @@
         </div>
         <section class="tile-container-empty-state" v-else>
           <Illus_EmptyState width="15" />
-          <p>No received any Messages in a Bottle.</p>
+          <p>No received Messages in a Bottle.</p>
         </section>
       </article>
     </div>
@@ -60,19 +60,26 @@ export default {
   },
   mounted() {
     this.loading = true
-    Promise.all([
-      this.userStore.initLoad(),
-      this.meboStore.initLoad(),
-      this.taskStore.initLoad(),
-    ]).then(() => {
-      this.loading = false
 
-      // Load allReceivedMebos from storage
-      const receivedMebosIds = this.userStore.allReceivedMebos
-      const allMebos = this.meboStore.mebos
-      // Filter mebos that match the received IDs
-      this.allReceivedMebos = allMebos.filter((mebo) => receivedMebosIds.includes(mebo.id))
-    })
+    Promise.all([this.userStore.initLoad(), this.meboStore.initLoad(), this.taskStore.initLoad()])
+      .then(() => {
+        this.loading = false
+
+        // Use $nextTick to ensure the DOM is updated after loading
+        this.$nextTick(() => {
+          const receivedMeboIdsSet = new Set(
+            this.userStore.allReceivedMebos.map((item) => item.meboId),
+          )
+          const allMebos = this.meboStore.allPublishedMebos || []
+
+          // Filter mebos that match the received meboId values
+          this.allReceivedMebos = allMebos.filter((mebo) => receivedMeboIdsSet.has(mebo.id))
+        })
+      })
+      .catch((error) => {
+        this.loading = false
+        console.error('Error during data initialization:', error)
+      })
   },
 }
 </script>

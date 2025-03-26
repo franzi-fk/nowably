@@ -1,63 +1,69 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
+
 import {
-  getTasksFromFirestore,
-  addTaskFs,
+  getTasksForUserFs,
+  storeTaskForUserFs,
   updateTaskFs,
   deleteTaskFs,
   deleteAllDoneTasksFs,
   storeDeletedCompletedTaskFs,
   clearDeletedCompletedTasksFs,
-  getDeletedCompletedTasksFromFirestore,
+  getDeletedCompletedTasksFs,
 } from '../firestoreService'
+import { watch } from 'vue'
 
 export const useTaskStore = defineStore('taskStore', {
+  id: 'taskStore',
   state: () => ({
-    tasks: [], // Full list of tasks, stored in Firestore
+    tasks: [], // Full list of tasks per user, stored in Firestore
     // Example task object:
     // {description: "Test",
     // doneState: false,
+    // userId: user.uid,
     // id: "20250313T120344669Z66923",
     // successAt: null}
     currentTask: null, // Task currently being worked on, stored in SessionStorage
-    deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks, stored in Firestore
+    deletedCompletedTasksTemp: [], // Temporarily store deleted completed tasks per user, stored in Firestore
+    userId: null,
   }),
   getters: {
     openTasks() {
-      return this.tasks.filter((task) => task.doneState === false)
+      // open tasks of the current user
+      return this.tasks.filter((task) => task.doneState === false && task.userId === this.userId)
     },
     doneTasks() {
-      return this.tasks.filter((task) => task.doneState === true)
+      // done tasks of the current user
+      return this.tasks.filter((task) => task.doneState === true && task.userId === this.userId)
     },
     // Get count of completed tasks in the last 24 hours
     completedTasksCountLast24h() {
       const now = new Date()
       const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000) // 24 hours ago
       const allCompletedTasks = [
-        ...this.tasks.filter((task) => task.successAt && new Date(task.successAt) >= oneDayAgo),
-        ...this.deletedCompletedTasksTemp.filter((task) => new Date(task.successAt) >= oneDayAgo),
+        ...this.tasks.filter(
+          (task) =>
+            task.successAt && new Date(task.successAt) >= oneDayAgo && task.userId === this.userId,
+        ),
+        ...this.deletedCompletedTasksTemp.filter(
+          (task) => new Date(task.successAt) >= oneDayAgo && task.userId === this.userId,
+        ),
       ]
       return allCompletedTasks.length
     },
   },
   actions: {
-    // generateUniqueId() {
-    //   const now = new Date()
-    //   const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-    //   const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
-    //   const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
-    //   return `task-${datePart}${timePart}${randomPart}`
-    // },
     async addTask(descriptionInput) {
       const newTask = {
         description: descriptionInput,
         doneState: false,
         successAt: null,
+        userId: this.userId, // Ensure tasks are linked to the current user
       }
 
       try {
         // Add task to Firestore and get the task with id
-        const addedTask = await addTaskFs(newTask)
+        const addedTask = await storeTaskForUserFs(newTask)
 
         // Add to local state
         this.tasks.push(addedTask)
@@ -78,7 +84,7 @@ export const useTaskStore = defineStore('taskStore', {
 
         try {
           // Update Firestore task
-          const updatedTask = await updateTaskFs(task.id, updatedProperties)
+          const updatedTask = await updateTaskFs(this.userId, task.id, updatedProperties)
 
           // Update the local state
           Object.assign(task, updatedTask)
@@ -95,14 +101,18 @@ export const useTaskStore = defineStore('taskStore', {
           // If the task is done, temporarily store it in deletedCompletedTasksTemp and Firestore
           if (task.doneState) {
             const deletedTask = { ...task, deletedAt: new Date().toISOString() }
-            const updatedDeletedTask = await storeDeletedCompletedTaskFs(deletedTask) // Store the task in Firestore
+            // Pass userId to storeDeletedCompletedTaskFs
+            const updatedDeletedTask = await storeDeletedCompletedTaskFs(
+              deletedTask,
+              this.userId, // Use the user ID here
+            )
 
             // Keep local store in sync with Firestore data
             this.deletedCompletedTasksTemp.push(updatedDeletedTask)
           }
 
           // Delete the task from Firestore
-          const updatedTasks = await deleteTaskFs(task.id)
+          const updatedTasks = await deleteTaskFs(this.userId, task.id)
 
           // Update the local state to reflect the deletion from Firestore
           this.tasks = updatedTasks
@@ -122,13 +132,13 @@ export const useTaskStore = defineStore('taskStore', {
         }))
         // Add all deleted tasks to Firestore and update the local store
         const storedDeletedTasks = await Promise.all(
-          deletedTasks.map((task) => storeDeletedCompletedTaskFs(task)),
+          deletedTasks.map((task) => storeDeletedCompletedTaskFs(task, this.userId)), // Pass user ID
         )
 
         // Update the local state with Firestore IDs
         this.deletedCompletedTasksTemp.push(...storedDeletedTasks)
 
-        const updatedTasks = await deleteAllDoneTasksFs() // delete all done tasks from Firestore, returns updated tasks
+        const updatedTasks = await deleteAllDoneTasksFs(this.userId) // delete all done tasks from Firestore, returns updated tasks
 
         this.tasks = updatedTasks // Keep local state in sync
       } catch (e) {
@@ -136,9 +146,15 @@ export const useTaskStore = defineStore('taskStore', {
       }
     },
     async clearDeletedCompletedTasksTemp() {
+      const userStore = useUserStore()
+      const userId = userStore.userId
+      if (!userId) {
+        console.error('User ID is null. Cannot clear tasks.')
+        return
+      }
       try {
         // Fetch deleted tasks from Firestore
-        const updatedDeletedCompletedTasks = await clearDeletedCompletedTasksFs()
+        const updatedDeletedCompletedTasks = await clearDeletedCompletedTasksFs(userId)
 
         // Update the local state with the tasks that are not older than 48 hours
         this.deletedCompletedTasksTemp = updatedDeletedCompletedTasks
@@ -150,23 +166,30 @@ export const useTaskStore = defineStore('taskStore', {
       this.currentTask = task
       sessionStorage.setItem('currentTask', JSON.stringify(this.currentTask))
     },
+    loadDemoTasks() {
+      this.tasks = [
+        { id: 1, description: 'Clean up inbox', doneState: false, successAt: null },
+        { id: 2, description: 'Create a phone backup', doneState: false, successAt: null },
+      ]
+    },
     async initLoad() {
-      try {
-        // Load current task from sessionStorage
-        const storedCurrentTask = sessionStorage.getItem('currentTask')
-        if (storedCurrentTask) {
-          this.currentTask = JSON.parse(storedCurrentTask)
-        }
+      const userStore = useUserStore()
 
-        // Load tasks from Firestore
-        this.tasks = await getTasksFromFirestore()
-
-        // Load deleted tasks temp from Firestore
-        this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFromFirestore()
-      } catch (error) {
-        console.error('Error loading data:', error)
-      }
-      this.clearDeletedCompletedTasksTemp() // Clear old tasks after loading
+      watch(
+        () => userStore.userId,
+        async (newUserId) => {
+          if (newUserId) {
+            this.userId = newUserId
+            try {
+              this.tasks = await getTasksForUserFs(this.userId)
+              this.deletedCompletedTasksTemp = await getDeletedCompletedTasksFs(this.userId)
+            } catch (error) {
+              console.error('Error fetching tasks:', error)
+            }
+          }
+        },
+        { immediate: true },
+      )
     },
   },
 })

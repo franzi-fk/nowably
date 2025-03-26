@@ -5,7 +5,7 @@
     <div class="main-view-container home-container flex-grow view-layout-default">
       <section class="welcome-message page-padding-inline">
         <h1>Welcome</h1>
-        <span>Let's defeat procrastination now.</span>
+        <span id="subheading">Let's defeat procrastination now.</span>
       </section>
       <div class="tile-container">
         <OpenTasksList listHeadline="Tasks" />
@@ -47,10 +47,12 @@ export default {
       router: useRouter(),
     }
   },
-  mounted() {
+  async mounted() {
+    await Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()])
     this.taskStore.setCurrentTask(null)
-    this.taskStore.initLoad()
-    this.userStore.initLoad()
+    if (!this.userStore.user) {
+      this.router.push({ name: 'login' })
+    }
   },
 }
 </script>
@@ -64,7 +66,7 @@ export default {
   padding-block: 1.4rem 1rem;
 }
 
-span {
+#subheading {
   font-size: 1.25rem;
   font-weight: 500;
   letter-spacing: 0.0313rem;
