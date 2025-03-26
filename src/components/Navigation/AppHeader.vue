@@ -1,12 +1,16 @@
 <template>
-  <div class="app-header header-container user-header" v-if="variant === 'user'">
+  <div
+    class="app-header header-container user-header"
+    v-if="variant === 'user'"
+  >
     <div class="user-container" v-if="!isMobile && this.userStore.user">
-      <small
-        >logged in as: {{ this.userStore.user.displayName }} ({{
-          this.userStore.role || 'role not found'
-        }})</small
-      >
-      <LinkButton type="icon-text" icon="logOut" text="Sign out" @click="userLogout" />
+      <small v-if="this.userStore.role === 'admin'">logged in as Admin</small>
+      <LinkButton
+        type="icon-text"
+        icon="logOut"
+        text="Sign out"
+        @click="userLogout"
+      />
     </div>
 
     <!-- Mobile Navigation -->
@@ -21,7 +25,12 @@
         iconColor="var(--base-black)"
       />
 
-      <div v-if="isMobileMenuOpen" class="mobile-overlay" role="dialog" aria-modal="true">
+      <div
+        v-if="isMobileMenuOpen"
+        class="mobile-overlay"
+        role="dialog"
+        aria-modal="true"
+      >
         <div class="mobile-header">
           <LinkButton
             type="icon"
@@ -45,11 +54,22 @@
               active-class="active-link"
               class="menu-item"
             >
-              <li role="none" :class="{ active: isActive(item.link) }" @click="closeMobileMenu">
+              <li
+                role="none"
+                :class="{ active: isActive(item.link) }"
+                @click="closeMobileMenu"
+              >
                 <span>{{ item.name }}</span>
               </li>
             </router-link>
-            <li><LinkButton type="text" text="Sign out" @click="userLogout" id="btn-logout" /></li>
+            <li>
+              <LinkButton
+                type="text"
+                text="Sign out"
+                @click="userLogout"
+                id="btn-logout"
+              />
+            </li>
           </ul>
         </nav>
       </div>
@@ -58,20 +78,20 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
-import { useAppStore } from '@/stores/appStore'
-import { useRouter } from 'vue-router'
-import NowablyLogo from '@/components/Visuals/NowablyLogo.vue'
+import { useUserStore } from "@/stores/userStore";
+import { useAppStore } from "@/stores/appStore";
+import { useRouter } from "vue-router";
+import NowablyLogo from "@/components/Visuals/NowablyLogo.vue";
 
 export default {
-  name: 'AppHeader',
+  name: "AppHeader",
   components: {
     NowablyLogo,
   },
   props: {
     variant: {
       type: String,
-      default: 'user',
+      default: "user",
     },
   },
   data() {
@@ -83,57 +103,57 @@ export default {
       adminMenu: [],
       isMobileMenuOpen: false,
       isMobile: window.innerWidth <= 768,
-    }
+    };
   },
   computed: {
     activePath() {
-      return this.$route.path
+      return this.$route.path;
     },
   },
   methods: {
     async userLogout() {
       try {
-        await this.userStore.logout()
-        this.router.push({ name: 'login' })
+        await this.userStore.logout();
+        this.router.push({ name: "login" });
       } catch (error) {
-        console.error('Error logging out:', error)
+        console.error("Error logging out:", error);
       }
     },
     setRoleToAdmin() {
-      this.userStore.setRoleToAdmin()
+      this.userStore.setRoleToAdmin();
     },
     setRoleToUser() {
-      this.userStore.setRoleToUser()
+      this.userStore.setRoleToUser();
     },
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: "home" });
     },
     isActive(link) {
-      return this.activePath === link
+      return this.activePath === link;
     },
     openMobileMenu() {
-      this.isMobileMenuOpen = true
+      this.isMobileMenuOpen = true;
     },
     closeMobileMenu() {
-      this.isMobileMenuOpen = false
+      this.isMobileMenuOpen = false;
     },
     updateMobileState() {
-      this.isMobile = window.innerWidth <= 992
+      this.isMobile = window.innerWidth <= 992;
       if (!this.isMobile) {
-        this.isMobileMenuOpen = false
+        this.isMobileMenuOpen = false;
       }
     },
   },
   mounted() {
-    this.userMenu = this.appStore.userMenuNav
-    this.adminMenu = this.appStore.adminMenuNav
-    this.updateMobileState()
-    window.addEventListener('resize', this.updateMobileState)
+    this.userMenu = this.appStore.userMenuNav;
+    this.adminMenu = this.appStore.adminMenuNav;
+    this.updateMobileState();
+    window.addEventListener("resize", this.updateMobileState);
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.updateMobileState)
+    window.removeEventListener("resize", this.updateMobileState);
   },
-}
+};
 </script>
 
 <style scoped>

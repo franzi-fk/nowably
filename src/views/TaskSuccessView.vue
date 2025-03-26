@@ -1,36 +1,46 @@
 <template>
   <div class="success-view flex-grow page-padding-inline">
+    <Illus_Success width="16" />
     <h1>Great job, you have beaten procrastination.</h1>
-    <SolidButton type="text" text="Back to Home" variant="primary" @click="backToHome" />
+    <SolidButton
+      type="text"
+      text="Back to Home"
+      variant="primary"
+      @click="backToHome"
+    />
   </div>
 </template>
 
 <script>
-import { useTaskStore } from '../stores/taskStore'
-import { useUserStore } from '../stores/userStore'
-import { useRouter } from 'vue-router'
+import Illus_Success from "../components/Visuals/Illus_Success.vue";
+import { useTaskStore } from "../stores/taskStore";
+import { useUserStore } from "../stores/userStore";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'TaskSuccessView',
+  name: "TaskSuccessView",
+  components: {
+    Illus_Success,
+  },
   data() {
     return {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
-    }
+    };
   },
   methods: {
     backToHome() {
-      this.userStore.setCurrentStep(null)
-      this.taskStore.setCurrentTask(null)
-      this.router.push({ name: 'home' })
+      this.userStore.setCurrentStep(null);
+      this.taskStore.setCurrentTask(null);
+      this.router.push({ name: "home" });
     },
   },
   mounted() {
-    this.userStore.initLoad()
-    this.taskStore.initLoad()
+    this.userStore.initLoad();
+    this.taskStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>
