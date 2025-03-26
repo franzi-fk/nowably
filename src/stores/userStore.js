@@ -49,6 +49,7 @@ export const useUserStore = defineStore("userStore", {
   actions: {
     async loginForDemo() {
       try {
+        await resetDemoUserData();
         this.user = await loginDemo(); // firestoreService function
         this.userId = this.user.uid;
         this.isDemo = true;
