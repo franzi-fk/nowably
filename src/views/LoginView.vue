@@ -42,6 +42,7 @@
           <span>Sign in with Google</span>
         </button>
       </div>
+      <button @click="enterDemoMode" id="btn-demo">View Demo</button>
     </div>
   </div>
 </template>
@@ -102,10 +103,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
+  justify-content: space-around;
+  gap: 1rem;
   background-color: var(--base-white);
-  padding: 1rem 3rem 3rem 3rem;
+  padding: 8rem 3rem 4rem 3rem;
   min-height: 100vh;
   width: 100%;
 }
@@ -119,7 +120,8 @@ h1,
   font-size: 1.3rem;
 }
 
-#btn-login {
+#btn-login,
+#btn-demo {
   border-radius: 0.625rem;
   padding: 0.625rem 0.875rem;
   cursor: pointer;
@@ -138,8 +140,13 @@ h1,
   letter-spacing: 0;
 }
 
-#btn-login:hover {
+#btn-login:hover,
+#btn-demo:hover {
   border: 2px solid var(--base-black);
+}
+
+#btn-demo {
+  margin-top: 5rem;
 }
 
 /*________________________________________________________________________________*/

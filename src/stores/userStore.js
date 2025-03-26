@@ -55,6 +55,7 @@ export const useUserStore = defineStore('userStore', {
         await signOutUser()
         this.user = null
         this.userId = null
+        this.role = 'user'
       } catch (error) {
         console.error('Error logging out:', error)
       }

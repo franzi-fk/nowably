@@ -166,6 +166,12 @@ export const useTaskStore = defineStore('taskStore', {
       this.currentTask = task
       sessionStorage.setItem('currentTask', JSON.stringify(this.currentTask))
     },
+    loadDemoTasks() {
+      this.tasks = [
+        { id: 1, description: 'Clean up inbox', doneState: false, successAt: null },
+        { id: 2, description: 'Create a phone backup', doneState: false, successAt: null },
+      ]
+    },
     async initLoad() {
       const userStore = useUserStore()
 
