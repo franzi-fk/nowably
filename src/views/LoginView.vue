@@ -76,6 +76,15 @@ export default {
         console.error("Error logging in with Google:", error);
       }
     },
+    async enterDemoMode() {
+      try {
+        await this.userStore.loginForDemo();
+        // After successful login, redirect to the home page using this.$router
+        this.router.push({ name: "home" });
+      } catch (error) {
+        console.error("Error logging in with Demo Account:", error);
+      }
+    },
   },
   created() {
     // Watch for changes in user authentication status
@@ -147,7 +156,6 @@ h1,
 
 #btn-demo {
   margin-top: 5rem;
-  visibility: hidden;
 }
 
 /*________________________________________________________________________________*/

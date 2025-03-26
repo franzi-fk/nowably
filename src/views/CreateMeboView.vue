@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
+    <SidebarNavi
+      :variant="this.userStore.role === 'admin' ? 'admin' : 'user'"
+    />
     <AppHeader />
     <article
       class="create-mebo-view-container main-view-container flex-grow view-layout-default"
@@ -12,7 +14,10 @@
       <div class="mebo-sent-body" v-if="this.userStore.availableMeboTokens > 0">
         <section class="tile-container content-center">
           <Illus_MeboSent width="22" />
-          <p>You can send another Message in a Bottle. Do you want to write another one now?</p>
+          <p>
+            You can send another Message in a Bottle. Do you want to write
+            another one now?
+          </p>
           <div class="mebo-sent-actions">
             <SolidButton
               text="Write another message"
@@ -36,19 +41,30 @@
     >
       <section class="create-mebo-header page-padding-inline">
         <h1>Send a Message in a Bottle</h1>
-        <p>Another user who's in need of some motivational words can receive your message.</p>
+        <p>
+          Another user who's in need of some motivational words can receive your
+          message.
+        </p>
       </section>
-      <section class="tile-container" v-if="!messageSent && this.userStore.availableMeboTokens > 0">
-        <p v-if="this.userStore.availableMeboTokens === 1" class="tile-headline">
-          You can send {{ this.userStore.availableMeboTokens }} Message in a Bottle.
+      <section
+        class="tile-container"
+        v-if="!messageSent && this.userStore.availableMeboTokens > 0"
+      >
+        <p
+          v-if="this.userStore.availableMeboTokens === 1"
+          class="tile-headline"
+        >
+          You can send {{ this.userStore.availableMeboTokens }} Message in a
+          Bottle.
         </p>
         <p v-else class="tile-headline">
-          You can send {{ this.userStore.availableMeboTokens }} Messages in a Bottle.
+          You can send {{ this.userStore.availableMeboTokens }} Messages in a
+          Bottle.
         </p>
         <p>
-          Write what you would tell a friend who is struggling to start a task or simply feeling
-          demotivated. Make sure it's in English, anonymous, and neutral, so anyone reading it can
-          understand and find it helpful.
+          Write what you would tell a friend who is struggling to start a task
+          or simply feeling demotivated. Make sure it's in English, anonymous,
+          and neutral, so anyone reading it can understand and find it helpful.
         </p>
         <form class="write-message-form" @submit.prevent="confirmMebo">
           <label for="input-message" class="sr-only">Your message</label>
@@ -80,13 +96,15 @@
       <section
         class="tile-container-emptystate"
         v-else-if="
-          !messageSent && this.userStore.role !== 'admin' && this.userStore.availableMeboTokens <= 0
+          !messageSent &&
+          this.userStore.role !== 'admin' &&
+          this.userStore.availableMeboTokens <= 0
         "
       >
         <Illus_Task width="13" />
         <p>
-          Complete a task to unlock sending a Message in a Bottle.<br />You can send up to 3 per
-          day.
+          Complete a task to unlock sending a Message in a Bottle.<br />You can
+          send up to 3 per day.
         </p>
       </section>
     </article>
@@ -96,25 +114,26 @@
       :headline="modalHeadline"
       :primaryActionText="modalPrimaryActionText"
       :primaryAction="modalPrimaryAction"
+      :primaryActionOnly="modalPrimaryOnly"
       @update:isVisible="isModalVisible = $event"
     />
   </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
-import { useTaskStore } from '@/stores/taskStore'
-import { useMeboStore } from '@/stores/meboStore'
-import InputText from '@/components/InputsAndControls/InputText.vue'
-import InputCheckbox from '@/components/InputsAndControls/InputCheckbox.vue'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
-import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
-import Illus_MeboSent from '../components/Visuals/Illus_MeboSent.vue'
-import Illus_Task from '../components/Visuals/Illus_Task.vue'
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import { useTaskStore } from "@/stores/taskStore";
+import { useMeboStore } from "@/stores/meboStore";
+import InputText from "@/components/InputsAndControls/InputText.vue";
+import InputCheckbox from "@/components/InputsAndControls/InputCheckbox.vue";
+import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
+import SidebarNavi from "../components/Navigation/SidebarNavi.vue";
+import Illus_MeboSent from "../components/Visuals/Illus_MeboSent.vue";
+import Illus_Task from "../components/Visuals/Illus_Task.vue";
 
 export default {
-  name: 'CreateMeboView',
+  name: "CreateMeboView",
   components: {
     InputText,
     InputCheckbox,
@@ -129,49 +148,76 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       meboStore: useMeboStore(),
-      inputMessage: '',
+      inputMessage: "",
       meboComplianceApproved: false,
       messageSent: false,
       isModalVisible: false,
-      modalText: '',
-      modalHeadline: '',
-      modalPrimaryActionText: '',
+      modalText: "",
+      modalHeadline: "",
+      modalPrimaryActionText: "",
       modalPrimaryAction: null,
-    }
+      modalPrimaryOnly: false,
+    };
   },
   methods: {
     openModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     confirmMebo() {
+      if (
+        this.userStore.isDemo ||
+        this.userStore.userId === "SwBi7cJTsh8sMeph9xae"
+      ) {
+        this.showDemoLimitationHint();
+        return;
+      }
+
       // Define the modal content dynamically
-      this.modalHeadline = `Send Message`
-      this.modalText = `Are you sure you want to send your message now? Please be sure your message meets the rules.`
+      this.modalHeadline = `Send Message`;
+      this.modalText = `Are you sure you want to send your message now? Please be sure your message meets the rules.`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Send Message'
-      ;(this.modalPrimaryAction = () => {
-        this.meboStore.addNewMebo(this.inputMessage)
-        this.userStore.increaseDailyMeboCreationCount()
-        this.closeModal()
-        this.inputMessage = ''
-        this.messageSent = true
-        this.meboComplianceApproved = false
+      this.modalPrimaryActionText = "Send Message";
+      (this.modalPrimaryAction = () => {
+        this.meboStore.addNewMebo(this.inputMessage);
+        this.userStore.increaseDailyMeboCreationCount();
+        this.closeModal();
+        this.inputMessage = "";
+        this.messageSent = true;
+        this.meboComplianceApproved = false;
       }),
         // Show the modal
-        this.openModal()
+        this.openModal();
+    },
+    showDemoLimitationHint() {
+      // Define the modal content dynamically
+      this.modalHeadline = `Not available in Demo`;
+      this.modalText = `Please sign in to use this feature.`;
+      this.modalPrimaryOnly = true;
+
+      // Set dynamic action
+      this.modalPrimaryActionText = "Okay";
+      (this.modalPrimaryAction = () => {
+        this.closeModal();
+      }),
+        // Show the modal
+        this.openModal();
     },
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: "home" });
     },
   },
   mounted() {
-    Promise.all([this.userStore.initLoad(), this.meboStore.initLoad(), this.taskStore.initLoad()])
+    Promise.all([
+      this.userStore.initLoad(),
+      this.meboStore.initLoad(),
+      this.taskStore.initLoad(),
+    ]);
   },
-}
+};
 </script>
 
 <style scoped>

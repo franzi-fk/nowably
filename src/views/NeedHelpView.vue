@@ -1,39 +1,55 @@
 <template>
   <TaskProgressHeader />
-  <div class="need-help-view flex-grow task-view-layout" v-if="taskStore.currentTask">
-    <article id="help-demotivated" v-if="userStore.currentEmotion === 'demotivated'">
+  <div
+    class="need-help-view flex-grow task-view-layout"
+    v-if="taskStore.currentTask"
+  >
+    <article
+      id="help-demotivated"
+      v-if="userStore.currentEmotion === 'demotivated'"
+    >
       <article
         id="motivation-alt"
-        v-if="!userStore.canReceiveMebo || meboStore.mebosToReceive.length < 1 || !mebo"
+        v-if="
+          !userStore.canReceiveMebo ||
+          meboStore.mebosToReceive.length < 1 ||
+          !mebo
+        "
       >
         <div class="help-sub-view">
           <section class="intro">
             <h1>Let's find your spark again</h1>
             <p>
-              Looks like you've already opened a Message in a Bottle today, or there isn't one
-              available right now. <br />But here are some other quick ways to boost your
-              motivation!
+              Looks like you've already opened a Message in a Bottle today, or
+              there isn't one available right now. <br />But here are some other
+              quick ways to boost your motivation!
             </p>
           </section>
           <section class="motivation-alt-body help-sub-view-body">
-            <section class="own-achievements" v-if="this.userStore.totalSuccessCount > 9">
+            <section
+              class="own-achievements"
+              v-if="this.userStore.totalSuccessCount > 9"
+            >
               <div class="motivation-intro">
-                <AppIcon name="history" color="var(--terra-06)" size="18" /><span
-                  class="sub-view-headline"
-                  >Take a look back</span
-                >
+                <AppIcon
+                  name="history"
+                  color="var(--terra-06)"
+                  size="18"
+                /><span class="sub-view-headline">Take a look back</span>
               </div>
               <p>
                 You have already completed
-                <strong>{{ this.userStore.totalSuccessCount }} tasks</strong> — you can do it again!
+                <strong>{{ this.userStore.totalSuccessCount }} tasks</strong> —
+                you can do it again!
               </p>
             </section>
             <section class="motivation-techniques">
               <div class="motivation-intro">
-                <AppIcon name="playCircle" color="var(--terra-06)" size="18" /><span
-                  class="sub-view-headline"
-                  >Take an action</span
-                >
+                <AppIcon
+                  name="playCircle"
+                  color="var(--terra-06)"
+                  size="18"
+                /><span class="sub-view-headline">Take an action</span>
               </div>
               <ContentRotator
                 :contentItems="contentItems"
@@ -44,7 +60,9 @@
                 <template #default="{ currentContent }">
                   <article class="slot-content">
                     <!-- Title of the content -->
-                    <span class="slot-headline">{{ currentContent.title }}</span>
+                    <span class="slot-headline">{{
+                      currentContent.title
+                    }}</span>
 
                     <!-- "How to do it" section -->
                     <div class="how-to-do-it">
@@ -57,9 +75,11 @@
                     <!-- "Why it works" section -->
                     <div class="why-it-works">
                       <span class="content-subheading">Why it works</span>
-                      <slot name="whyItWorks" :content="currentContent.whyItWorks">{{
-                        currentContent.whyItWorks
-                      }}</slot>
+                      <slot
+                        name="whyItWorks"
+                        :content="currentContent.whyItWorks"
+                        >{{ currentContent.whyItWorks }}</slot
+                      >
                     </div>
                   </article>
                 </template>
@@ -83,9 +103,15 @@
         <div class="help-sub-view">
           <section class="intro">
             <h1>Message in a Bottle</h1>
-            <p>Open a message in a bottle - it might bring you that needed spark of motivation.</p>
+            <p>
+              Open a message in a bottle - it might bring you that needed spark
+              of motivation.
+            </p>
           </section>
-          <section class="help-sub-view-body receive-mebo-opened" v-if="meboOpened === true">
+          <section
+            class="help-sub-view-body receive-mebo-opened"
+            v-if="meboOpened === true"
+          >
             <h2>Message:</h2>
             <p id="mebo-text">{{ this.mebo.text }}</p>
             <small>— written by another user</small>
@@ -123,13 +149,16 @@
         </section>
       </article>
     </article>
-    <article id="help-overwhelmed" v-else-if="userStore.currentEmotion === 'overwhelmed'">
+    <article
+      id="help-overwhelmed"
+      v-else-if="userStore.currentEmotion === 'overwhelmed'"
+    >
       <div class="help-sub-view">
         <section class="intro">
           <h1>One step at a time</h1>
           <p>
-            Maybe your task is just a little bit too big for now. Let’s break it down into smaller
-            sub-tasks, that are easier to handle.
+            Maybe your task is just a little bit too big for now. Let’s break it
+            down into smaller sub-tasks, that are easier to handle.
           </p>
         </section>
         <section class="split-task help-sub-view-body">
@@ -192,21 +221,24 @@
         <LinkButton type="text" text="Skip this" @click="finishHelp" />
       </section>
     </article>
-    <article id="help-anxious" v-else-if="userStore.currentEmotion === 'anxious'">
+    <article
+      id="help-anxious"
+      v-else-if="userStore.currentEmotion === 'anxious'"
+    >
       <div class="help-sub-view">
         <section class="intro">
           <h1>Calm your mind</h1>
           <p>
-            Sometimes certain tasks trigger some really intense emotions. Let's try to calm down by
-            doing a relaxation technique for just 2 minutes.
+            Sometimes certain tasks trigger some really intense emotions. Let's
+            try to calm down by doing a relaxation technique for just 2 minutes.
           </p>
         </section>
         <section class="relaxation-exercise help-sub-view-body">
           <section class="exercise-instructions" v-show="!relaxExerciseStarted">
             <h2>Humming</h2>
             <p>
-              Sit comfortably and relax your body.<br />Inhale deeply through your nose.<br />Exhale
-              with a hum, feeling the vibrations.<br />
+              Sit comfortably and relax your body.<br />Inhale deeply through
+              your nose.<br />Exhale with a hum, feeling the vibrations.<br />
               Relax and repeat.
             </p>
             <SolidButton
@@ -286,28 +318,29 @@
     :headline="modalHeadline"
     :primaryActionText="modalPrimaryActionText"
     :primaryAction="modalPrimaryAction"
+    :primaryActionOnly="modalPrimaryOnly"
     @update:isVisible="isModalVisible = $event"
   />
 </template>
 
 <script>
-import GeneralCountdown from '@/components/Animations/GeneralCountdown.vue'
-import HummingAnimation from '@/components/Animations/HummingAnimation.vue'
-import InputText from '@/components/InputsAndControls/InputText.vue'
-import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
-import SolidButton from '@/components/InputsAndControls/SolidButton.vue'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
-import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '@/stores/userStore'
-import { useMeboStore } from '../stores/meboStore'
-import { useRouter } from 'vue-router'
-import Illus_MeboReceived from '../components/Visuals/Illus_MeboReceived.vue'
-import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
-import HintBadge from '../components/FeedbackAndStatus/HintBadge.vue'
-import ContentRotator from '../components/ContainersAndLayouts/ContentRotator.vue'
+import GeneralCountdown from "@/components/Animations/GeneralCountdown.vue";
+import HummingAnimation from "@/components/Animations/HummingAnimation.vue";
+import InputText from "@/components/InputsAndControls/InputText.vue";
+import SnackbarOverlay from "@/components/FeedbackAndStatus/SnackbarOverlay.vue";
+import SolidButton from "@/components/InputsAndControls/SolidButton.vue";
+import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
+import { useTaskStore } from "@/stores/taskStore";
+import { useUserStore } from "@/stores/userStore";
+import { useMeboStore } from "../stores/meboStore";
+import { useRouter } from "vue-router";
+import Illus_MeboReceived from "../components/Visuals/Illus_MeboReceived.vue";
+import TaskProgressHeader from "../components/Navigation/TaskProgressHeader.vue";
+import HintBadge from "../components/FeedbackAndStatus/HintBadge.vue";
+import ContentRotator from "../components/ContainersAndLayouts/ContentRotator.vue";
 
 export default {
-  name: 'NeedHelpView',
+  name: "NeedHelpView",
   components: {
     GeneralCountdown,
     HummingAnimation,
@@ -328,120 +361,148 @@ export default {
       router: useRouter(),
       snackbar: {
         visible: true,
-        text: '',
-        variant: 'info',
+        text: "",
+        variant: "info",
         duration: 3000,
       },
       isModalVisible: false,
-      modalText: '',
-      modalHeadline: '',
-      modalPrimaryActionText: '',
+      modalText: "",
+      modalHeadline: "",
+      modalPrimaryActionText: "",
       modalPrimaryAction: null,
+      modalPrimaryOnly: false,
       meboOpened: false,
-      mebo: '',
+      mebo: "",
       relaxExerciseStarted: false,
       animationDuration: 120, // in seconds
       hummingAnimationCompleted: false,
       contentItems: [
         {
-          title: 'Power Posing',
+          title: "Power Posing",
           howTo:
-            'Stand tall with hands on hips, shoulders back, and chest open. Hold for 2 minutes.',
+            "Stand tall with hands on hips, shoulders back, and chest open. Hold for 2 minutes.",
           whyItWorks:
-            'Boosts confidence and motivation by triggering the release of hormones that make you feel powerful.',
+            "Boosts confidence and motivation by triggering the release of hormones that make you feel powerful.",
         },
         {
-          title: 'Listening to Energizing Music',
-          howTo: 'Play a high-energy playlist with upbeat songs before or during a task.',
-          whyItWorks: 'Fast-tempo, uplifting music releases dopamine, enhancing mood and energy.',
-        },
-        {
-          title: 'Quick Physical Activity',
-          howTo: 'Do 30 seconds of jumping jacks or stretch your body.',
-          whyItWorks:
-            'Boosts circulation and releases endorphins, which increase energy and motivation.',
-        },
-        {
-          title: 'Visualization',
+          title: "Listening to Energizing Music",
           howTo:
-            'Close your eyes for 30 seconds and vividly imagine yourself completing the task successfully.',
+            "Play a high-energy playlist with upbeat songs before or during a task.",
           whyItWorks:
-            'Visualization activates brain regions associated with goal achievement, making you more motivated to act.',
+            "Fast-tempo, uplifting music releases dopamine, enhancing mood and energy.",
         },
         {
-          title: 'Box Breathing',
+          title: "Quick Physical Activity",
+          howTo: "Do 30 seconds of jumping jacks or stretch your body.",
+          whyItWorks:
+            "Boosts circulation and releases endorphins, which increase energy and motivation.",
+        },
+        {
+          title: "Visualization",
           howTo:
-            'Inhale for 4 seconds, hold for 4, exhale for 4, hold for 4. Repeat for 4-5 cycles.',
+            "Close your eyes for 30 seconds and vividly imagine yourself completing the task successfully.",
           whyItWorks:
-            'Calms the nervous system and helps you refocus, reducing anxiety and boosting motivation.',
+            "Visualization activates brain regions associated with goal achievement, making you more motivated to act.",
         },
         {
-          title: 'Change Your Space',
-          howTo: 'Move to a new spot or tidy up your space.',
+          title: "Box Breathing",
+          howTo:
+            "Inhale for 4 seconds, hold for 4, exhale for 4, hold for 4. Repeat for 4-5 cycles.",
           whyItWorks:
-            'A fresh environment brings new energy and a renewed mindset, helping you feel more motivated and focused.',
+            "Calms the nervous system and helps you refocus, reducing anxiety and boosting motivation.",
+        },
+        {
+          title: "Change Your Space",
+          howTo: "Move to a new spot or tidy up your space.",
+          whyItWorks:
+            "A fresh environment brings new energy and a renewed mindset, helping you feel more motivated and focused.",
         },
       ],
-      splitTask1: '',
-      splitTask2: '',
-      splitTask3: '',
-      splitTask4: '',
-      splitTask5: '',
-    }
+      splitTask1: "",
+      splitTask2: "",
+      splitTask3: "",
+      splitTask4: "",
+      splitTask5: "",
+    };
   },
   methods: {
     openMebo() {
-      if (!this.mebo) {
-        return // Ensure that there's a valid mebo before proceeding
+      if (
+        this.userStore.isDemo ||
+        this.userStore.userId === "SwBi7cJTsh8sMeph9xae"
+      ) {
+        this.showDemoLimitationHint();
+        return;
       }
-      this.meboOpened = true
 
-      this.userStore.storeAllReceivedMebos(this.mebo.id)
-      this.userStore.setCurrentStep('openedMebo')
+      if (!this.mebo) {
+        return; // Ensure that there's a valid mebo before proceeding
+      }
+      this.meboOpened = true;
+
+      this.userStore.storeAllReceivedMebos(this.mebo.id);
+      this.userStore.setCurrentStep("openedMebo");
+    },
+    showDemoLimitationHint() {
+      // Define the modal content dynamically
+      this.modalHeadline = `Not available in Demo`;
+      this.modalText = `Please sign in to use this feature.`;
+      this.modalPrimaryOnly = true;
+
+      // Set dynamic action
+      this.modalPrimaryActionText = "Okay";
+      (this.modalPrimaryAction = () => {
+        this.closeModal();
+      }),
+        // Show the modal
+        this.openModal();
     },
     getMebo() {
-      const potentialMebos = this.meboStore.mebosToReceive
+      const potentialMebos = this.meboStore.mebosToReceive;
 
       // Ensure allReceivedMebos is an array
       const allReceivedMebos = Array.isArray(this.userStore.allReceivedMebos)
         ? this.userStore.allReceivedMebos
-        : []
+        : [];
 
-      const receivedMebos = new Set(allReceivedMebos)
+      const receivedMebos = new Set(allReceivedMebos);
 
-      if (!potentialMebos || potentialMebos === 0) return null
+      if (!potentialMebos || potentialMebos === 0) return null;
       // Filter out any mebos the user has already received
-      const validMebos = potentialMebos.filter((mebo) => !receivedMebos.has(mebo.id))
+      const validMebos = potentialMebos.filter(
+        (mebo) => !receivedMebos.has(mebo.id)
+      );
 
       if (validMebos.length === 0) {
-        return (this.mebo = null)
+        return (this.mebo = null);
       }
 
       // Pick a random valid mebo
-      return (this.mebo = validMebos[Math.floor(Math.random() * validMebos.length)])
+      return (this.mebo =
+        validMebos[Math.floor(Math.random() * validMebos.length)]);
     },
     updateLastMeboReceived() {
-      this.userStore.updateLastMeboReceived()
+      this.userStore.updateLastMeboReceived();
     },
     openModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     confirmSplitting() {
       // Define the modal content dynamically
-      this.modalHeadline = `Replace task`
-      this.modalText = `Are you sure you want to replace the current task with the new ones?`
+      this.modalHeadline = `Replace task`;
+      this.modalText = `Are you sure you want to replace the current task with the new ones?`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Replace task'
-      ;(this.modalPrimaryAction = () => {
-        this.handleSplitting()
-        this.closeModal()
+      this.modalPrimaryActionText = "Replace task";
+      (this.modalPrimaryAction = () => {
+        this.handleSplitting();
+        this.closeModal();
       }),
         // Show the modal
-        this.openModal()
+        this.openModal();
     },
     async handleSplitting() {
       // Check if the split task descriptions are not empty
@@ -451,85 +512,90 @@ export default {
         this.splitTask3,
         this.splitTask4,
         this.splitTask5,
-      ].filter((task) => task.trim()) // Filter out empty tasks
+      ].filter((task) => task.trim()); // Filter out empty tasks
 
       if (splitTasks.length > 0) {
-        this.deleteTask(this.taskStore.currentTask.id)
+        this.deleteTask(this.taskStore.currentTask.id);
         // Add each split task to taskStore
         // Wait for each split task to be added to the store
         for (let splitTask of splitTasks) {
           if (splitTask.trim()) {
-            await this.addNewTask(splitTask) // Ensure each task is added before continuing
+            await this.addNewTask(splitTask); // Ensure each task is added before continuing
           }
         }
         // Set the first task (splitTask1) as the new current task
-        const newCurrentTask = this.taskStore.tasks.find((t) => t.description === splitTasks[0])
-        this.taskStore.setCurrentTask(newCurrentTask)
+        const newCurrentTask = this.taskStore.tasks.find(
+          (t) => t.description === splitTasks[0]
+        );
+        this.taskStore.setCurrentTask(newCurrentTask);
 
-        this.finishHelp()
+        this.finishHelp();
       } else {
-        this.finishHelp()
+        this.finishHelp();
       }
     },
     deleteTask(taskId) {
-      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId)
+      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId);
       if (!taskToDelete) {
-        this.showSnackbar('error', 'Task not found.', '3000') // properties:  variant, text, duration in ms
-        return
+        this.showSnackbar("error", "Task not found.", "3000"); // properties:  variant, text, duration in ms
+        return;
       } else {
-        this.taskStore.deleteTask(taskId)
-        return
+        this.taskStore.deleteTask(taskId);
+        return;
       }
     },
     async addNewTask(description) {
-      const newTaskDesc = description.trim() // Removes spaces from input value
+      const newTaskDesc = description.trim(); // Removes spaces from input value
 
       // Check if user input is empty
-      if (newTaskDesc === '') {
-        return
+      if (newTaskDesc === "") {
+        return;
       }
 
       // Check if user tries to add a duplicate (case-insensitive)
       if (
         this.taskStore.openTasks.some(
-          (task) => task.description.toLowerCase() === newTaskDesc.toLowerCase(),
+          (task) => task.description.toLowerCase() === newTaskDesc.toLowerCase()
         )
       ) {
-        this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
-        return
+        this.showSnackbar("error", "Task already exists.", "3000"); // properties:  variant, text, duration in ms
+        return;
       }
 
-      await this.taskStore.addTask(newTaskDesc)
+      await this.taskStore.addTask(newTaskDesc);
     },
     completeHumming() {
-      this.hummingAnimationCompleted = true
+      this.hummingAnimationCompleted = true;
     },
     startExercise() {
-      this.relaxExerciseStarted = true
+      this.relaxExerciseStarted = true;
     },
     backToWhichHelp() {
-      this.userStore.setCurrentEmotion(null)
+      this.userStore.setCurrentEmotion(null);
     },
     backToCountdown() {
-      this.userStore.setCurrentEmotion(null)
-      this.userStore.setCurrentStep('countdown')
-      this.router.push({ name: 'countdown', params: { id: this.taskStore.currentTask.id } })
+      this.userStore.setCurrentEmotion(null);
+      this.userStore.setCurrentStep("countdown");
+      this.router.push({
+        name: "countdown",
+        params: { id: this.taskStore.currentTask.id },
+      });
     },
     finishHelp() {
-      this.router.push({ name: 'task-continue' })
+      this.router.push({ name: "task-continue" });
     },
     showSnackbar(variant, text, duration) {
-      this.snackbar.text = text
-      this.snackbar.variant = variant
-      this.snackbar.duration = Number(duration)
-      this.$refs.snackbar.show()
+      this.snackbar.text = text;
+      this.snackbar.variant = variant;
+      this.snackbar.duration = Number(duration);
+      this.$refs.snackbar.show();
     },
     generateUniqueId() {
-      const now = new Date()
-      const datePart = now.toISOString().replace(/[-:.]/g, '') // Format the date (e.g., "20250302T102040")
-      const timePart = now.getMilliseconds() // Add milliseconds for further uniqueness
-      const randomPart = Math.floor(Math.random() * 1000) // Add a random number to ensure uniqueness
-      return `${datePart}${timePart}${randomPart}`
+      const now = new Date();
+      const datePart = now.toISOString().replace(/[-:.]/g, ""); // Format the date (e.g., "20250302T102040")
+      const timePart = now.getMilliseconds(); // Add milliseconds for further uniqueness
+      const randomPart = Math.floor(Math.random() * 1000); // Add a random number to ensure uniqueness
+      return `${datePart}${timePart}${randomPart}`;
     },
   },
   async mounted() {
@@ -537,28 +603,28 @@ export default {
       this.userStore.initLoad(),
       this.taskStore.initLoad(),
       this.meboStore.initLoad(),
-    ])
-    this.getMebo()
+    ]);
+    this.getMebo();
 
     // If there is no currentTask, redirect to the home view
     if (!this.taskStore.currentTask) {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: "home" });
     }
 
     // Detect when the user is about to leave the page (refresh/close tab)
-    window.addEventListener('beforeunload', this.updateLastMeboReceived)
+    window.addEventListener("beforeunload", this.updateLastMeboReceived);
   },
   beforeUnmount() {
-    window.removeEventListener('beforeunload', this.updateLastMeboReceived)
+    window.removeEventListener("beforeunload", this.updateLastMeboReceived);
   },
   beforeRouteLeave(to, from, next) {
     // Ensure we clean up any state before leaving the route
     if (this.meboOpened) {
-      this.updateLastMeboReceived() // update lastMeboReceived before leaving
+      this.updateLastMeboReceived(); // update lastMeboReceived before leaving
     }
-    next() // Continue with route navigation
+    next(); // Continue with route navigation
   },
-}
+};
 </script>
 
 <style scoped>

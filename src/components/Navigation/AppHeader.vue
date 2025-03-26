@@ -6,10 +6,18 @@
     <div class="user-container" v-if="!isMobile && this.userStore.user">
       <small v-if="this.userStore.role === 'admin'">logged in as Admin</small>
       <LinkButton
+        v-if="!this.userStore.isDemo"
         type="icon-text"
         icon="logOut"
         text="Sign out"
         @click="userLogout"
+      />
+      <LinkButton
+        v-if="this.userStore.isDemo"
+        type="icon-text"
+        icon="logOut"
+        text="Leave Demo"
+        @click="leaveDemoMode"
       />
     </div>
 
@@ -119,11 +127,13 @@ export default {
         console.error("Error logging out:", error);
       }
     },
-    setRoleToAdmin() {
-      this.userStore.setRoleToAdmin();
-    },
-    setRoleToUser() {
-      this.userStore.setRoleToUser();
+    async leaveDemoMode() {
+      try {
+        await this.userStore.leaveDemo();
+        this.router.push({ name: "login" });
+      } catch (error) {
+        console.error("Error leaving Demo Mode:", error);
+      }
     },
     goToHome() {
       this.$router.push({ name: "home" });

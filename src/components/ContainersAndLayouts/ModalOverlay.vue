@@ -11,6 +11,7 @@
       <div class="modal-footer">
         <!-- Cancel button -->
         <SolidButton
+          v-if="!primaryActionOnly"
           variant="secondary"
           type="text"
           @click="closeModal"
@@ -40,7 +41,7 @@ export default {
     },
     headline: {
       type: String,
-      default: '',
+      default: "",
     },
     text: {
       type: String,
@@ -48,19 +49,23 @@ export default {
     },
     primaryActionText: {
       type: String,
-      default: 'Confirm',
+      default: "Confirm",
     },
     primaryAction: {
       type: [Function, null],
       required: true,
     },
+    primaryActionOnly: {
+      type: Boolean,
+      default: false, // Default value is false, showing the Cancel button
+    },
   },
   methods: {
     closeModal() {
-      this.$emit('update:isVisible', false)
+      this.$emit("update:isVisible", false);
     },
   },
-}
+};
 </script>
 
 <style scoped>
