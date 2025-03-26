@@ -3,10 +3,10 @@
     <div class="login-container">
       <section class="intro">
         <h1>
-          <NowablyLogo variant="image" width="4" /><NowablyLogo variant="text" width="9" /><span
-            class="sr-only"
-            >Nowably</span
-          >
+          <NowablyLogo variant="image" width="4" /><NowablyLogo
+            variant="text"
+            width="9"
+          /><span class="sr-only">Nowably</span>
         </h1>
         <span>Beat procrastination now.</span>
       </section>
@@ -48,12 +48,12 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
-import { useRouter } from 'vue-router'
-import NowablyLogo from '../components/Visuals/NowablyLogo.vue'
+import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
+import NowablyLogo from "../components/Visuals/NowablyLogo.vue";
 
 export default {
-  name: 'LoginView',
+  name: "LoginView",
   components: {
     NowablyLogo,
   },
@@ -62,33 +62,33 @@ export default {
       userStore: useUserStore(),
       router: useRouter(),
       user: null, // user will hold the current authenticated user
-    }
+    };
   },
   methods: {
     // Method to handle Google login
     async loginWithGoogle() {
       try {
-        await this.userStore.loginWithGoogle()
+        await this.userStore.loginWithGoogle();
 
         // After successful login, redirect to the home page using this.$router
-        this.router.push({ name: 'home' })
+        this.router.push({ name: "home" });
       } catch (error) {
-        console.error('Error logging in with Google:', error)
+        console.error("Error logging in with Google:", error);
       }
     },
   },
   created() {
     // Watch for changes in user authentication status
     this.userStore.$subscribe(() => {
-      this.user = this.userStore.user
-    })
+      this.user = this.userStore.user;
+    });
   },
   mounted() {
     if (this.user) {
-      this.router.push({ name: 'home' })
+      this.router.push({ name: "home" });
     }
   },
-}
+};
 </script>
 
 <style scoped>
@@ -147,6 +147,7 @@ h1,
 
 #btn-demo {
   margin-top: 5rem;
+  visibility: hidden;
 }
 
 /*________________________________________________________________________________*/
