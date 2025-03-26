@@ -18,6 +18,7 @@ A productivity app designed to help users defeat procrastination, start to their
 - Routing: Vue Router
 - State Management: Pinia
 - Backend: Firestore
+- Authentication: Firebase
 
 ### Design
 
