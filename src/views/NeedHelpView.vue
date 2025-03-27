@@ -234,7 +234,7 @@
           </p>
         </section>
         <section class="relaxation-exercise help-sub-view-body">
-          <section class="exercise-instructions" v-show="!relaxExerciseStarted">
+          <section class="exercise-instructions" v-if="!relaxExerciseStarted">
             <h2>Humming</h2>
             <p>
               Sit comfortably and relax your body.<br />Inhale deeply through
@@ -249,7 +249,7 @@
               @click="startExercise"
             />
           </section>
-          <section id="exercise-progress" v-show="relaxExerciseStarted">
+          <section id="exercise-progress" v-if="relaxExerciseStarted">
             <HummingAnimation
               :disappearAfter="animationDuration * 1000"
               @fade-out-complete="completeHumming"
