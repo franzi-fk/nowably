@@ -1,14 +1,34 @@
 <template>
-  <button :class="buttonClass" :style="buttonStyle" :disabled="disabled" :aria-label="ariaLabel">
+  <button
+    :class="buttonClass"
+    :style="buttonStyle"
+    :disabled="disabled"
+    :aria-label="ariaLabel"
+  >
     <!-- Icon & Text -->
     <template v-if="type === 'icon-text'">
-      <AppIcon v-if="iconPosition === 'left'" :name="icon" :size="iconSize" :color="iconColor" />
+      <AppIcon
+        v-if="iconPosition === 'left'"
+        :name="icon"
+        :size="iconSize"
+        :color="iconColor"
+      />
       <span>{{ text }}</span>
-      <AppIcon v-if="iconPosition === 'right'" :name="icon" :size="iconSize" :color="iconColor" />
+      <AppIcon
+        v-if="iconPosition === 'right'"
+        :name="icon"
+        :size="iconSize"
+        :color="iconColor"
+      />
     </template>
 
     <!-- Icon Only -->
-    <AppIcon v-else-if="type === 'icon'" :name="icon" :size="iconSize" :color="iconColor" />
+    <AppIcon
+      v-else-if="type === 'icon'"
+      :name="icon"
+      :size="iconSize"
+      :color="iconColor"
+    />
 
     <!-- Text Only -->
     <span v-else>{{ text }}</span>
@@ -17,50 +37,56 @@
 
 <script>
 export default {
-  name: 'LinkButton',
+  name: "LinkButton",
   props: {
     type: {
       type: String,
       required: true,
-      default: 'icon-text',
-      validator: (value) => ['icon', 'text', 'icon-text'].includes(value),
+      default: "icon-text",
+      validator: (value) => ["icon", "text", "icon-text"].includes(value),
     },
-    text: { type: String, default: '' },
-    icon: { type: String, default: '' },
+    text: { type: String, default: "" },
+    icon: { type: String, default: "" },
     disabled: { type: Boolean, default: false },
-    textColor: { type: String, default: 'currentColor' },
-    iconSize: { type: String, default: '20' },
-    iconColor: { type: String, default: 'currentColor' },
+    textColor: { type: String, default: "currentColor" },
+    iconSize: { type: String, default: "20" },
+    iconColor: { type: String, default: "currentColor" },
     iconPosition: {
       type: String,
-      default: 'left',
-      validator: (value) => ['left', 'right'].includes(value),
+      default: "left",
+      validator: (value) => ["left", "right"].includes(value),
+    },
+    btnSize: {
+      type: String,
+      default: "large",
+      validator: (value) => ["large", "small"].includes(value),
     },
   },
   computed: {
     buttonStyle() {
       return {
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         color: this.textColor,
-        border: 'none',
-      }
+        border: "none",
+      };
     },
     buttonClass() {
       return [
-        'btn-link', // always keep this class
+        "btn-link", // always keep this class
         `btn-${this.type}`, // apply text/icon/text&icon class conditionally
-      ]
+        `btn-${this.btnSize}`, // class for btnSize
+      ];
     },
     ariaLabel() {
-      return this.text || this.icon || 'Button'
+      return this.text || this.icon || "Button";
     },
   },
-}
+};
 </script>
 
 <style scoped>
 /* Link Button General */
-.btn-link {
+.btn-large {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,9 +101,24 @@ export default {
   transition: color 0.3s ease-in-out;
 }
 
+.btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.02rem;
+  min-height: 2.5rem;
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
 .btn-icon-text:before,
 .btn-text:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 80%;
   left: 1%;

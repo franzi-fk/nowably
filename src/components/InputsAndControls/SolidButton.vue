@@ -2,13 +2,28 @@
   <button :class="buttonClass" :disabled="disabled" :aria-label="ariaLabel">
     <!-- Icon & Text -->
     <template v-if="type === 'icon-text'">
-      <AppIcon v-if="iconPosition === 'left'" :name="icon" :size="iconSize" :color="iconColor" />
+      <AppIcon
+        v-if="iconPosition === 'left'"
+        :name="icon"
+        :size="iconSize"
+        :color="iconColor"
+      />
       <span>{{ text }}</span>
-      <AppIcon v-if="iconPosition === 'right'" :name="icon" :size="iconSize" :color="iconColor" />
+      <AppIcon
+        v-if="iconPosition === 'right'"
+        :name="icon"
+        :size="iconSize"
+        :color="iconColor"
+      />
     </template>
 
     <!-- Icon Only -->
-    <AppIcon v-else-if="type === 'icon'" :name="icon" :size="iconSize" :color="iconColor" />
+    <AppIcon
+      v-else-if="type === 'icon'"
+      :name="icon"
+      :size="iconSize"
+      :color="iconColor"
+    />
 
     <!-- Text Only -->
     <span v-else>{{ text }}</span>
@@ -17,48 +32,55 @@
 
 <script>
 export default {
-  name: 'SolidButton',
+  name: "SolidButton",
   props: {
     type: {
       type: String,
       required: true,
-      default: 'icon-text',
-      validator: (value) => ['icon', 'text', 'icon-text'].includes(value),
+      default: "icon-text",
+      validator: (value) => ["icon", "text", "icon-text"].includes(value),
     },
-    text: { type: String, default: '' },
-    icon: { type: String, default: 'home' },
+    text: { type: String, default: "" },
+    icon: { type: String, default: "home" },
     disabled: { type: Boolean, default: false },
     variant: {
       type: String,
-      default: 'secondary',
-      validator: (value) => ['primary', 'secondary', 'tertiary'].includes(value),
+      default: "secondary",
+      validator: (value) =>
+        ["primary", "secondary", "tertiary"].includes(value),
     },
-    iconSize: { type: String, default: '20' },
-    iconColor: { type: String, default: 'currentColor' },
+    btnSize: {
+      type: String,
+      default: "large",
+      validator: (value) => ["large", "small"].includes(value),
+    },
+    iconSize: { type: String, default: "20" },
+    iconColor: { type: String, default: "currentColor" },
     iconPosition: {
       type: String,
-      default: 'left',
-      validator: (value) => ['left', 'right'].includes(value),
+      default: "left",
+      validator: (value) => ["left", "right"].includes(value),
     },
   },
   computed: {
     buttonClass() {
       return [
-        'btn-solid', // Base button class
+        "btn-solid", // Base button class
         `btn-${this.variant}`, // Dynamic class based on variant
         `btn-${this.type}`, // Class based on type (icon, text, icon-text)
-      ]
+        `btn-${this.btnSize}`, // Class based on btnSize
+      ];
     },
     ariaLabel() {
-      return this.text || this.icon || 'Button'
+      return this.text || this.icon || "Button";
     },
   },
-}
+};
 </script>
 
 <style scoped>
 /* Solid Button General */
-.btn-solid {
+.btn-large {
   border-radius: 0.625rem;
   display: inline-flex;
   align-items: center;
@@ -69,6 +91,23 @@ export default {
   font-weight: 500;
   letter-spacing: 0.05rem;
   min-height: 3.125rem;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.btn-small {
+  border-radius: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+  min-height: 2.5rem;
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s ease;
@@ -90,7 +129,11 @@ export default {
   color: var(--base-black);
 }
 .btn-secondary:hover {
-  background-color: color-mix(in srgb, var(--secondary) 80%, var(--terra-01) 20%);
+  background-color: color-mix(
+    in srgb,
+    var(--secondary) 80%,
+    var(--terra-01) 20%
+  );
 }
 
 /* Tertiary */
@@ -99,7 +142,11 @@ export default {
   color: var(--base-black);
 }
 .btn-tertiary:hover {
-  background-color: color-mix(in srgb, var(--cotton-01) 25%, var(--base-white) 75%);
+  background-color: color-mix(
+    in srgb,
+    var(--cotton-01) 25%,
+    var(--base-white) 75%
+  );
 }
 
 /* Icon-Only Button */
@@ -109,9 +156,15 @@ export default {
 }
 
 /* Text-Only Button */
-.btn-text {
+.btn-large {
   padding: 0.625rem 1.25rem;
   min-width: 7.8125rem;
+}
+
+/* Text-Only Button */
+.btn-small {
+  padding: 0.625rem 1rem;
+  min-width: 6.25rem;
 }
 
 /* Text & Icon Spacing */
