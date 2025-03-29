@@ -44,6 +44,10 @@
       </div>
       <button @click="enterDemoMode" id="btn-demo">View Demo</button>
     </div>
+    <div id="legal-links">
+      <RouterLink :to="{ name: 'privacy-policy' }">Privacy Policy</RouterLink>
+      <RouterLink :to="{ name: 'imprint' }">Imprint</RouterLink>
+    </div>
   </div>
 </template>
 
@@ -156,6 +160,26 @@ h1,
 
 #btn-demo {
   margin-top: 5rem;
+}
+
+#legal-links {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 0.875rem;
+  display: flex;
+  gap: 1rem;
+}
+
+#legal-links a {
+  color: var(--base-black);
+  text-decoration: none;
+}
+
+#legal-links a:hover {
+  color: var(--base-black);
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
 }
 
 /*________________________________________________________________________________*/

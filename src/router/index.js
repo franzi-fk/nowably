@@ -13,6 +13,7 @@ import AdminModerateMebosView from "../views/AdminModerateMebosView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import LoginView from "../views/LoginView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
+import ImprintView from "../views/ImprintView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +83,11 @@ const router = createRouter({
       path: "/privacy",
       name: "privacy-policy",
       component: PrivacyPolicyView,
+    },
+    {
+      path: "/imprint",
+      name: "imprint",
+      component: ImprintView,
     },
   ],
   scrollBehavior() {
