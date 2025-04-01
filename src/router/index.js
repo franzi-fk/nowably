@@ -13,7 +13,8 @@ import AdminModerateMebosView from "../views/AdminModerateMebosView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import LoginView from "../views/LoginView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
-import ImprintView from "../views/ImprintView.vue";
+import LegalNoticeView from "../views/LegalNoticeView.vue";
+import DeleteAccountView from "../views/DeleteAccountView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,14 +81,19 @@ const router = createRouter({
       component: AdminModerateMebosView,
     },
     {
+      path: "/delete-account",
+      name: "delete-account",
+      component: DeleteAccountView,
+    },
+    {
       path: "/privacy",
       name: "privacy-policy",
       component: PrivacyPolicyView,
     },
     {
-      path: "/imprint",
-      name: "imprint",
-      component: ImprintView,
+      path: "/legal-notice",
+      name: "legal-notice",
+      component: LegalNoticeView,
     },
   ],
   scrollBehavior() {

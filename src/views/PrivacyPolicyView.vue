@@ -7,7 +7,7 @@
       @click="$router.back()"
     />
     <h1>Privacy Policy</h1>
-    <p><strong>Effective Date:</strong> 29.03.2025</p>
+    <p><strong>Effective Date:</strong> 01.04.2025</p>
 
     <h2>1. Who We Are</h2>
     <p>
@@ -16,35 +16,63 @@
       with positive reinforcement. Users can share moments of success with other
       users by sending and receiving "Messages in a Bottle".
     </p>
+    <p>The data controller responsible for your personal data is:</p>
+    <p>
+      Franziska Kiel <br />
+      Rheingoldstraße 157 <br />
+      68199 Mannheim <br />
+      Germany <br />
+    </p>
+    <p>
+      Phone: +49 1525 357 59 24<br />
+      Email: <a href="mailto:nowably.app@gmail.com">nowably.app@gmail.com</a>
+    </p>
+    <p>
+      Legal Notice:
+      <InlineLinkButton
+        @click="this.router.push({ name: 'legal-notice' })"
+        text="nowably.me/legal-notice"
+        font-size="1.1rem"
+      />
+    </p>
 
     <h2>2. What Data We Collect</h2>
 
     <h3>2.1. Authentication Data (Google Sign-In via Firebase)</h3>
+    <p>
+      When you sign up, we collect your email address and any other personal
+      information provided during registration via Google Sign-in.
+    </p>
     <ul>
       <li>Display name (Google name)</li>
       <li>Email address</li>
-      <li>Timestamp of user creation (first sign-in)</li>
-      <li>Nowably user ID (UID) (created with user creation)</li>
+      <li>Timestamp of Nowably user creation (first sign-in on Nowably)</li>
+      <li>Nowably user ID (UID) (created with Nowably user creation)</li>
     </ul>
 
     <h3>2.2. Task Data (Stored in Firestore)</h3>
+    <p>
+      This includes any data you provide when creating, editing, updating and
+      deleting tasks through our service.
+    </p>
     <ul>
       <li>Task description</li>
       <li>Task state (open or done)</li>
       <li>Timestamp of completion</li>
       <li>User ID (UID) associated with the task</li>
+      <li>Deleted completed tasks</li>
     </ul>
 
     <h3>2.3. "Messages in a Bottle" Data (Stored in Firestore)</h3>
+    <p>
+      This includes any data you provide when creating and receiving "Messages
+      in a Bottle" through our service.
+    </p>
     <ul>
       <li>All received "Messages in a Bottle"</li>
       <li>All created "Messages in a Bottle" (messages you send)</li>
-      <li>
-        Deleted completed tasks (stored for 48 hours, then permanently deleted)
-      </li>
-      <li>
-        Daily count of created "Messages in a Bottle" (reset to 0 every day)
-      </li>
+
+      <li>Daily count of created "Messages in a Bottle"</li>
       <li>Timestamp of last received "Message in a Bottle"</li>
     </ul>
 
@@ -69,10 +97,15 @@
       <li>
         Saving tasks and "Messages in a Bottle" so you can access them later
       </li>
-      <li>Providing gamified insights (e.g., tracking success counts)</li>
+      <li>Providing gamified insights (e.g. tracking success counts)</li>
       <li>Maintaining app functionality and security</li>
     </ul>
-    <p>We do not sell, share, or use your data for advertising.</p>
+    <p>
+      We do not sell, share, or use your data for advertising. We do not use
+      personal data for marketing, advertising, or user profiling purposes. We
+      do not send promotional emails, track users for analytics, or target users
+      based on their behavior.
+    </p>
 
     <h2>4. Where Your Data Is Stored</h2>
     <table>
@@ -114,18 +147,39 @@
     <h2>6. How to Delete Your Data</h2>
     <ul>
       <li>
-        Deleting Your Tasks: You can manually delete them in the app. Deleted
-        completed tasks are automatically erased after 48 hours.
+        Deleting Your Incompleted Tasks: You can manually delete them in the
+        app.
+      </li>
+      <li>
+        Deleting Your Completed Tasks: Deleted completed tasks are stored for 48
+        hours before being permanently deleted. This deletion is triggered when
+        the user logs into the app, where a check is performed to determine if
+        the tasks have exceeded the 48-hour retention period.<br />
+        Contact us at
+        <strong>nowably.app@gmail.com</strong> to request direct deletion.
       </li>
       <li>
         Deleting Your Sent "Messages in a Bottle": Contact us at
         <strong>nowably.app@gmail.com</strong> to request deletion.
       </li>
       <li>
-        Deleting Your Account: Contact us at
-        <strong>nowably.app@gmail.com</strong> to request deletion.
+        Deleting Your Account: You can delete your account on
+        <InlineLinkButton
+          type="text"
+          text="nowably.me/delete-account"
+          font-size="1.1rem"
+          @click="this.router.push({ name: 'delete-account' })"
+        />. Deleting your account will result in the permanent and irreversible
+        deletion of all associated data and content linked to your account.
       </li>
     </ul>
+    <p>
+      We retain your personal data for as long as your account is active. Once
+      you delete your account, all associated data is deleted, including any
+      user-generated content, such as "Messages in a Bottle" or other content
+      linked to your account. There is no retention period for any data after
+      account deletion.
+    </p>
 
     <h2>7. Third-Party Services</h2>
     <table>
@@ -161,8 +215,11 @@
       </li>
     </ul>
     <p>
-      However, no system is 100% secure, and we cannot guarantee absolute
-      security.
+      We take the security of your personal data seriously. We use
+      industry-standard security measures to protect your data from unauthorized
+      access, alteration, and destruction. However, please be aware that no
+      method of data transmission over the internet or electronic storage is
+      100% secure.
     </p>
 
     <h2>9. Changes to This Privacy Policy</h2>
@@ -174,7 +231,7 @@
       <li>Posting the updated policy on this page.</li>
       <li>Sending an email if necessary.</li>
     </ul>
-    <p>Last Updated: 29.03.2025</p>
+    <p>Last Updated: 01.04.2025</p>
 
     <h2>10. Contact Us</h2>
     <p>
@@ -185,6 +242,18 @@
   </div>
 </template>
 
+<script>
+import { useRouter } from "vue-router";
+
+export default {
+  data() {
+    return {
+      router: useRouter(),
+    };
+  },
+};
+</script>
+
 <style scoped>
 .policy-tile {
   width: 100%;
@@ -192,6 +261,17 @@
   max-width: 70ch;
   margin-inline: auto;
   padding-block: 1rem 5rem;
+}
+
+a {
+  color: var(--base-black);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  text-decoration-color: var(--sand-03);
+}
+
+a:hover {
+  text-decoration-color: var(--base-black);
 }
 
 h1 {

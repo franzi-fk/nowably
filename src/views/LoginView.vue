@@ -47,7 +47,7 @@
       </div>
       <div id="legal-links" class="login-container-footer">
         <RouterLink :to="{ name: 'privacy-policy' }">Privacy Policy</RouterLink>
-        <RouterLink :to="{ name: 'imprint' }">Imprint</RouterLink>
+        <RouterLink :to="{ name: 'legal-notice' }">Legal Notice</RouterLink>
       </div>
     </div>
   </div>

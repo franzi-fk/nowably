@@ -1,12 +1,12 @@
 <template>
-  <div class="imprint-tile page-padding-inline flex-grow">
+  <div class="legal-notice-tile page-padding-inline flex-grow">
     <LinkButton
       type="icon-text"
       icon="arrowLeft"
       text="Go Back"
       @click="$router.back()"
     />
-    <h1>Imprint</h1>
+    <h1>Legal Notice</h1>
     <p><strong>According to § 5 TMG (Telemedia Act)</strong></p>
 
     <h2>Responsible for this website & web app</h2>
@@ -77,7 +77,7 @@
 </template>
 
 <style scoped>
-.imprint-tile {
+.legal-notice-tile {
   width: 100%;
   height: 100%;
   max-width: 70ch;
@@ -88,9 +88,13 @@
 a {
   color: var(--base-black);
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.25rem;
+  text-decoration-color: var(--sand-03);
 }
 
+a:hover {
+  text-decoration-color: var(--base-black);
+}
 h1 {
   margin-block: 2.25rem 1.3rem;
 }

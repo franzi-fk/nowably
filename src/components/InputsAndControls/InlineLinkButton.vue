@@ -58,7 +58,7 @@ export default {
 <style scoped>
 /* Link Button General */
 .btn-inline-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
