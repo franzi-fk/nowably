@@ -104,14 +104,16 @@ export default {
   justify-content: center;
   text-transform: uppercase;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 500;
   letter-spacing: 0.05rem;
-  min-height: 2.5rem;
+  min-height: 2.125rem;
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s ease;
   border: none;
+  padding: 0.6rem 1rem;
+  min-width: 5.25rem;
 }
 
 /* Primary */
@@ -156,15 +158,9 @@ export default {
 }
 
 /* Text-Only Button */
-.btn-large {
+.btn-icon-text {
   padding: 0.625rem 1.25rem;
   min-width: 7.8125rem;
-}
-
-/* Text-Only Button */
-.btn-small {
-  padding: 0.625rem 1rem;
-  min-width: 6.25rem;
 }
 
 /* Text & Icon Spacing */
@@ -183,8 +179,11 @@ export default {
 }
 
 @media (min-width: 576px) {
-  .btn-solid {
+  .btn-large {
     font-size: 0.95rem;
+  }
+  .btn-small {
+    font-size: 0.875rem;
   }
 }
 </style>
