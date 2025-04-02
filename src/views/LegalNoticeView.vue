@@ -20,7 +20,10 @@
     <h2>Contact Information</h2>
     <p>
       Phone: +49 1525 357 59 24<br />
-      Email: <a href="mailto:nowably.app@gmail.com">nowably.app@gmail.com</a>
+      Email:
+      <a href="mailto:nowably.app@gmail.com" class="inline-link"
+        >nowably.app@gmail.com</a
+      >
       <br />
     </p>
 
@@ -36,7 +39,10 @@
       (OS):
     </p>
     <p>
-      <a href="https://ec.europa.eu/consumers/odr/" target="_blank"
+      <a
+        href="https://ec.europa.eu/consumers/odr/"
+        target="_blank"
+        class="inline-link"
         >https://ec.europa.eu/consumers/odr/</a
       >
     </p>
@@ -85,16 +91,6 @@
   padding-block: 1rem 5rem;
 }
 
-a {
-  color: var(--base-black);
-  text-decoration: underline;
-  text-underline-offset: 0.25rem;
-  text-decoration-color: var(--sand-03);
-}
-
-a:hover {
-  text-decoration-color: var(--base-black);
-}
 h1 {
   margin-block: 2.25rem 1.3rem;
 }

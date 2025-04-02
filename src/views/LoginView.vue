@@ -11,8 +11,7 @@
           </h1>
           <span>Beat procrastination now.</span>
         </section>
-        <!-- Show login button if not logged in -->
-        <div v-if="!user">
+        <div v-if="!user" class="sign-in-action">
           <button @click="loginWithGoogle" id="btn-login">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -42,13 +41,30 @@
             </svg>
             <span>Sign in with Google</span>
           </button>
+
+          <small class="signin-legal-note"
+            >By signing in, you agree to our
+            <RouterLink :to="{ name: 'terms-of-use' }" class="inline-link"
+              >Terms of Use</RouterLink
+            >
+            and
+            <RouterLink :to="{ name: 'privacy-policy' }" class="inline-link"
+              >Privacy Policy</RouterLink
+            >.</small
+          >
         </div>
         <button @click="enterDemoMode" id="btn-demo">View Demo</button>
       </div>
-      <div id="legal-links" class="login-container-footer">
-        <RouterLink :to="{ name: 'privacy-policy' }">Privacy Policy</RouterLink>
-        <RouterLink :to="{ name: 'legal-notice' }">Legal Notice</RouterLink>
-      </div>
+      <footer>
+        <div id="legal-links" class="login-container-footer">
+          <RouterLink :to="{ name: 'terms-of-use' }">Terms of Use</RouterLink>
+          <RouterLink :to="{ name: 'privacy-policy' }"
+            >Privacy Policy</RouterLink
+          >
+          <RouterLink :to="{ name: 'legal-notice' }">Legal Notice</RouterLink>
+        </div>
+        <div id="copyright">&copy; 2025 Franziska Kiel</div>
+      </footer>
     </div>
   </div>
 </template>
@@ -120,7 +136,7 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: var(--base-white);
-  padding-block: 3rem;
+  padding-block: 2rem 1rem;
   min-height: 100vh;
   width: 100%;
   gap: 3rem;
@@ -136,6 +152,7 @@ export default {
   justify-content: space-around;
   gap: 1rem;
   padding-top: 8vh;
+  padding-inline: 2rem;
 }
 
 .intro {
@@ -177,11 +194,20 @@ h1 {
 }
 
 #btn-demo {
-  margin-top: 12vh;
+  margin-top: 10vh;
 }
 
-#btn-login {
-  margin-block: 1rem 3rem;
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.3rem;
+}
+
+#copyright {
+  font-size: 0.875rem;
+  opacity: 0.7;
 }
 
 #legal-links {
@@ -194,12 +220,27 @@ h1 {
 #legal-links a {
   color: var(--base-black);
   text-decoration: none;
+  opacity: 0.85;
 }
 
 #legal-links a:hover {
   color: var(--base-black);
   text-decoration: underline;
   text-underline-offset: 0.3rem;
+}
+.signin-legal-note {
+  font-weight: 400;
+  opacity: 0.85;
+  font-size: 0.875rem;
+  letter-spacing: 0.0031rem;
+}
+.sign-in-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-block: 1rem 2rem;
 }
 
 /*________________________________________________________________________________*/
@@ -225,6 +266,12 @@ h1 {
     font-size: 0.875rem;
     display: flex;
     gap: 1rem;
+  }
+  #copyright {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-size: 0.875rem;
   }
 }
 

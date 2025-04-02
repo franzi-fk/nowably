@@ -15,6 +15,7 @@ import LoginView from "../views/LoginView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import LegalNoticeView from "../views/LegalNoticeView.vue";
 import DeleteAccountView from "../views/DeleteAccountView.vue";
+import TermsOfUseView from "../views/TermsOfUseView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,6 +85,11 @@ const router = createRouter({
       path: "/delete-account",
       name: "delete-account",
       component: DeleteAccountView,
+    },
+    {
+      path: "/terms-of-use",
+      name: "terms-of-use",
+      component: TermsOfUseView,
     },
     {
       path: "/privacy",
