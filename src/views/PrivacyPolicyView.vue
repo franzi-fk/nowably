@@ -25,15 +25,16 @@
     </p>
     <p>
       Phone: +49 1525 357 59 24<br />
-      Email: <a href="mailto:nowably.app@gmail.com">nowably.app@gmail.com</a>
+      Email:
+      <a href="mailto:nowably.app@gmail.com" class="inline-link"
+        >nowably.app@gmail.com</a
+      >
     </p>
     <p>
       Legal Notice:
-      <InlineLinkButton
-        @click="this.router.push({ name: 'legal-notice' })"
-        text="nowably.me/legal-notice"
-        font-size="1.1rem"
-      />
+      <RouterLink :to="{ name: 'legal-notice' }" class="inline-link"
+        >nowably.me/legal-notice</RouterLink
+      >
     </p>
 
     <h2>2. What Data We Collect</h2>
@@ -164,12 +165,9 @@
       </li>
       <li>
         Deleting Your Account: You can delete your account on
-        <InlineLinkButton
-          type="text"
-          text="nowably.me/delete-account"
-          font-size="1.1rem"
-          @click="this.router.push({ name: 'delete-account' })"
-        />. Deleting your account will result in the permanent and irreversible
+        <RouterLink :to="{ name: 'delete-account' }" class="inline-link"
+          >nowably.me/delete-account</RouterLink
+        >. Deleting your account will result in the permanent and irreversible
         deletion of all associated data and content linked to your account.
       </li>
     </ul>
@@ -261,17 +259,6 @@ export default {
   max-width: 70ch;
   margin-inline: auto;
   padding-block: 1rem 5rem;
-}
-
-a {
-  color: var(--base-black);
-  text-decoration: underline;
-  text-underline-offset: 0.25rem;
-  text-decoration-color: var(--sand-03);
-}
-
-a:hover {
-  text-decoration-color: var(--base-black);
 }
 
 h1 {

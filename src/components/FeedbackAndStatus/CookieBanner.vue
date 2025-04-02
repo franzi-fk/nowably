@@ -4,13 +4,9 @@
       This app only uses essential cookies, with Google Sign-In for secure login
       and Firestore for data storage.
 
-      <InlineLinkButton
-        @click="goToPrivacyPolicy"
-        type="text"
-        text="Learn more"
-        id="btn-learn-more"
-        fontSize="0.9375rem"
-      />
+      <RouterLink :to="{ name: 'privacy-policy' }" class="inline-link"
+        >Learn more</RouterLink
+      >
     </p>
     <SolidButton
       @click="closeBanner"
@@ -46,9 +42,6 @@ export default {
       localStorage.setItem("cookieAccepted", "true");
       this.showBanner = false;
     },
-    goToPrivacyPolicy() {
-      this.router.push({ name: "privacy-policy" });
-    },
   },
 };
 </script>
@@ -70,10 +63,6 @@ export default {
   gap: 1.25rem;
   border-top: 2px solid var(--sand-02);
   box-shadow: 0 0.625rem 2rem 0 var(--cloud-02);
-}
-
-#btn-learn-more {
-  display: inline-flex;
 }
 
 /*________________________________________________________________________________*/

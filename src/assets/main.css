@@ -45,6 +45,7 @@
   --terra-08: #edbba6;
   --sky-01: #9dd1fe;
   --ocean-01: #3136b7;
+  --ocean-02: #0b1096;
   --cloud-01: #f2f2f2;
   --cloud-02: #d8d8d8;
   --cloud-03: #afafaf;
@@ -60,7 +61,7 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'Reddit Sans', sans-serif;
+  font-family: "Reddit Sans", sans-serif;
 }
 
 button {
@@ -215,6 +216,22 @@ fieldset {
 ::selection {
   background-color: var(--terra-08);
   color: var(--base-black);
+}
+
+a {
+  text-decoration: none;
+}
+
+.inline-link {
+  color: var(--ocean-02);
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.inline-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+  text-decoration-color: var(--ocean-01);
 }
 
 /*_______________________________________________________*/

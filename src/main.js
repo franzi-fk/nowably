@@ -12,7 +12,6 @@ import AppHeader from "@/components/Navigation/AppHeader.vue";
 import { auth } from "./firebaseConfig"; // Import your Firebase Auth instance
 import { useUserStore } from "./stores/userStore";
 import { createUserIfNotExists } from "./firebaseService.js";
-import InlineLinkButton from "./components/InputsAndControls/InlineLinkButton.vue";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -21,7 +20,6 @@ app.component("SolidButton", SolidButton);
 app.component("AppIcon", AppIcon);
 app.component("AppHeader", AppHeader);
 app.component("LinkButton", LinkButton);
-app.component("InlineLinkButton", InlineLinkButton);
 
 // Register Pinia and Router before using the store
 app.use(pinia);
