@@ -7,7 +7,7 @@
       <small v-if="this.userStore.role === 'admin'">logged in as Admin</small>
 
       <!-- User Menu -->
-      <div class="user-menu" ref="menuContainer">
+      <div class="user-menu" ref="menuContainer" v-if="!userStore.isDemo">
         <!-- Profile Picture -->
         <img
           src="@/assets/static-profile-pic.png"
@@ -70,6 +70,7 @@
         icon="logOut"
         text="Leave Demo"
         @click="leaveDemoMode"
+        id="btn-leave-demo"
       />
     </div>
 
@@ -413,6 +414,10 @@ ul {
   outline: none;
   cursor: pointer;
   margin: 2rem 0.75rem 0 0;
+}
+
+#btn-leave-demo {
+  margin: 0.75rem 1rem 0 0;
 }
 
 .profile-pic:hover {

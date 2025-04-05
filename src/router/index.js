@@ -17,6 +17,7 @@ import LegalNoticeView from "../views/LegalNoticeView.vue";
 import TermsOfUseView from "../views/TermsOfUseView.vue";
 import AccountView from "../views/AccountView.vue";
 import { auth } from "../firebaseConfig";
+import { useUserStore } from "../stores/userStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -125,7 +126,16 @@ router.beforeEach((to, from, next) => {
   const user = auth.currentUser;
   const requiresAuth = to.meta.requiresAuth;
 
-  if (requiresAuth && !user) {
+  // If Firebase user is logged in, allow navigation
+  if (user) {
+    next();
+    return;
+  }
+
+  // If no Firebase user, check if userStore has a demo session
+  const userStore = useUserStore();
+
+  if (requiresAuth && !user && !userStore.isDemo) {
     next({ name: "login" });
   } else {
     next();

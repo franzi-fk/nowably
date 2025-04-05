@@ -29,10 +29,10 @@
             <h2>Account Information</h2>
             <p>Name: {{ userStore.user.displayName }}</p>
             <p>Email: {{ userStore.user.email }}</p>
-            <p>User ID: {{ userStore.user.uid }}</p>
+            <p>Nowably User ID: {{ userStore.user.uid }}</p>
             <small>
-              You are signed in with your Google account. This information comes
-              directly from Google and can not be changed here. To use a
+              You are signed in with your Google account. Your name and email
+              come directly from Google and can not be changed here. To use a
               different name or email, sign out and sign in with another
               account.
             </small>
@@ -158,7 +158,7 @@ export default {
   align-items: start;
   justify-content: center;
   text-align: left;
-  gap: 1.3rem;
+  gap: 2rem;
 }
 .account-tile {
   display: flex;
