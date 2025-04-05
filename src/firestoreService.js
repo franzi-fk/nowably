@@ -13,7 +13,7 @@ import {
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
-import { db } from "./firebaseConfig";
+import { db, auth } from "./firebaseConfig";
 
 /*_______________________________________*/
 /*________ TASK STORE OPERATIONS ________*/
@@ -325,15 +325,13 @@ export async function getUserFs(userId) {
   }
 
   try {
-    // If demo mode, use the demo user ID
     const finalUserId =
-      userId === "demo_user" ? "SwBi7cJTsh8sMeph9xae" : userId;
+      userId === "demo_user" ? "SwBi7cJTsh8sMeph9xae" : userId; // If demo mode, use the demo user ID
     const userRef = userDocRef(finalUserId); // Using the correct ID
 
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      console.warn("User not found in Firestore.");
       return null;
     }
 
@@ -426,6 +424,48 @@ export async function storeReceivedMeboForUserFs(userId, meboId) {
   } catch (e) {
     console.error("Error storing received mebo in Firestore:", e);
     throw e;
+  }
+}
+
+// Delete all user account data (account deletion comes with account data deletion)
+export async function deleteUserData() {
+  const uid = auth.currentUser?.uid;
+
+  if (!uid) {
+    console.error("No user is currently logged in.");
+    return;
+  }
+
+  try {
+    const userDocRef = doc(db, "users", uid);
+
+    // subcollections to delete
+    const subcollections = ["tasks", "deletedCompletedTasks", "receivedMebos"];
+
+    for (const subcol of subcollections) {
+      const subcolRef = collection(userDocRef, subcol);
+      const querySnapshot = await getDocs(subcolRef);
+
+      const deletePromises = querySnapshot.docs.map((docSnap) =>
+        deleteDoc(docSnap.ref)
+      );
+
+      await Promise.all(deletePromises);
+    }
+
+    // Delete the user document
+    await deleteDoc(userDocRef);
+
+    // Delete all mebos authored by this user
+    const mebosRef = collection(db, "mebos");
+    const q = query(mebosRef, where("author", "==", uid));
+    const snapshot = await getDocs(q);
+
+    const deleteMebos = snapshot.docs.map((doc) => deleteDoc(doc.ref));
+    await Promise.all(deleteMebos);
+  } catch (error) {
+    console.error("Error deleting user data:", error);
+    throw error;
   }
 }
 

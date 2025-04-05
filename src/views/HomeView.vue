@@ -1,8 +1,12 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
+    <SidebarNavi
+      :variant="this.userStore.role === 'admin' ? 'admin' : 'user'"
+    />
     <AppHeader />
-    <div class="main-view-container home-container flex-grow view-layout-default">
+    <div
+      class="main-view-container home-container flex-grow view-layout-default"
+    >
       <section class="welcome-message page-padding-inline">
         <h1>Welcome</h1>
         <span id="subheading">Let's defeat procrastination now.</span>
@@ -12,7 +16,8 @@
         <CreateMeboBanner
           v-if="
             this.userStore.role === 'admin' ||
-            (this.userStore.role !== 'admin' && this.userStore.availableMeboTokens > 0)
+            (this.userStore.role !== 'admin' &&
+              this.userStore.availableMeboTokens > 0)
           "
         />
         <CompletionCardsTile />
@@ -23,14 +28,14 @@
 </template>
 
 <script>
-import OpenTasksList from '@/components/DataDisplay/OpenTasksList.vue'
-import { useTaskStore } from '@/stores/taskStore'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
-import CompletionCardsTile from '@/components/DataDisplay/CompletionCardsTile.vue'
-import CreateMeboBanner from '@/components/DataDisplay/CreateMeboBanner.vue'
-import ReceivedMebosTile from '../components/DataDisplay/ReceivedMebosTile.vue'
-import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
+import OpenTasksList from "@/components/DataDisplay/OpenTasksList.vue";
+import { useTaskStore } from "@/stores/taskStore";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
+import CompletionCardsTile from "@/components/DataDisplay/CompletionCardsTile.vue";
+import CreateMeboBanner from "@/components/DataDisplay/CreateMeboBanner.vue";
+import ReceivedMebosTile from "../components/DataDisplay/ReceivedMebosTile.vue";
+import SidebarNavi from "../components/Navigation/SidebarNavi.vue";
 
 export default {
   components: {
@@ -45,16 +50,13 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
-    }
+    };
   },
   async mounted() {
-    await Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()])
-    this.taskStore.setCurrentTask(null)
-    if (!this.userStore.user) {
-      this.router.push({ name: 'login' })
-    }
+    await Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]);
+    this.taskStore.setCurrentTask(null);
   },
-}
+};
 </script>
 
 <style scoped>

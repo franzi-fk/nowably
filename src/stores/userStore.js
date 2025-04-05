@@ -7,8 +7,13 @@ import {
   storeReceivedMeboForUserFs,
   loginDemo,
   resetDemoUserData,
+  deleteUserData,
 } from "../firestoreService";
-import { signInWithGoogle, signOutUser } from "../firebaseService";
+import {
+  deleteFirebaseAccount,
+  signInWithGoogle,
+  signOutUser,
+} from "../firebaseService";
 
 export const useUserStore = defineStore("userStore", {
   state: () => ({
@@ -87,6 +92,14 @@ export const useUserStore = defineStore("userStore", {
         this.user = null;
         this.userId = null;
         this.role = "user";
+      } catch (error) {
+        console.error("Error logging out:", error);
+      }
+    },
+    async deleteUserAccount() {
+      try {
+        await deleteUserData(); // 1. Delete Firestore data first (needs UID)
+        await deleteFirebaseAccount(); // 2. Delete Firebase Auth account
       } catch (error) {
         console.error("Error logging out:", error);
       }

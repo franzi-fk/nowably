@@ -14,8 +14,9 @@ import NotFoundView from "../views/NotFoundView.vue";
 import LoginView from "../views/LoginView.vue";
 import PrivacyPolicyView from "../views/PrivacyPolicyView.vue";
 import LegalNoticeView from "../views/LegalNoticeView.vue";
-import DeleteAccountView from "../views/DeleteAccountView.vue";
 import TermsOfUseView from "../views/TermsOfUseView.vue";
+import AccountView from "../views/AccountView.vue";
+import { auth } from "../firebaseConfig";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,61 +31,73 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/:id/countdown",
       name: "countdown",
       component: CountdownView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/need-help",
       name: "need-help",
       component: NeedHelpView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/task-continue",
       name: "task-continue",
       component: AfterHelpView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/:id/working-on-task",
       name: "task-in-progress",
       component: TaskInProgressView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/task-success",
       name: "task-success",
       component: TaskSuccessView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/completion-cards",
       name: "completion-cards",
       component: CompletionCardsView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/all-tasks",
       name: "all-tasks",
       component: AllTasksView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/send-message-in-bottle",
       name: "send-message-in-bottle",
       component: CreateMeboView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/received-messages",
       name: "received-messages",
       component: ReceivedMebosView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/moderate-mebos",
       name: "moderate-mebos",
       component: AdminModerateMebosView,
+      meta: { requiresAuth: true },
     },
     {
-      path: "/delete-account",
-      name: "delete-account",
-      component: DeleteAccountView,
+      path: "/account",
+      name: "account",
+      component: AccountView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/terms-of-use",
@@ -103,8 +116,20 @@ const router = createRouter({
     },
   ],
   scrollBehavior() {
-    return { top: 0 }; // Always scroll to top
+    return { top: 0 };
   },
+});
+
+// Global navigation guard
+router.beforeEach((to, from, next) => {
+  const user = auth.currentUser;
+  const requiresAuth = to.meta.requiresAuth;
+
+  if (requiresAuth && !user) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
 });
 
 export default router;

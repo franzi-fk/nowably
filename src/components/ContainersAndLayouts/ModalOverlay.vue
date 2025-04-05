@@ -6,7 +6,7 @@
         <LinkButton type="icon" icon="x" @click="closeModal" iconSize="24" />
       </div>
       <div class="modal-body">
-        <p>{{ text }}</p>
+        <p v-html="text"></p>
       </div>
       <div class="modal-footer">
         <!-- Cancel button -->
@@ -109,10 +109,13 @@ p {
   margin: 0;
 }
 
-.modal-body {
+.modal-body p {
   text-align: left;
   margin-block: 1.5rem 2.2rem;
   line-height: 140%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .modal-footer {

@@ -31,10 +31,11 @@
 
   /* Other */
   --cotton-01: #f9f2ee;
-  --sand-01: #fbf0eb;
+  --sand-01: #e9d5cd;
   --sand-02: #f3e9e4;
   --sand-03: #ccb9af;
   --sand-04: #f1dac6;
+  --sand-05: #e7d6c8;
   --terra-01: #d09983;
   --terra-02: #a8766c;
   --terra-03: #9e605a;
@@ -233,6 +234,10 @@ a {
   text-decoration: underline;
   text-underline-offset: 0.3rem;
   text-decoration-color: var(--ocean-01);
+}
+
+.txt-important {
+  color: var(--error);
 }
 
 /*_______________________________________________________*/

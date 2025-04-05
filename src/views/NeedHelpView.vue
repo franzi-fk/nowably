@@ -209,6 +209,7 @@
                   type="text"
                   text="Save and continue"
                   variant="primary"
+                  id="btn-save-splitting"
                   :disabled="!splitTask1 || !splitTask2"
                 />
               </fieldset>
@@ -747,7 +748,22 @@ h2 {
 .split-task-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
+}
+
+.split-task-form form {
+  width: 100%;
+}
+
+.split-task-form fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+#btn-save-splitting {
+  width: fit-content;
+  align-self: center;
 }
 
 .open-mebo-info {

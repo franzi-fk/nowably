@@ -165,8 +165,8 @@
       </li>
       <li>
         Deleting Your Account: You can delete your account on
-        <RouterLink :to="{ name: 'delete-account' }" class="inline-link"
-          >nowably.me/delete-account</RouterLink
+        <RouterLink :to="{ name: 'account' }" class="inline-link"
+          >nowably.me/account</RouterLink
         >. Deleting your account will result in the permanent and irreversible
         deletion of all associated data and content linked to your account.
       </li>

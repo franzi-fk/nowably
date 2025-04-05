@@ -158,7 +158,7 @@ export default {
 }
 
 /* Text-Only Button */
-.btn-icon-text {
+.btn-text {
   padding: 0.625rem 1.25rem;
   min-width: 7.8125rem;
 }
