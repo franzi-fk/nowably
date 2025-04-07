@@ -131,6 +131,7 @@
               aria-label="My Account"
               class="menu-item"
               @click="goToAccount"
+              v-if="!userStore.isDemo"
             >
               My Account
             </li>
@@ -139,8 +140,18 @@
               aria-label="Sign out"
               class="menu-item"
               @click="userLogout"
+              v-if="!userStore.isDemo"
             >
               Sign Out
+            </li>
+            <li
+              role="menuitem"
+              aria-label="Leave demo"
+              class="menu-item"
+              @click="leaveDemoMode"
+              v-if="userStore.isDemo"
+            >
+              Leave Demo
             </li>
           </ul>
           <hr />
@@ -475,6 +486,10 @@ hr {
 
 .user-info p:last-of-type {
   font-weight: 400;
+}
+
+.menu-item {
+  cursor: pointer;
 }
 
 .menu-items-list {

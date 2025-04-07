@@ -99,6 +99,13 @@ body {
   background-image: var(--linear-sand-01);
 }
 
+#app > div {
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .wrapper {
   display: grid;
   grid-template-columns: auto 1fr;

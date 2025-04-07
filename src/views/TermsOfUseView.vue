@@ -18,6 +18,9 @@
     <p>
       The App was created by Franziska Kiel, a UX/UI Designer and Frontend
       Developer based in Germany.
+      <a href="https://github.com/franzi-fk" class="inline-link"
+        >Open GitHub Profile</a
+      >
     </p>
 
     <p>By using the App, you agree to these Terms of Use.</p>

@@ -58,6 +58,7 @@ export const useUserStore = defineStore("userStore", {
         this.user = await loginDemo(); // firestoreService function
         this.userId = this.user.uid;
         this.isDemo = true;
+        sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
         await this.initLoad();
       } catch (error) {
         console.error("Error logging in for Demo:", error);
@@ -71,6 +72,7 @@ export const useUserStore = defineStore("userStore", {
           this.userId = null;
           this.role = "user";
           this.isDemo = false;
+          sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
         } catch (error) {
           console.error("Error logging out:", error);
         }

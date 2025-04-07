@@ -719,6 +719,7 @@ h2 {
   align-items: center;
   justify-content: center;
   min-height: 55vh;
+  gap: 1.25rem;
 }
 
 .relaxation-exercise p {
