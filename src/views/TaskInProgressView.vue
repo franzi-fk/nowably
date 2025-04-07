@@ -6,7 +6,11 @@
   >
     <div class="in-progress-view-body">
       <h2 class="sr-only">Work on the task</h2>
-      <img src="@/assets/illus_taskprogress.gif" alt="You got this" id="you-got-this-gif" />
+      <img
+        src="/illus_taskprogress.gif"
+        alt="You got this"
+        id="you-got-this-gif"
+      />
       <span id="you-got-this-text">Keep going!</span>
       <SolidButton
         type="text"
@@ -41,25 +45,34 @@
           />
         </fieldset>
         <fieldset>
-          <SolidButton id="btn-continue" type="text" text="Save and continue" variant="primary" />
+          <SolidButton
+            id="btn-continue"
+            type="text"
+            text="Save and continue"
+            variant="primary"
+          />
         </fieldset>
       </form>
     </div>
     <div class="actions document-task-status-footer">
-      <LinkButton type="text" text="Go back" @click="userStore.setCurrentStep('workingOnTask')" />
+      <LinkButton
+        type="text"
+        text="Go back"
+        @click="userStore.setCurrentStep('workingOnTask')"
+      />
     </div>
   </article>
 </template>
 
 <script>
-import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
-import { useTaskStore } from '../stores/taskStore'
-import { useUserStore } from '../stores/userStore'
-import { useRouter } from 'vue-router'
-import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
+import InputRadio from "@/components/InputsAndControls/InputRadio.vue";
+import { useTaskStore } from "../stores/taskStore";
+import { useUserStore } from "../stores/userStore";
+import { useRouter } from "vue-router";
+import TaskProgressHeader from "../components/Navigation/TaskProgressHeader.vue";
 
 export default {
-  name: 'TaskInProgressView',
+  name: "TaskInProgressView",
   components: {
     InputRadio,
     TaskProgressHeader,
@@ -70,37 +83,44 @@ export default {
       userStore: useUserStore(),
       router: useRouter(),
       taskComplete: true,
-    }
+    };
   },
   methods: {
     submitUserInput() {
-      const updatedTask = this.taskStore.tasks.find((t) => t.id === this.taskStore.currentTask.id)
+      const updatedTask = this.taskStore.tasks.find(
+        (t) => t.id === this.taskStore.currentTask.id
+      );
 
       if (updatedTask) {
         // Update the task's doneState in the tasks array
-        this.taskStore.updateTask(updatedTask.id, { doneState: this.taskComplete })
+        this.taskStore.updateTask(updatedTask.id, {
+          doneState: this.taskComplete,
+        });
 
         // Update state
-        this.taskStore.setCurrentTask(updatedTask) // Update currentTask
-        this.userStore.setCurrentStep('success')
-        this.router.push({ name: 'task-success' })
+        this.taskStore.setCurrentTask(updatedTask); // Update currentTask
+        this.userStore.setCurrentStep("success");
+        this.router.push({ name: "task-success" });
       }
     },
     stopWorking() {
-      this.workingOnTask = false
+      this.workingOnTask = false;
     },
     backToWork() {
-      this.workingOnTask = true
+      this.workingOnTask = true;
     },
     taskInProgress() {
-      this.router.push({ name: 'task-in-progress', params: { id: this.taskStore.currentTask.id } })
+      this.router.push({
+        name: "task-in-progress",
+        params: { id: this.taskStore.currentTask.id },
+      });
     },
   },
   mounted() {
-    this.taskStore.initLoad()
-    this.userStore.initLoad()
+    this.taskStore.initLoad();
+    this.userStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>

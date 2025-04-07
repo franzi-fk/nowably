@@ -10,7 +10,7 @@
       <div class="user-menu" ref="menuContainer" v-if="!userStore.isDemo">
         <!-- Profile Picture -->
         <img
-          src="@/assets/static-profile-pic.png"
+          src="/static-profile-pic.png"
           alt="Profile Picture"
           class="profile-pic"
           @click="toggleMenu"
@@ -31,7 +31,7 @@
         >
           <div class="menu-header">
             <img
-              src="@/assets/static-profile-pic.png"
+              src="/static-profile-pic.png"
               alt="Profile Picture"
               class="profile-pic-small"
             />
