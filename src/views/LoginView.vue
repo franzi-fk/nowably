@@ -206,12 +206,12 @@ footer {
 }
 
 #copyright {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   opacity: 0.7;
 }
 
 #legal-links {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   display: flex;
   gap: 1rem;
   flex-grow: 0;
@@ -231,7 +231,7 @@ footer {
 .signin-legal-note {
   font-weight: 400;
   opacity: 0.85;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.0031rem;
 }
 .sign-in-action {
@@ -258,12 +258,14 @@ footer {
   .login-container {
     min-width: 44vw;
     width: auto;
+    box-shadow: 0 1rem 0.5rem 0 rgba(69, 57, 44, 0.1);
   }
+
   #legal-links {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     display: flex;
     gap: 1rem;
   }
@@ -271,7 +273,7 @@ footer {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 }
 

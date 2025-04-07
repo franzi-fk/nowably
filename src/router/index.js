@@ -123,6 +123,8 @@ const router = createRouter({
 
 // Global navigation guard
 router.beforeEach((to, from, next) => {
+  document.body.style.overflow = ""; // Restore scroll on route change
+
   const user = auth.currentUser;
   const requiresAuth = to.meta.requiresAuth;
 
