@@ -4,8 +4,6 @@
     v-if="variant === 'user'"
   >
     <div class="user-container" v-if="!isMobile && this.userStore.user">
-      <small v-if="this.userStore.role === 'admin'">logged in as Admin</small>
-
       <!-- User Menu -->
       <div class="user-menu" ref="menuContainer" v-if="!userStore.isDemo">
         <!-- Profile Picture -->
