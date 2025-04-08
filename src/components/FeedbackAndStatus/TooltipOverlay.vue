@@ -1,5 +1,9 @@
 <template>
-  <div class="tooltip-container" @mouseenter="showTooltip" @mouseleave="hideTooltip">
+  <div
+    class="tooltip-container"
+    @mouseenter="showTooltip"
+    @mouseleave="hideTooltip"
+  >
     <slot></slot>
     <!-- The trigger element -->
     <span v-if="visible" class="tooltip" :style="tooltipStyles">
@@ -17,59 +21,59 @@ export default {
     },
     position: {
       type: String,
-      default: 'right', // Default tooltip position
-      validator: (value) => ['top', 'right', 'bottom', 'left'].includes(value),
+      default: "right", // Default tooltip position
+      validator: (value) => ["top", "right", "bottom", "left"].includes(value),
     },
   },
   data() {
     return {
       visible: false,
       tooltipStyles: {},
-    }
+    };
   },
   methods: {
     showTooltip(event) {
-      this.visible = true
-      const rect = event.target.getBoundingClientRect()
+      this.visible = true;
+      const rect = event.target.getBoundingClientRect();
 
       // Calculate tooltip position based on prop
-      const spacing = 6 // Space between element and tooltip
+      const spacing = 6; // Space between element and tooltip
       let styles = {
-        position: 'fixed',
+        position: "fixed",
         zIndex: 100,
-      }
+      };
 
       switch (this.position) {
-        case 'top':
-          styles.top = `${rect.top - spacing}px`
-          styles.left = `${rect.left + rect.width / 2}px`
-          styles.transform = 'translate(-50%, -100%)'
-          break
-        case 'bottom':
-          styles.top = `${rect.bottom + spacing}px`
-          styles.left = `${rect.left + rect.width / 2}px`
-          styles.transform = 'translate(-50%, 0)'
-          break
-        case 'left':
-          styles.top = `${rect.top + rect.height / 2}px`
-          styles.left = `${rect.left - spacing}px`
-          styles.transform = 'translate(-100%, -50%)'
-          break
-        case 'right':
+        case "top":
+          styles.top = `${rect.top - spacing}px`;
+          styles.left = `${rect.left + rect.width / 2}px`;
+          styles.transform = "translate(-50%, -100%)";
+          break;
+        case "bottom":
+          styles.top = `${rect.bottom + spacing}px`;
+          styles.left = `${rect.left + rect.width / 2}px`;
+          styles.transform = "translate(-50%, 0)";
+          break;
+        case "left":
+          styles.top = `${rect.top + rect.height / 2}px`;
+          styles.left = `${rect.left - spacing}px`;
+          styles.transform = "translate(-100%, -50%)";
+          break;
+        case "right":
         default:
-          styles.top = `${rect.top + rect.height / 2}px`
-          styles.left = `${rect.right + spacing}px`
-          styles.transform = 'translate(0, -50%)'
-          break
+          styles.top = `${rect.top + rect.height / 2}px`;
+          styles.left = `${rect.right + spacing}px`;
+          styles.transform = "translate(0, -50%)";
+          break;
       }
 
-      this.tooltipStyles = styles
+      this.tooltipStyles = styles;
     },
     hideTooltip() {
-      this.visible = false
+      this.visible = false;
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -81,8 +85,8 @@ export default {
 }
 
 .tooltip {
-  background-color: var(--base-white);
-  color: var(--base-black);
+  background-color: var(--t-black-80);
+  color: var(--base-white);
   box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.085);
   padding: 0.3rem 0.55rem 0.4rem 0.55rem;
   border-radius: 0.375rem;
@@ -92,6 +96,8 @@ export default {
   transition: opacity 0.4s ease-in-out;
   font-size: 0.875rem;
   z-index: 50;
+  font-weight: 300;
+  letter-spacing: 0.0063rem;
 }
 
 .tooltip-container:hover .tooltip {

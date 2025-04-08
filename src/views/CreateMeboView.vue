@@ -83,12 +83,25 @@
           supportive tone and exclude personal details like phone numbers or addresses, as well as
           links."
           />
+          <TooltipOverlay
+            text="Write at least 200 characters and tick the box to agree to the guidelines."
+            v-if="!meboComplianceApproved || inputMessage.length < 200"
+          >
+            <SolidButton
+              type="text"
+              id="btn-send-message"
+              text="Send Message"
+              variant="primary"
+              :disabled="true"
+            />
+          </TooltipOverlay>
           <SolidButton
+            v-else
             type="text"
             id="btn-send-message"
             text="Send Message"
             variant="primary"
-            :disabled="!meboComplianceApproved || inputMessage.length <= 200"
+            :disabled="false"
           />
         </form>
       </section>
@@ -131,6 +144,7 @@ import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
 import SidebarNavi from "../components/Navigation/SidebarNavi.vue";
 import Illus_MeboSent from "../components/Visuals/Illus_MeboSent.vue";
 import Illus_Task from "../components/Visuals/Illus_Task.vue";
+import TooltipOverlay from "../components/FeedbackAndStatus/TooltipOverlay.vue";
 
 export default {
   name: "CreateMeboView",
@@ -141,6 +155,7 @@ export default {
     SidebarNavi,
     Illus_MeboSent,
     Illus_Task,
+    TooltipOverlay,
   },
   data() {
     return {
@@ -295,12 +310,9 @@ input-message {
   margin-top: 1rem;
 }
 
-#btn-send-message {
-  margin-top: 1rem;
-}
-
 #checkbox-label {
   font-size: 0.95rem;
+  margin-bottom: 1rem;
 }
 
 .mebo-sent-body {

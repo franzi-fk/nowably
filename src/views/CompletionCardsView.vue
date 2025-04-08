@@ -1,8 +1,12 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
+    <SidebarNavi
+      :variant="this.userStore.role === 'admin' ? 'admin' : 'user'"
+    />
     <AppHeader />
-    <article class="main-view-container cards-view-container flex-grow view-layout-default">
+    <article
+      class="main-view-container cards-view-container flex-grow view-layout-default"
+    >
       <section class="cards-view-header page-padding-inline">
         <h1>Completion Cards</h1>
       </section>
@@ -37,13 +41,13 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-import CompletionCard from '@/components/DataDisplay/CompletionCard.vue'
-import { useUserStore } from '../stores/userStore'
-import SidebarNavi from '../components/Navigation/SidebarNavi.vue'
+import { useRouter } from "vue-router";
+import CompletionCard from "@/components/DataDisplay/CompletionCard.vue";
+import { useUserStore } from "../stores/userStore";
+import SidebarNavi from "../components/Navigation/SidebarNavi.vue";
 
 export default {
-  name: 'CompletionCardsView',
+  name: "CompletionCardsView",
   components: {
     CompletionCard,
     SidebarNavi,
@@ -53,36 +57,44 @@ export default {
       router: useRouter(),
       userStore: useUserStore(),
       milestones: [
-        5, 10, 20, 50, 75, 100, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000,
+        5, 10, 20, 50, 75, 100, 150, 200, 250, 300, 350, 400, 500, 600, 700,
+        800, 900, 1000,
       ],
-    }
+    };
   },
   computed: {
     reachedMilestones() {
       // includes all milestones the user has reached (milestones <= totalSuccessCount)
-      return this.milestones.filter((milestone) => this.userStore.totalSuccessCount >= milestone)
+      return this.milestones.filter(
+        (milestone) => this.userStore.totalSuccessCount >= milestone
+      );
     },
     nextMilestone() {
       // returns the next milestone the user hasn't reached yet (milestone > totalSuccessCount)
       return (
-        this.milestones.find((milestone) => this.userStore.totalSuccessCount < milestone) || null
-      )
+        this.milestones.find(
+          (milestone) => this.userStore.totalSuccessCount < milestone
+        ) || null
+      );
     },
     closedMilestones() {
       // includes all milestones greater than totalSuccessCount, excluding the next milestone
       return this.milestones.filter(
         (milestone) =>
-          this.userStore.totalSuccessCount < milestone && milestone !== this.nextMilestone,
-      )
+          this.userStore.totalSuccessCount < milestone &&
+          milestone !== this.nextMilestone
+      );
     },
     nextMilestoneDistance() {
-      return this.nextMilestone ? this.nextMilestone - this.userStore.totalSuccessCount : 0
+      return this.nextMilestone
+        ? this.nextMilestone - this.userStore.totalSuccessCount
+        : 0;
     },
   },
   mounted() {
-    this.userStore.initLoad()
+    this.userStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>
@@ -148,6 +160,14 @@ export default {
   .cards-tile {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    padding: 0;
+  }
+}
+
+@media (min-width: 2000px) {
+  .cards-tile {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
     padding: 0;
   }
 }
