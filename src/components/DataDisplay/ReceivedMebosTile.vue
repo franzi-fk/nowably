@@ -1,5 +1,8 @@
 <template>
-  <article class="received-mebos-container" v-if="this.userStore.allReceivedMebos.length > 0">
+  <article
+    class="received-mebos-container"
+    v-if="this.userStore.allReceivedMebos.length > 0"
+  >
     <div class="received-mebos-header">
       <h2>Received Messages in a Bottle</h2>
       <LinkButton type="text" text="View all" @click="goToReceivedMessages()" />
@@ -7,39 +10,47 @@
     <div class="received-mebos-body">
       <p v-if="this.userStore.allReceivedMebos.length === 1">
         Need a little boost to keep going? You have
-        <span>{{ this.userStore.allReceivedMebos.length }} motivational message</span> waiting for
-        you. Check it out to stay inspired and keep moving forward. You've got this!
+        <span
+          >{{ this.userStore.allReceivedMebos.length }} motivational
+          message</span
+        >
+        waiting for you. Check it out to stay inspired and keep moving forward.
+        You've got this!
       </p>
       <p v-if="this.userStore.allReceivedMebos.length > 1">
         Need a little boost to keep going? You have
-        <span>{{ this.userStore.allReceivedMebos.length }} motivational messages</span> waiting for
-        you. Check them out to stay inspired and keep moving forward. You've got this!
+        <span
+          >{{ this.userStore.allReceivedMebos.length }} motivational
+          messages</span
+        >
+        waiting for you. Check them out to stay inspired and keep moving
+        forward. You've got this!
       </p>
     </div>
   </article>
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
-import { useRouter } from 'vue-router'
+import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'CompletionCardsTile',
+  name: "CompletionCardsTile",
   data() {
     return {
       userStore: useUserStore(),
       router: useRouter(),
-    }
+    };
   },
   methods: {
     goToReceivedMessages() {
-      this.router.push({ name: 'received-messages' })
+      this.router.push({ name: "received-messages" });
     },
   },
   mounted() {
-    this.userStore.initLoad()
+    this.userStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>
@@ -48,6 +59,7 @@ export default {
   flex-direction: column;
   align-items: start;
   justify-content: center;
+  text-align: left;
   gap: 1.1rem;
   width: 100%;
   background-color: var(--t-white-66);
@@ -57,8 +69,9 @@ export default {
 
 .received-mebos-header {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   min-height: 3.125rem;
 }
@@ -103,21 +116,26 @@ export default {
   .card-visuals-container {
     justify-content: flex-start;
   }
-}
 
-/* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) {
-}
+  .received-mebos-header {
+    flex-direction: row;
+    align-items: center;
+  }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-}
+  /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 768px) {
+  }
 
-/* X-Large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
-}
+  /* Large devices (desktops, 992px and up) */
+  @media (min-width: 992px) {
+  }
 
-/* XX-Large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) {
+  /* X-Large devices (large desktops, 1200px and up) */
+  @media (min-width: 1200px) {
+  }
+
+  /* XX-Large devices (larger desktops, 1400px and up) */
+  @media (min-width: 1400px) {
+  }
 }
 </style>

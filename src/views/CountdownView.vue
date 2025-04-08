@@ -1,30 +1,40 @@
 <template>
   <TaskProgressHeader />
   <article class="countdown-view flex-grow task-view-layout">
-    <div class="countdown-view-body">
+    <div class="countdown-view-body page-padding-inline">
       <h2 class="sr-only">Start working on the task</h2>
       <p>
-        Start with the task before the timer hits zero. <br />You can do this! Don't overthink, just
-        start.
+        Start with the task before the timer hits zero. <br />You can do this!
+        Don't overthink, just start.
       </p>
       <TaskCountdown />
     </div>
     <div class="countdown-view-footer">
-      <SolidButton type="text" text="I need help" @click="needHelp" variant="tertiary" />
-      <SolidButton type="text" text="I started" variant="primary" @click="taskInProgress" />
+      <SolidButton
+        type="text"
+        text="I need help"
+        @click="needHelp"
+        variant="tertiary"
+      />
+      <SolidButton
+        type="text"
+        text="I started"
+        variant="primary"
+        @click="taskInProgress"
+      />
     </div>
   </article>
 </template>
 
 <script>
-import TaskCountdown from '@/components/Animations/TaskCountdown.vue'
-import { useTaskStore } from '../stores/taskStore'
-import { useUserStore } from '../stores/userStore'
-import { useRouter } from 'vue-router'
-import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
+import TaskCountdown from "@/components/Animations/TaskCountdown.vue";
+import { useTaskStore } from "../stores/taskStore";
+import { useUserStore } from "../stores/userStore";
+import { useRouter } from "vue-router";
+import TaskProgressHeader from "../components/Navigation/TaskProgressHeader.vue";
 
 export default {
-  name: 'CountdownView',
+  name: "CountdownView",
   components: {
     TaskCountdown,
     TaskProgressHeader,
@@ -34,24 +44,27 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
-    }
+    };
   },
   methods: {
     needHelp() {
-      this.userStore.setCurrentStep('help')
-      this.router.push({ name: 'need-help' })
+      this.userStore.setCurrentStep("help");
+      this.router.push({ name: "need-help" });
     },
     taskInProgress() {
-      this.userStore.setCurrentStep('workingOnTask')
-      this.router.push({ name: 'task-in-progress', params: { id: this.taskStore.currentTask.id } })
+      this.userStore.setCurrentStep("workingOnTask");
+      this.router.push({
+        name: "task-in-progress",
+        params: { id: this.taskStore.currentTask.id },
+      });
     },
   },
   mounted() {
-    this.taskStore.initLoad()
-    this.userStore.initLoad()
-    this.userStore.setCurrentEmotion(null)
+    this.taskStore.initLoad();
+    this.userStore.initLoad();
+    this.userStore.setCurrentEmotion(null);
   },
-}
+};
 </script>
 
 <style scoped>
@@ -64,6 +77,7 @@ export default {
   gap: 1rem;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 .countdown-view-footer {
