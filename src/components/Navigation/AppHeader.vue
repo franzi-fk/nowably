@@ -422,7 +422,7 @@ ul {
   border-radius: 50%;
   outline: none;
   cursor: pointer;
-  margin: 2rem 0.75rem 0 0;
+  margin: 1.1rem 0.9rem 0 0;
 }
 
 #btn-leave-demo {
