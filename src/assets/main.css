@@ -150,13 +150,21 @@ p {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 h3 {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+}
+
+.max-ch-40 {
+  max-width: 40ch;
+}
+
+.max-ch-70 {
+  max-width: 70ch;
 }
 
 .page-padding-inline {
@@ -263,6 +271,15 @@ a {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */

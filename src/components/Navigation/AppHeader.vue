@@ -311,7 +311,7 @@ ul {
   align-items: center;
   justify-content: end;
   width: 100%;
-  padding: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   height: 4rem;
   position: relative;
   top: 0;
@@ -321,12 +321,12 @@ ul {
 /* Mobile navigation */
 .mobile-nav {
   width: 100%;
-  height: 100vh;
+  height: auto;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 100;
+  z-index: 10;
 }
 
 .mobile-overlay {
@@ -358,8 +358,8 @@ ul {
 
 .mobile-header {
   position: absolute;
-  top: 0.8rem;
-  right: 1.5rem;
+  top: 1rem;
+  right: 1rem;
 }
 
 .user-menu-mobile,

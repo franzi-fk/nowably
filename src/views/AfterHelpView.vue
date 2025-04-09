@@ -35,7 +35,12 @@
           />
         </fieldset>
         <fieldset>
-          <SolidButton type="text" text="Continue" variant="primary" id="btn-continue" />
+          <SolidButton
+            type="text"
+            text="Continue"
+            variant="primary"
+            id="btn-continue"
+          />
         </fieldset>
       </form>
     </section>
@@ -58,13 +63,13 @@
 </template>
 
 <script>
-import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
-import InputSelect from '@/components/InputsAndControls/InputSelect.vue'
-import { useTaskStore } from '../stores/taskStore'
-import { useRouter } from 'vue-router'
-import InputRadio from '@/components/InputsAndControls/InputRadio.vue'
-import { useUserStore } from '../stores/userStore'
-import TaskProgressHeader from '../components/Navigation/TaskProgressHeader.vue'
+import SnackbarOverlay from "@/components/FeedbackAndStatus/SnackbarOverlay.vue";
+import InputSelect from "@/components/InputsAndControls/InputSelect.vue";
+import { useTaskStore } from "../stores/taskStore";
+import { useRouter } from "vue-router";
+import InputRadio from "@/components/InputsAndControls/InputRadio.vue";
+import { useUserStore } from "../stores/userStore";
+import TaskProgressHeader from "../components/Navigation/TaskProgressHeader.vue";
 
 export default {
   components: {
@@ -78,47 +83,52 @@ export default {
       taskStore: useTaskStore(),
       userStore: useUserStore(),
       router: useRouter(),
-      userInput: 'continue',
+      userInput: "continue",
       selectedValue: null, // Initially null until data is loaded
       snackbar: {
-        text: '',
-        variant: 'info',
+        text: "",
+        variant: "info",
         duration: 3000,
       },
-    }
+    };
   },
   methods: {
     backToLastStep() {
-      this.router.push({ name: 'need-help' })
+      this.router.push({ name: "need-help" });
     },
     showSnackbar(variant, text, duration) {
-      this.snackbar.text = text
-      this.snackbar.variant = variant
-      this.snackbar.duration = Number(duration)
-      this.$refs.snackbar.show()
+      this.snackbar.text = text;
+      this.snackbar.variant = variant;
+      this.snackbar.duration = Number(duration);
+      this.$refs.snackbar.show();
     },
     submitUserInput() {
-      if (this.userInput === 'continue' && this.selectedValue) {
-        const taskExists = this.taskStore.openTasks.some((task) => task.id === this.selectedValue)
+      if (this.userInput === "continue" && this.selectedValue) {
+        const taskExists = this.taskStore.openTasks.some(
+          (task) => task.id === this.selectedValue
+        );
         if (taskExists) {
           // Set the current task using the store's action
           const selectedTask = this.taskStore.openTasks.find(
-            (task) => task.id === this.selectedValue,
-          )
-          this.taskStore.setCurrentTask(selectedTask)
-          this.userStore.setCurrentStep('countdown')
-          this.userStore.setCurrentEmotion(null)
-          this.router.push({ name: 'countdown', params: { id: selectedTask.id } })
-          return
+            (task) => task.id === this.selectedValue
+          );
+          this.taskStore.setCurrentTask(selectedTask);
+          this.userStore.setCurrentStep("countdown");
+          this.userStore.setCurrentEmotion(null);
+          this.router.push({
+            name: "countdown",
+            params: { id: selectedTask.id },
+          });
+          return;
         } else {
-          this.showSnackbar('error', 'Please select a task.', 3000)
-          return
+          this.showSnackbar("error", "Please select a task.", 3000);
+          return;
         }
       } else {
-        this.userStore.setCurrentStep(null)
-        this.userStore.setCurrentEmotion(null)
-        this.router.push({ name: 'home' })
-        return
+        this.userStore.setCurrentStep(null);
+        this.userStore.setCurrentEmotion(null);
+        this.router.push({ name: "home" });
+        return;
       }
     },
   },
@@ -127,19 +137,19 @@ export default {
     Promise.all([this.taskStore.initLoad(), this.userStore.initLoad()])
       .then(() => {
         // **Once the data is loaded, set selectedValue from currentTask**
-        this.selectedValue = this.taskStore.currentTask?.id || 'Select a task'
+        this.selectedValue = this.taskStore.currentTask?.id || "Select a task";
       })
       .catch((err) => {
-        console.error('Error loading tasks:', err)
-      })
+        console.error("Error loading tasks:", err);
+      });
   },
-}
+};
 </script>
 
 <style scoped>
 .after-help-view {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -158,6 +168,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: left;
   gap: 2rem;
 }
 

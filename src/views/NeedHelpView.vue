@@ -19,7 +19,7 @@
         <div class="help-sub-view">
           <section class="intro">
             <h1>Let's find your spark again</h1>
-            <p>
+            <p class="max-ch-70">
               Looks like you've already opened a Message in a Bottle today, or
               there isn't one available right now. <br />But here are some other
               quick ways to boost your motivation!
@@ -103,7 +103,7 @@
         <div class="help-sub-view">
           <section class="intro">
             <h1>Message in a Bottle</h1>
-            <p>
+            <p class="max-ch-70">
               Open a message in a bottle - it might bring you that needed spark
               of motivation.
             </p>
@@ -156,7 +156,7 @@
       <div class="help-sub-view">
         <section class="intro">
           <h1>One step at a time</h1>
-          <p>
+          <p class="max-ch-70">
             Maybe your task is just a little bit too big for now. Let’s break it
             down into smaller sub-tasks, that are easier to handle.
           </p>
@@ -229,7 +229,7 @@
       <div class="help-sub-view">
         <section class="intro">
           <h1>Calm your mind</h1>
-          <p>
+          <p class="max-ch-70">
             Sometimes certain tasks trigger some really intense emotions. Let's
             try to calm down by doing a relaxation technique for just 2 minutes.
           </p>
@@ -573,6 +573,7 @@ export default {
     },
     backToWhichHelp() {
       this.userStore.setCurrentEmotion(null);
+      this.relaxExerciseStarted = false;
     },
     backToCountdown() {
       this.userStore.setCurrentEmotion(null);
@@ -657,12 +658,13 @@ export default {
 }
 
 article {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
 }
 
 section {
@@ -720,6 +722,11 @@ h2 {
   justify-content: center;
   min-height: 55vh;
   gap: 1.25rem;
+}
+
+.exercise-instructions,
+#exercise-progress {
+  min-height: 19.6875rem;
 }
 
 .relaxation-exercise p {
@@ -878,5 +885,11 @@ small {
 
 /* XX-Large devices (larger desktops, 1400px and up) */
 @media (min-width: 1400px) {
+}
+
+@media (min-width: 2000px) {
+  .intro {
+    padding-block: 5vh 3rem;
+  }
 }
 </style>

@@ -3,9 +3,9 @@
   <article class="countdown-view flex-grow task-view-layout">
     <div class="countdown-view-body page-padding-inline">
       <h2 class="sr-only">Start working on the task</h2>
-      <p>
-        Start with the task before the timer hits zero. <br />You can do this!
-        Don't overthink, just start.
+      <p class="max-ch-40">
+        Start with the task before the timer hits zero. You can do this! Don't
+        overthink, just start.
       </p>
       <TaskCountdown />
     </div>
