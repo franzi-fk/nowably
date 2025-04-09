@@ -441,7 +441,7 @@ hr {
 
 .menu {
   position: absolute;
-  top: 5.25rem;
+  top: 4.25rem;
   right: 0.65rem;
   background-color: var(--t-white-33);
   backdrop-filter: blur(7rem);
