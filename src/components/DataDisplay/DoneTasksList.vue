@@ -1,5 +1,5 @@
 <template>
-  <section class="task-list-container">
+  <section class="task-list-container" data-cy="sct-completed-tasks">
     <div class="task-list-header">
       <h2>{{ listHeadline }}</h2>
       <LinkButton
@@ -7,6 +7,7 @@
         type="text"
         text="Clear all"
         @click="confirmClearAllCompleteTasks"
+        data-cy="btn-clear-completed-tasks"
       />
     </div>
 
@@ -14,11 +15,20 @@
     <div class="loader-space" v-if="loading"></div>
     <!-- Show task list content after loading -->
     <div class="task-list-body" v-else>
-      <div class="empty-state" v-if="this.taskStore.doneTasks.length === 0">
+      <div
+        class="empty-state"
+        data-cy="completed-tasks-empty-state"
+        v-if="this.taskStore.doneTasks.length === 0"
+      >
         <Illus_EmptyState :width="15" />
         <p>No completed tasks.</p>
       </div>
-      <div class="task-list-row" v-for="task in this.taskStore.doneTasks" :key="task.id">
+      <div
+        class="task-list-row"
+        data-cy="task-row-container"
+        v-for="task in this.taskStore.doneTasks"
+        :key="task.id"
+      >
         <div class="task-desc">
           <div class="task-desc-text">
             {{ task.description }}
@@ -30,6 +40,7 @@
             type="icon"
             icon="trash2"
             @click="confirmSingleDeletion(task.id)"
+            data-cy="btn-initiate-task-deletion"
           />
         </div>
       </div>
@@ -54,15 +65,15 @@
 </template>
 
 <script>
-import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
-import { useRouter } from 'vue-router'
-import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '@/stores/userStore'
-import Illus_EmptyState from '@/components/Visuals/Illus_EmptyState.vue'
+import SnackbarOverlay from "@/components/FeedbackAndStatus/SnackbarOverlay.vue";
+import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
+import { useRouter } from "vue-router";
+import { useTaskStore } from "@/stores/taskStore";
+import { useUserStore } from "@/stores/userStore";
+import Illus_EmptyState from "@/components/Visuals/Illus_EmptyState.vue";
 
 export default {
-  name: 'DoneTasksList',
+  name: "DoneTasksList",
   components: {
     SnackbarOverlay,
     ModalOverlay,
@@ -71,7 +82,7 @@ export default {
   props: {
     listHeadline: {
       type: String,
-      default: 'Completed tasks',
+      default: "Completed tasks",
     },
     deleteEnabled: {
       type: Boolean,
@@ -85,95 +96,97 @@ export default {
       router: useRouter(),
       loading: true,
       isModalVisible: false,
-      modalText: '',
-      modalHeadline: '',
-      modalPrimaryActionText: '',
+      modalText: "",
+      modalHeadline: "",
+      modalPrimaryActionText: "",
       modalPrimaryAction: null,
       editingTaskId: null,
       isMobile: window.innerWidth < 576,
       snackbar: {
         visible: true,
-        text: '',
-        variant: 'info',
+        text: "",
+        variant: "info",
         duration: 3000,
       },
-    }
+    };
   },
   methods: {
     openModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     confirmClearAllCompleteTasks() {
       // Define the modal content dynamically
-      this.modalHeadline = `Delete all completed tasks`
-      this.modalText = `Are you sure you want to delete all completed tasks? You can't bring them back.`
+      this.modalHeadline = `Delete all completed tasks`;
+      this.modalText = `Are you sure you want to delete all completed tasks? You can't bring them back.`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Delete tasks'
+      this.modalPrimaryActionText = "Delete tasks";
       this.modalPrimaryAction = () => {
-        this.taskStore.deleteAllDoneTasks()
-        this.closeModal()
-      }
+        this.taskStore.deleteAllDoneTasks();
+        this.closeModal();
+      };
 
       // Show the modal
-      this.openModal()
+      this.openModal();
     },
     confirmSingleDeletion(taskId) {
       // Define the modal content dynamically
-      this.modalHeadline = `Delete task`
-      this.modalText = `Are you sure you want to delete this task? You can't bring it back.`
+      this.modalHeadline = `Delete task`;
+      this.modalText = `Are you sure you want to delete this task? You can't bring it back.`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Delete task'
-      ;(this.modalPrimaryAction = () => {
-        this.deleteTask(taskId)
-        this.closeModal()
+      this.modalPrimaryActionText = "Delete task";
+      (this.modalPrimaryAction = () => {
+        this.deleteTask(taskId);
+        this.closeModal();
       }),
         // Show the modal
-        this.openModal()
+        this.openModal();
     },
     deleteTask(taskId) {
-      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId)
+      const taskToDelete = this.taskStore.tasks.find((t) => t.id === taskId);
       this.$nextTick(() => {
         if (!taskToDelete) {
-          this.showSnackbar('error', 'Task not found.', '3000') // properties:  variant, text, duration in ms
-          return
+          this.showSnackbar("error", "Task not found.", "3000"); // properties:  variant, text, duration in ms
+          return;
         } else {
-          this.taskStore.deleteTask(taskId)
-          return
+          this.taskStore.deleteTask(taskId);
+          return;
         }
-      })
+      });
     },
     showSnackbar(variant, text, duration) {
-      this.snackbar.text = text
-      this.snackbar.variant = variant
-      this.snackbar.duration = Number(duration)
-      this.$refs.snackbar.show()
+      this.snackbar.text = text;
+      this.snackbar.variant = variant;
+      this.snackbar.duration = Number(duration);
+      this.$refs.snackbar.show();
     },
     updateWindowWidth() {
-      this.isMobile = window.innerWidth < 576
+      this.isMobile = window.innerWidth < 576;
       if (!this.isMobile) {
         // Reset expandedRow when switching to a larger screen
-        this.expandedRow = null
+        this.expandedRow = null;
       }
     },
   },
   mounted() {
-    this.loading = true
+    this.loading = true;
 
-    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(() => {
-      this.loading = false
-    })
+    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(
+      () => {
+        this.loading = false;
+      }
+    );
 
-    window.addEventListener('resize', this.updateWindowWidth) // Track window resize
+    window.addEventListener("resize", this.updateWindowWidth); // Track window resize
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.updateWindowWidth) // Clean up listener
+    window.removeEventListener("resize", this.updateWindowWidth); // Clean up listener
   },
-}
+};
 </script>
 
 <style scoped>

@@ -21,6 +21,7 @@
         text="I started"
         variant="primary"
         @click="taskInProgress"
+        data-cy="btn-task-started"
       />
     </div>
   </article>

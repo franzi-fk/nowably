@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.log
+.vscode/
+.idea/
+eslint.config.js
+cypress.config.js
+firebaseConfig.js
+cypress/

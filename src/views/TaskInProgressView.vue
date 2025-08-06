@@ -17,6 +17,7 @@
         text="Stop"
         @click="userStore.setCurrentStep('documentTaskStatus')"
         variant="tertiary"
+        data-cy="btn-stop-task"
       />
     </div>
   </article>
@@ -35,6 +36,7 @@
             name="task-status"
             :value="true"
             v-model="taskComplete"
+            data-cy="radio-task-completed"
           />
           <InputRadio
             label="Task is not completed yet"
@@ -50,6 +52,7 @@
             type="text"
             text="Save and continue"
             variant="primary"
+            data-cy="btn-save-continue"
           />
         </fieldset>
       </form>

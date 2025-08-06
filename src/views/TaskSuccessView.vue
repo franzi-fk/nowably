@@ -7,6 +7,7 @@
       text="Back to Home"
       variant="primary"
       @click="backToHome"
+      data-cy="btn-back-home"
     />
   </div>
 </template>

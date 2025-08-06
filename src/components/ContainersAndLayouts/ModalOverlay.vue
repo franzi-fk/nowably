@@ -13,6 +13,7 @@
         <SolidButton
           v-if="!primaryActionOnly"
           variant="secondary"
+          data-cy="modal-btn-secondary"
           type="text"
           @click="closeModal"
           text="Cancel"
@@ -22,6 +23,7 @@
         <!-- Primary Action button (with custom action) -->
         <SolidButton
           type="text"
+          data-cy="modal-btn-primary"
           variant="primary"
           @click="primaryAction"
           :text="primaryActionText"

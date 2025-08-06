@@ -1,5 +1,5 @@
 <template>
-  <section class="task-list-container">
+  <section class="task-list-container" data-cy="sct-open-tasks">
     <div class="task-list-header">
       <h2>{{ listHeadline }}</h2>
       <LinkButton
@@ -18,13 +18,22 @@
     <!-- Show task list content after loading -->
     <div class="task-list-body" v-else>
       <!-- Show empty state only if NOT loading and there are no tasks -->
-      <div class="empty-state" v-if="!loading && this.taskStore.openTasks.length === 0">
+      <div
+        class="empty-state"
+        data-cy="open-tasks-empty-state"
+        v-if="!loading && this.taskStore.openTasks.length === 0"
+      >
         <Illus_EmptyState :width="15" />
         <p>No open tasks. Create a new one.</p>
       </div>
 
       <!-- Show task list when not loading and tasks exist -->
-      <div class="task-list-row" v-for="task in this.taskStore.openTasks" :key="task.id">
+      <div
+        class="task-list-row"
+        data-cy="task-row-container"
+        v-for="task in this.taskStore.openTasks"
+        :key="task.id"
+      >
         <div class="task-desc" @click="toggleRow(task.id)">
           <div class="task-desc-text" v-if="editingTaskId !== task.id">
             {{ task.description }}
@@ -40,12 +49,19 @@
             id="edit-task-input"
             maxLength="80"
             label="Task description"
+            data-cy="inp-edit-task"
           />
-          <AppIcon name="chevronDown" :class="{ rotated: expandedRow === task.id }" />
+          <AppIcon
+            name="chevronDown"
+            :class="{ rotated: expandedRow === task.id }"
+          />
         </div>
 
         <!-- Actions section (visible only when expanded or on non-mobile devices) -->
-        <div class="task-actions" v-if="isMobile ? expandedRow === task.id : true">
+        <div
+          class="task-actions"
+          v-if="isMobile ? expandedRow === task.id : true"
+        >
           <!-- Edit button is shown if the task is not being edited -->
           <SolidButton
             v-show="editingTaskId !== task.id"
@@ -53,6 +69,7 @@
             icon="pencil"
             @click="startEditing(task.id, task.description, $event)"
             id="btn-edit-task"
+            data-cy="btn-initiate-task-editing"
           />
           <!-- Save and Cancel buttons appear when editing -->
 
@@ -70,10 +87,12 @@
             text="Save"
             @click="saveEditing(task)"
             id="btn-save-edited-task"
+            data-cy="btn-save-edited-task"
           />
           <SolidButton
             v-show="editingTaskId !== task.id"
             type="icon"
+            data-cy="btn-initiate-task-deletion"
             icon="trash2"
             @click="confirmDeletion(task.id)"
           />
@@ -86,6 +105,7 @@
             background-color="var(--primary)"
             text-color="var(--base-white)"
             id="btn-start-task"
+            data-cy="btn-start-task"
             @click="startTask(task)"
           />
         </div>
@@ -93,6 +113,7 @@
     </div>
     <div class="create-new-task-container">
       <SolidButton
+        data-cy="btn-initiate-task-creation"
         v-show="!creatingTask"
         type="icon-text"
         text="Add task"
@@ -100,8 +121,13 @@
         id="btn-create-new-task"
         @click="startCreatingTask()"
       />
-      <form class="form-create-new-task" @submit.prevent="saveNewTask" v-show="creatingTask">
+      <form
+        class="form-create-new-task"
+        @submit.prevent="saveNewTask"
+        v-show="creatingTask"
+      >
         <InputText
+          data-cy="inp-new-task"
           ref="newTaskInput"
           id="new-task"
           name="new-task"
@@ -114,7 +140,7 @@
           @blur="
             () => {
               if (inpNewTask.trim() === '') {
-                cancelCreatingTask()
+                cancelCreatingTask();
               }
             }
           "
@@ -126,7 +152,12 @@
             backgroundColor="var(--secondary)"
             @click="cancelCreatingTask()"
           />
-          <SolidButton type="icon-text" text="Add task" icon="plus" />
+          <SolidButton
+            type="icon-text"
+            text="Add task"
+            icon="plus"
+            data-cy="btn-add-task"
+          />
         </div>
       </form>
     </div>
@@ -151,16 +182,16 @@
 </template>
 
 <script>
-import InputText from '@/components/InputsAndControls/InputText.vue'
-import SnackbarOverlay from '@/components/FeedbackAndStatus/SnackbarOverlay.vue'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
-import { useRouter } from 'vue-router'
-import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '@/stores/userStore'
-import Illus_EmptyState from '@/components/Visuals/Illus_EmptyState.vue'
+import InputText from "@/components/InputsAndControls/InputText.vue";
+import SnackbarOverlay from "@/components/FeedbackAndStatus/SnackbarOverlay.vue";
+import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
+import { useRouter } from "vue-router";
+import { useTaskStore } from "@/stores/taskStore";
+import { useUserStore } from "@/stores/userStore";
+import Illus_EmptyState from "@/components/Visuals/Illus_EmptyState.vue";
 
 export default {
-  name: 'OpenTasksList',
+  name: "OpenTasksList",
   components: {
     InputText,
     SnackbarOverlay,
@@ -170,7 +201,7 @@ export default {
   props: {
     listHeadline: {
       type: String,
-      default: 'Open tasks',
+      default: "Open tasks",
     },
     showViewAll: {
       type: Boolean,
@@ -184,212 +215,215 @@ export default {
       router: useRouter(),
       loading: true,
       isModalVisible: false,
-      modalText: '',
-      modalHeadline: '',
-      modalPrimaryActionText: '',
+      modalText: "",
+      modalHeadline: "",
+      modalPrimaryActionText: "",
       modalPrimaryAction: null,
       editingTaskId: null,
-      editableDescription: '',
+      editableDescription: "",
       creatingTask: false,
-      inpNewTask: '',
+      inpNewTask: "",
       expandedRow: null, // stores the ID of the currently expanded row
       isMobile: window.innerWidth < 576,
       snackbar: {
         visible: true,
-        text: '',
-        variant: 'info',
+        text: "",
+        variant: "info",
         duration: 3000,
       },
-    }
+    };
   },
   computed: {
     tasks() {
-      return this.taskStore.tasks
+      return this.taskStore.tasks;
     },
   },
   methods: {
     goToAllTasksView() {
-      this.router.push({ name: 'all-tasks' })
+      this.router.push({ name: "all-tasks" });
     },
     startTask(task) {
-      this.taskStore.setCurrentTask(task)
-      this.userStore.setCurrentStep('countdown')
-      this.router.push({ name: 'countdown', params: { id: task.id } })
+      this.taskStore.setCurrentTask(task);
+      this.userStore.setCurrentStep("countdown");
+      this.router.push({ name: "countdown", params: { id: task.id } });
     },
     startEditing(taskId, description, event) {
       if (event) {
-        event.stopPropagation() // Stop the event from propagating to the parent elements
+        event.stopPropagation(); // Stop the event from propagating to the parent elements
       }
-      this.editingTaskId = taskId
-      this.editableDescription = description // store the description to be edited
+      this.editingTaskId = taskId;
+      this.editableDescription = description; // store the description to be edited
       this.$nextTick(() => {
         // nextTick delays execution until the input field is in the DOM and rendered
-        const inputElement = this.$refs[`taskInput-${taskId}`][0]
+        const inputElement = this.$refs[`taskInput-${taskId}`][0];
         if (inputElement) {
-          inputElement.focusInput() // focus input
+          inputElement.focusInput(); // focus input
         }
-      })
+      });
     },
     saveEditing() {
-      const taskId = this.editingTaskId
-      const task = this.taskStore.tasks.find((t) => t.id === taskId)
+      const taskId = this.editingTaskId;
+      const task = this.taskStore.tasks.find((t) => t.id === taskId);
       if (!task) {
-        this.stopEditing()
-        return
+        this.stopEditing();
+        return;
       }
-      const newTaskDesc = this.editableDescription.trim()
+      const newTaskDesc = this.editableDescription.trim();
 
       // Check if the description hasn't changed
       if (task.description === newTaskDesc) {
-        this.stopEditing()
-        return
+        this.stopEditing();
+        return;
       }
 
       // Check if user tries to add a duplicate (case-insensitive)
       const isDuplicate = this.taskStore.tasks.some(
         (existingTask) =>
           existingTask.id !== this.editingTaskId &&
-          existingTask.description.toLowerCase() === newTaskDesc.toLowerCase(),
-      )
+          existingTask.description.toLowerCase() === newTaskDesc.toLowerCase()
+      );
 
       if (isDuplicate) {
-        this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
+        this.showSnackbar("error", "Task already exists.", "3000"); // properties:  variant, text, duration in ms
 
         // Ensure the input field regains focus using nextTick
         this.$nextTick(() => {
-          const inputElement = this.$refs[`taskInput-${this.editingTaskId}`]?.[0]
-          inputElement?.focusInput()
-        })
+          const inputElement =
+            this.$refs[`taskInput-${this.editingTaskId}`]?.[0];
+          inputElement?.focusInput();
+        });
 
-        return
+        return;
       }
 
       // Check if the user input is empty
-      if (newTaskDesc === '') {
-        this.abortEditing()
-        return
+      if (newTaskDesc === "") {
+        this.abortEditing();
+        return;
       }
 
       // Save the updated task description
-      this.taskStore.updateTask(taskId, { description: newTaskDesc })
+      this.taskStore.updateTask(taskId, { description: newTaskDesc });
 
-      this.stopEditing() // Stop editing after save
+      this.stopEditing(); // Stop editing after save
     },
     abortEditing(task) {
-      this.editableDescription = task.description // Reset editable description to original
-      this.stopEditing() // Stop editing after abort
+      this.editableDescription = task.description; // Reset editable description to original
+      this.stopEditing(); // Stop editing after abort
     },
     stopEditing() {
-      this.editingTaskId = null // Exit editing mode
+      this.editingTaskId = null; // Exit editing mode
     },
     openModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     confirmDeletion(taskId) {
       // Define the modal content dynamically
-      this.modalHeadline = `Delete task`
-      this.modalText = `Are you sure you want to delete this task? You can't bring it back.`
+      this.modalHeadline = `Delete task`;
+      this.modalText = `Are you sure you want to delete this task? You can't bring it back.`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Delete task'
-      ;(this.modalPrimaryAction = () => {
-        this.taskStore.deleteTask(taskId)
-        this.closeModal()
+      this.modalPrimaryActionText = "Delete task";
+      (this.modalPrimaryAction = () => {
+        this.taskStore.deleteTask(taskId);
+        this.closeModal();
       }),
         // Show the modal
-        this.openModal()
+        this.openModal();
     },
     focusInput(inputElement) {
       this.$nextTick(() => {
-        inputElement?.focusInput()
-      })
+        inputElement?.focusInput();
+      });
     },
     startCreatingTask() {
-      this.creatingTask = true
+      this.creatingTask = true;
       this.$nextTick(() => {
         if (this.creatingTask === true) {
-          this.focusInput(this.$refs.newTaskInput)
+          this.focusInput(this.$refs.newTaskInput);
         }
-      })
+      });
     },
     cancelCreatingTask() {
-      this.creatingTask = false
-      this.inpNewTask = '' // Reset the task input field if needed
+      this.creatingTask = false;
+      this.inpNewTask = ""; // Reset the task input field if needed
     },
     saveNewTask() {
-      const newTaskDesc = this.inpNewTask.trim() // Removes spaces from input value
+      const newTaskDesc = this.inpNewTask.trim(); // Removes spaces from input value
 
       // Check if user input is empty
-      if (newTaskDesc === '') {
-        this.inpNewTask = '' // clear input field
-        return
+      if (newTaskDesc === "") {
+        this.inpNewTask = ""; // clear input field
+        return;
       }
 
       // Check if user tries to add a duplicate (case-insensitive)
       if (
         this.taskStore.openTasks.some(
-          (task) => task.description.toLowerCase() === newTaskDesc.toLowerCase(),
+          (task) => task.description.toLowerCase() === newTaskDesc.toLowerCase()
         )
       ) {
-        this.showSnackbar('error', 'Task already exists.', '3000') // properties:  variant, text, duration in ms
+        this.showSnackbar("error", "Task already exists.", "3000"); // properties:  variant, text, duration in ms
         // Ensure the input field regains focus using nextTick
-        this.focusInput(this.$refs.newTaskInput)
-        return
+        this.focusInput(this.$refs.newTaskInput);
+        return;
       }
 
-      this.taskStore.addTask(newTaskDesc)
+      this.taskStore.addTask(newTaskDesc);
 
-      this.inpNewTask = '' // clear input field
-      this.focusInput(this.$refs.newTaskInput)
+      this.inpNewTask = ""; // clear input field
+      this.focusInput(this.$refs.newTaskInput);
     },
     showSnackbar(variant, text, duration) {
-      this.snackbar.text = text
-      this.snackbar.variant = variant
-      this.snackbar.duration = Number(duration)
-      this.$refs.snackbar.show()
+      this.snackbar.text = text;
+      this.snackbar.variant = variant;
+      this.snackbar.duration = Number(duration);
+      this.$refs.snackbar.show();
     },
     toggleRow(id) {
       // if the clicked row is already expanded, collapse it; otherwise, expand the new one
-      this.expandedRow = this.expandedRow === id ? null : id
+      this.expandedRow = this.expandedRow === id ? null : id;
     },
     updateWindowWidth() {
-      this.isMobile = window.innerWidth < 576
+      this.isMobile = window.innerWidth < 576;
       if (!this.isMobile) {
         // Reset expandedRow when switching to a larger screen
-        this.expandedRow = null
+        this.expandedRow = null;
       }
     },
   },
   watch: {
-    'taskStore.openTasks.length': function (newLength) {
+    "taskStore.openTasks.length": function (newLength) {
       // Watch for changes in the length of taskStore.openTasks
       if (newLength === 0) {
         // If there are no open tasks left, set creatingTask to true
-        this.creatingTask = true
+        this.creatingTask = true;
       }
     },
   },
   mounted() {
-    this.loading = true
+    this.loading = true;
 
-    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(() => {
-      this.loading = false
+    Promise.all([this.userStore.initLoad(), this.taskStore.initLoad()]).then(
+      () => {
+        this.loading = false;
 
-      // Open the task creation state if no tasks exist
-      if (this.taskStore.openTasks.length === 0) {
-        this.creatingTask = true
+        // Open the task creation state if no tasks exist
+        if (this.taskStore.openTasks.length === 0) {
+          this.creatingTask = true;
+        }
       }
-    })
+    );
 
-    window.addEventListener('resize', this.updateWindowWidth) // Track window resize
+    window.addEventListener("resize", this.updateWindowWidth); // Track window resize
   },
   beforeUnmount() {
-    window.removeEventListener('resize', this.updateWindowWidth) // Clean up listener
+    window.removeEventListener("resize", this.updateWindowWidth); // Clean up listener
   },
-}
+};
 </script>
 
 <style scoped>
