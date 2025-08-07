@@ -37,7 +37,7 @@ function runOpenTasksCardTest() {
     cy.get('[data-cy="sct-open-tasks"]').should("exist");
 
     // wait for loading to finish
-    cy.get(".loader-space").should("not.exist");
+    cy.get('[data-cy="loading"]').should("not.exist");
 
     // check whether tasks exist or empty state is shown
     cy.get("body").then(($body) => {
@@ -83,7 +83,7 @@ describe('Task management on "All tasks" page', () => {
     cy.get('[data-cy="sct-completed-tasks"]').should("exist");
 
     // wait for loading to finish
-    cy.get(".loader-space").should("not.exist");
+    cy.get('[data-cy="loading"]').should("not.exist");
 
     // check whether tasks exist or empty state is shown
     cy.get("body").then(($body) => {
@@ -102,6 +102,7 @@ describe('Task management on "All tasks" page', () => {
   it("deletes a completed task", () => {
     const taskName = `CC-${Date.now()}`;
     cy.createAndCompleteTask(taskName);
+    cy.visit("http://localhost:8888/all-tasks");
 
     // delete task
     cy.contains(taskName)
@@ -119,6 +120,7 @@ describe('Task management on "All tasks" page', () => {
   it("clears all completed tasks", () => {
     const taskName = `Task-${Date.now()}`;
     cy.createAndCompleteTask(taskName);
+    cy.visit("http://localhost:8888/all-tasks");
 
     // clear all completed tasks
     cy.get('[data-cy="btn-clear-completed-tasks"]').click();
