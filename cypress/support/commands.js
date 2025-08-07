@@ -57,6 +57,8 @@ Cypress.Commands.add("createAndCompleteTask", (taskName) => {
   cy.visit("http://localhost:8888/all-tasks");
   cy.contains(uniqueTaskName).should("exist");
 
+  // back to home
+  cy.visit("http://localhost:8888/");
   // return the task name
   return cy.wrap(uniqueTaskName);
 });

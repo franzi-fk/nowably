@@ -11,7 +11,11 @@
       <div class="create-mebo-header page-padding-inline">
         <h1>Your Message in a Bottle has been sent</h1>
       </div>
-      <div class="mebo-sent-body" v-if="this.userStore.availableMeboTokens > 0">
+      <div
+        class="mebo-sent-body"
+        data-cy="mebo-sent-container"
+        v-if="this.userStore.availableMeboTokens > 0"
+      >
         <section class="tile-container content-center">
           <Illus_MeboSent width="22" />
           <p>
@@ -28,7 +32,7 @@
           </div>
         </section>
       </div>
-      <div class="mebo-sent-body" v-else>
+      <div class="mebo-sent-body" data-cy="mebo-sent-container" v-else>
         <section class="tile-container content-center">
           <Illus_MeboSent width="22" />
           <p>Thanks for putting some kindness out there!</p>
@@ -48,6 +52,7 @@
       </section>
       <section
         class="tile-container"
+        data-cy="sct-send-mebo-form"
         v-if="!messageSent && this.userStore.availableMeboTokens > 0"
       >
         <p
@@ -75,6 +80,7 @@
             variant="multi-line"
             maxLength="1000"
             minLength="200"
+            data-cy="inp-write-mebo"
           />
           <InputCheckbox
             id="mebo-compliance"
@@ -82,9 +88,11 @@
             label="My message is free of hate speech, discrimination, or harm. I maintain a positive,
           supportive tone and exclude personal details like phone numbers or addresses, as well as
           links."
+            data-cy="check-mebo-compliance"
           />
           <TooltipOverlay
             text="Write at least 200 characters and tick the box to agree to the guidelines."
+            data-cy="tooltip-mebo"
             v-if="!meboComplianceApproved || inputMessage.length < 200"
           >
             <SolidButton
@@ -93,6 +101,7 @@
               text="Send Message"
               variant="primary"
               :disabled="true"
+              data-cy="btn-initiate-sending-mebo"
             />
           </TooltipOverlay>
           <SolidButton
@@ -102,6 +111,7 @@
             text="Send Message"
             variant="primary"
             :disabled="false"
+            data-cy="btn-initiate-sending-mebo"
           />
         </form>
       </section>

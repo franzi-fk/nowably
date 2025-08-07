@@ -1,22 +1,26 @@
 <template>
-  <article class="mebo-banner-container" @click="goToCreateMebo">
+  <article
+    class="mebo-banner-container"
+    data-cy="home-mebo-banner"
+    @click="goToCreateMebo"
+  >
     <div class="mebo-image"><Illus_MeboBottle width="12" /></div>
     <div class="mebo-content">
       <div class="mebo-banner-header">
         <h2 class="sr-only">Message in a Bottle unlocked</h2>
         <span v-if="this.userStore.availableMeboTokens === 1"
-          >Congrats! You can send {{ this.userStore.availableMeboTokens }} Message in a
-          Bottle.</span
+          >Congrats! You can send
+          {{ this.userStore.availableMeboTokens }} Message in a Bottle.</span
         >
         <span v-else
-          >Congrats! You can send {{ this.userStore.availableMeboTokens }} Messages in a
-          Bottle.</span
+          >Congrats! You can send
+          {{ this.userStore.availableMeboTokens }} Messages in a Bottle.</span
         >
       </div>
       <div class="mebo-banner-body">
         <p>
-          You did amazing progress and beat procrastination - doesn't that feel good? <br />You can
-          use your momentum to help others, if you want.
+          You did amazing progress and beat procrastination - doesn't that feel
+          good? <br />You can use your momentum to help others, if you want.
         </p>
         <LinkButton
           type="icon-text"
@@ -30,28 +34,28 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
-import LinkButton from '@/components/InputsAndControls/LinkButton.vue'
-import Illus_MeboBottle from '@/components/Visuals/Illus_MeboBottle.vue'
-import { useUserStore } from '../../stores/userStore'
+import { useRouter } from "vue-router";
+import LinkButton from "@/components/InputsAndControls/LinkButton.vue";
+import Illus_MeboBottle from "@/components/Visuals/Illus_MeboBottle.vue";
+import { useUserStore } from "../../stores/userStore";
 
 export default {
-  name: 'CreateMeboBanner',
+  name: "CreateMeboBanner",
   components: {
     LinkButton,
     Illus_MeboBottle,
   },
   props: {},
   data() {
-    return { router: useRouter(), userStore: useUserStore() }
+    return { router: useRouter(), userStore: useUserStore() };
   },
   computed: {},
   methods: {
     goToCreateMebo() {
-      this.router.push({ name: 'send-message-in-bottle' })
+      this.router.push({ name: "send-message-in-bottle" });
     },
   },
-}
+};
 </script>
 
 <style scoped>
