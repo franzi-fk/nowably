@@ -19,6 +19,7 @@ A productivity app designed to help users defeat procrastination, start to their
 - State Management: Pinia
 - Database: Firestore
 - Authentication: Firebase
+- Testing: Cypress (E2E)
 
 ### Design
 
@@ -28,9 +29,10 @@ A productivity app designed to help users defeat procrastination, start to their
 - App Illustrations: Franziska Kiel
 
 ## License
+
 This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.
+
 - You are free to share the project, copy it, and redistribute it for non-commercial purposes only.
 - You cannot modify or build upon this project for distribution.
 - You must give appropriate credit when using the project.
-For more details, please refer to the [full license text](https://creativecommons.org/licenses/by-nc-nd/4.0/).
-
+  For more details, please refer to the [full license text](https://creativecommons.org/licenses/by-nc-nd/4.0/).
