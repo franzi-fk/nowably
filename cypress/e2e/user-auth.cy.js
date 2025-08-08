@@ -1,4 +1,3 @@
-// sign up
-// login
-// logout
+// sign in
+// sign out
 // delete account
