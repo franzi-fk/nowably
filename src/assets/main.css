@@ -1,3 +1,7 @@
+.vue-devtools__panel {
+  display: none !important;
+}
+
 :root {
   /* Main */
   --primary: #686bd4; /* Primary Button */
