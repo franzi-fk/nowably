@@ -19,6 +19,7 @@
           :aria-expanded="isMenuOpen.toString()"
           aria-haspopup="true"
           aria-label="User menu"
+          data-cy="btn-user-menu"
         />
         <!-- Dropdown Menu -->
         <div
@@ -26,6 +27,7 @@
           class="menu"
           role="menu"
           aria-label="User menu options"
+          data-cy="menu-user"
         >
           <div class="menu-header">
             <img
@@ -44,7 +46,12 @@
               <AppIcon name="circleUserRound" size="20" />My Account
             </li>
 
-            <li role="menuitem" @click="userLogout" tabindex="0">
+            <li
+              role="menuitem"
+              @click="userLogout"
+              tabindex="0"
+              data-cy="btn-signout"
+            >
               <AppIcon name="logOut" size="20" />Sign Out
             </li>
           </ul>

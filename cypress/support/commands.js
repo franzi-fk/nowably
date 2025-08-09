@@ -31,6 +31,27 @@ Cypress.Commands.add("loginWithFirebase", () => {
     });
 });
 
+// custom command for logout
+Cypress.Commands.add("logout", () => {
+  cy.visit("http://localhost:8888/");
+  cy.wait(3000);
+
+  // wait for URL to settle
+  cy.url({ timeout: 6000 }).then((url) => {
+    if (!url.includes("/login")) {
+      cy.log("User is logged in, logging out...");
+      // User is logged in
+      cy.get('[data-cy="btn-user-menu"]').click(); // Open user menu
+      cy.get('[data-cy="menu-user"]').should("be.visible"); // Menu visible
+      cy.get('[data-cy="btn-signout"]').click(); // Click logout button
+
+      cy.url({ timeout: 5000 }).should("include", "/login"); // Confirm logout by checking URL includes /login
+    }
+    // User is logged out, nothing to do
+    cy.log("User is logged out");
+  });
+});
+
 // Custom command for creating and completing a task
 Cypress.Commands.add("createAndCompleteTask", (taskName) => {
   const uniqueTaskName = taskName || `CreatedCompleted ${Date.now()}`;

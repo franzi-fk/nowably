@@ -12,7 +12,11 @@
           <span>Beat procrastination now.</span>
         </section>
         <div v-if="!user" class="sign-in-action">
-          <button @click="loginWithGoogle" id="btn-login">
+          <button
+            @click="loginWithGoogle"
+            id="btn-login"
+            data-cy="btn-google-sign-in"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

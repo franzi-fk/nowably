@@ -25,7 +25,7 @@
           <h1>Account</h1>
         </div>
         <article class="account-body">
-          <section class="account-info account-tile">
+          <section class="account-info account-tile" data-cy="sct-account-info">
             <h2>Account Information</h2>
             <p>Name: {{ userStore.user.displayName }}</p>
             <p>Email: {{ userStore.user.email }}</p>
@@ -37,7 +37,10 @@
               account.
             </small>
           </section>
-          <section class="account-deletion account-tile">
+          <section
+            class="account-deletion account-tile"
+            data-cy="sct-account-deletion"
+          >
             <h2>Account Deletion</h2>
             <div class="deletion-info">
               <p>
@@ -53,6 +56,7 @@
               type="icon-text"
               icon="arrowRight"
               @click="confirmDeletion"
+              data-cy="btn-delete-account"
             />
           </section>
         </article>
