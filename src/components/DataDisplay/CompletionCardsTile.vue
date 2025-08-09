@@ -2,7 +2,11 @@
   <article class="completion-cards-container">
     <div class="completion-cards-header">
       <h2>Completion Cards</h2>
-      <LinkButton type="text" text="View all" @click="goToCompletionCardsView()" />
+      <LinkButton
+        type="text"
+        text="View all"
+        @click="goToCompletionCardsView()"
+      />
     </div>
     <div class="completion-cards-body">
       <p v-if="this.userStore.totalSuccessCount > 0">
@@ -30,12 +34,12 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/userStore'
-import { useRouter } from 'vue-router'
-import CompletionCard from '@/components/DataDisplay/CompletionCard.vue'
+import { useUserStore } from "@/stores/userStore";
+import { useRouter } from "vue-router";
+import CompletionCard from "@/components/DataDisplay/CompletionCard.vue";
 
 export default {
-  name: 'CompletionCardsTile',
+  name: "CompletionCardsTile",
   components: {
     CompletionCard,
   },
@@ -44,9 +48,10 @@ export default {
       userStore: useUserStore(),
       router: useRouter(),
       milestones: [
-        5, 10, 20, 50, 75, 100, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000,
+        5, 10, 20, 50, 75, 100, 150, 200, 250, 300, 350, 400, 500, 600, 700,
+        800, 900, 1000,
       ],
-    }
+    };
   },
   computed: {
     currentMilestone() {
@@ -54,32 +59,36 @@ export default {
         this.milestones
           .filter((milestone) => this.userStore.totalSuccessCount >= milestone)
           .pop() || 0
-      )
+      );
     },
     nextMilestone() {
       return (
-        this.milestones.find((milestone) => this.userStore.totalSuccessCount < milestone) || null
-      )
+        this.milestones.find(
+          (milestone) => this.userStore.totalSuccessCount < milestone
+        ) || null
+      );
     },
     nextMilestoneDistance() {
-      return this.nextMilestone ? this.nextMilestone - this.userStore.totalSuccessCount : 0
+      return this.nextMilestone
+        ? this.nextMilestone - this.userStore.totalSuccessCount
+        : 0;
     },
     recentMilestones() {
       // Get the last 3 completed milestones (if any)
       return this.milestones
         .filter((milestone) => this.userStore.totalSuccessCount >= milestone)
-        .slice(-3) // Last 3 milestones
+        .slice(-3); // Last 3 milestones
     },
   },
   methods: {
     goToCompletionCardsView() {
-      this.router.push({ name: 'completion-cards' })
+      this.router.push({ name: "completion-cards" });
     },
   },
   mounted() {
-    this.userStore.initLoad()
+    this.userStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>

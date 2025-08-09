@@ -1,7 +1,11 @@
 <template>
-  <div class="completion-card-visual aspect-ratio">
+  <div class="completion-card-visual aspect-ratio" data-cy="completion-card">
     <!-- Front Side -->
-    <div v-if="!isFlipped" class="completion-card-front">
+    <div
+      v-if="!isFlipped"
+      class="completion-card-front"
+      data-cy="opened-completion-card"
+    >
       <img
         v-if="milestoneData && milestoneData.image"
         :src="milestoneData.image"
@@ -9,9 +13,11 @@
         class="completion-card-image"
       />
       <div class="completion-card-content">
-        <p class="completion-card-title">{{ milestoneData?.title || 'Unknown Milestone' }}</p>
+        <p class="completion-card-title">
+          {{ milestoneData?.title || "Unknown Milestone" }}
+        </p>
         <p class="completion-card-description">
-          {{ milestoneData?.description || 'No description available.' }}
+          {{ milestoneData?.description || "No description available." }}
         </p>
       </div>
     </div>
@@ -24,111 +30,112 @@
 
 <script>
 export default {
-  name: 'CompletionCard',
+  name: "CompletionCard",
   props: {
     milestone: { type: Number, default: 5 }, // Determines which milestone to display
     isFlipped: { type: Boolean, default: false }, // Show back side or front
-    backText: { type: String, default: '' }, // Optional text on back side
+    backText: { type: String, default: "" }, // Optional text on back side
   },
   data() {
     return {
       completionCardMilestones: {
         5: {
-          title: 'Progress Pioneer Meerkat',
-          description: 'Starting your journey with unstoppable curiosity.',
+          title: "Progress Pioneer Meerkat",
+          description: "Starting your journey with unstoppable curiosity.",
           image: null, // will be added dynamically
         },
         10: {
-          title: 'Breakthrough Dolphin',
-          description: 'Building speed and breaking free from hesitation.',
+          title: "Breakthrough Dolphin",
+          description: "Building speed and breaking free from hesitation.",
           image: null,
         },
         20: {
-          title: 'Path Shifter Wolf',
-          description: 'Shattering old habits, creating a fresh path.',
+          title: "Path Shifter Wolf",
+          description: "Shattering old habits, creating a fresh path.",
           image: null,
         },
         50: {
-          title: 'Habit Builder Squirrel',
-          description: 'Turning small steps into lasting routines.',
+          title: "Habit Builder Squirrel",
+          description: "Turning small steps into lasting routines.",
           image: null,
         },
         75: {
-          title: 'Productive Flow Bee',
-          description: 'Mastering the art of effortless productivity.',
+          title: "Productive Flow Bee",
+          description: "Mastering the art of effortless productivity.",
           image: null,
         },
         100: {
-          title: 'Goal Getter Elephant',
-          description: 'Turning your goals into milestones, one by one.',
+          title: "Goal Getter Elephant",
+          description: "Turning your goals into milestones, one by one.",
           image: null,
         },
         150: {
-          title: 'Routine Shifter Toucan',
-          description: 'Transforming the ordinary into extraordinary.',
+          title: "Routine Shifter Toucan",
+          description: "Transforming the ordinary into extraordinary.",
           image: null,
         },
         200: {
-          title: 'Procrastination Conqueror Lion',
-          description: 'Turning delay into action with unstoppable force.',
+          title: "Procrastination Conqueror Lion",
+          description: "Turning delay into action with unstoppable force.",
           image: null,
         },
         250: {
-          title: 'Gradual Progress Capybara',
-          description: 'Small steps, steady results, ongoing momentum.',
+          title: "Gradual Progress Capybara",
+          description: "Small steps, steady results, ongoing momentum.",
           image: null,
         },
         300: {
-          title: 'Task Tamer Shark',
-          description: 'Facing each challenge with poise and precision.',
+          title: "Task Tamer Shark",
+          description: "Facing each challenge with poise and precision.",
           image: null,
         },
         350: {
-          title: 'Progress Seeker Fox',
-          description: 'Continuously evolving and moving forward.',
+          title: "Progress Seeker Fox",
+          description: "Continuously evolving and moving forward.",
           image: null,
         },
         400: {
-          title: 'Unstoppable Achiever Kangaroo',
-          description: 'No hurdle too high, no goal too far.',
+          title: "Unstoppable Achiever Kangaroo",
+          description: "No hurdle too high, no goal too far.",
           image: null,
         },
         500: {
-          title: 'Momentum Master Cheetah',
-          description: 'Harnessing the power of momentum and riding it to success.',
+          title: "Momentum Master Cheetah",
+          description:
+            "Harnessing the power of momentum and riding it to success.",
           image: null,
         },
         600: {
-          title: 'Energy Dynamo Bear',
-          description: 'Fueling your progress with boundless energy.',
+          title: "Energy Dynamo Bear",
+          description: "Fueling your progress with boundless energy.",
           image: null,
         },
         700: {
-          title: 'Peak Performer Llama',
-          description: 'Reaching new heights with every step you take.',
+          title: "Peak Performer Llama",
+          description: "Reaching new heights with every step you take.",
           image: null,
         },
         800: {
-          title: 'Focused Strength Owl',
-          description: 'Channeling all your focus into unwavering success.',
+          title: "Focused Strength Owl",
+          description: "Channeling all your focus into unwavering success.",
           image: null,
         },
         900: {
-          title: 'Master of Success Orca',
-          description: 'Turning progress into your natural state.',
+          title: "Master of Success Orca",
+          description: "Turning progress into your natural state.",
           image: null,
         },
         1000: {
-          title: 'Legendary Achiever Phoenix',
-          description: 'Rising from challenges and embracing transformation.',
+          title: "Legendary Achiever Phoenix",
+          description: "Rising from challenges and embracing transformation.",
           image: null,
         },
       },
-    }
+    };
   },
   computed: {
     milestoneData() {
-      return this.completionCardMilestones[this.milestone] || null
+      return this.completionCardMilestones[this.milestone] || null;
     },
   },
   watch: {
@@ -136,48 +143,56 @@ export default {
     milestone: {
       immediate: true,
       handler(newMilestone) {
-        this.loadMilestoneImage(newMilestone)
+        this.loadMilestoneImage(newMilestone);
       },
     },
   },
   methods: {
     async loadMilestoneImage(milestone) {
-      const milestoneData = this.completionCardMilestones[milestone]
+      const milestoneData = this.completionCardMilestones[milestone];
       if (milestoneData && milestoneData.image === null) {
         try {
           // Extract the last word of the title safely
-          const words = milestoneData.title.split(' ')
-          const identifier = words.length > 1 ? words[words.length - 1].toLowerCase() : 'default'
+          const words = milestoneData.title.split(" ");
+          const identifier =
+            words.length > 1
+              ? words[words.length - 1].toLowerCase()
+              : "default";
 
           // Direct path reference for assets in public/cc-graphics/
-          const imagePath = `/cc-graphics/cc_${identifier}.png` // No need for `new URL()` here
+          const imagePath = `/cc-graphics/cc_${identifier}.png`; // No need for `new URL()` here
 
           // Check if the image exists (optional, for error handling)
-          const imageExists = await this.checkImageExists(imagePath)
+          const imageExists = await this.checkImageExists(imagePath);
           if (imageExists) {
-            this.completionCardMilestones[milestone].image = imagePath
+            this.completionCardMilestones[milestone].image = imagePath;
           } else {
             // Fallback to default image if the image does not exist
-            this.completionCardMilestones[milestone].image = '/cc-graphics/default-image.png'
+            this.completionCardMilestones[milestone].image =
+              "/cc-graphics/default-image.png";
           }
         } catch (error) {
-          console.error(`Failed to load image for milestone ${milestone}:`, error)
+          console.error(
+            `Failed to load image for milestone ${milestone}:`,
+            error
+          );
           // Default image path in case of error
-          this.completionCardMilestones[milestone].image = '/cc-graphics/default-image.png'
+          this.completionCardMilestones[milestone].image =
+            "/cc-graphics/default-image.png";
         }
       }
     },
 
     async checkImageExists(imagePath) {
       try {
-        const response = await fetch(imagePath, { method: 'HEAD' })
-        return response.ok // Returns true if the image exists
+        const response = await fetch(imagePath, { method: "HEAD" });
+        return response.ok; // Returns true if the image exists
       } catch (error) {
-        return console.log(error)
+        return console.log(error);
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -258,7 +273,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-image: url('/cc-graphics/cc-backside-pattern.png'); /* Fixed backside image */
+  background-image: url("/cc-graphics/cc-backside-pattern.png"); /* Fixed backside image */
   background-size: cover;
   background-position: center;
   color: var(--base-white);
