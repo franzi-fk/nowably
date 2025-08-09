@@ -7,4 +7,4 @@ dist/
 eslint.config.js
 cypress.config.js
 firebaseConfig.js
-cypress/
+cypress/nowably-firebase-service-account.json
