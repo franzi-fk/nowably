@@ -1,8 +1,5 @@
-// sign in
-// sign out
-// delete account
-
 describe("Sign In and Sign Out", () => {
+  // Sign in
   it("signs user in", () => {
     cy.logout();
 
@@ -19,6 +16,7 @@ describe("Sign In and Sign Out", () => {
     cy.contains("Welcome").should("be.visible");
   });
 
+  // Sign out
   it("signs user out", () => {
     cy.loginWithFirebase();
     cy.logout();
@@ -31,6 +29,7 @@ describe("User Account", () => {
     cy.visit("http://localhost:8888/account");
   });
 
+  // View user account page and information
   it("views user account", () => {
     cy.get('[data-cy="sct-account-info"]').within(() => {
       cy.contains("Name").should("be.visible");
