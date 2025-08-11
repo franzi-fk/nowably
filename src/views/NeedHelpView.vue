@@ -10,6 +10,7 @@
     >
       <article
         id="motivation-alt"
+        data-cy="art-motivation-alt"
         v-if="
           !userStore.canReceiveMebo ||
           meboStore.mebosToReceive.length < 1 ||
@@ -99,7 +100,7 @@
           <LinkButton type="text" text="Skip this" @click="finishHelp" />
         </section>
       </article>
-      <article id="receive-mebo" v-else>
+      <article id="receive-mebo" data-cy="art-receive-mebo" v-else>
         <div class="help-sub-view">
           <section class="intro">
             <h1>Message in a Bottle</h1>
@@ -285,6 +286,7 @@
             text="I feel demotivated"
             @click="userStore.setCurrentEmotion('demotivated')"
             variant="tertiary"
+            data-cy="btn-demotivated"
           />
           <SolidButton
             type="text"

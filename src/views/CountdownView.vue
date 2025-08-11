@@ -15,6 +15,7 @@
         text="I need help"
         @click="needHelp"
         variant="tertiary"
+        data-cy="btn-need-help"
       />
       <SolidButton
         type="text"

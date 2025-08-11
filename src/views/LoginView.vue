@@ -57,7 +57,9 @@
             >.</small
           >
         </div>
-        <button @click="enterDemoMode" id="btn-demo">View Demo</button>
+        <button @click="enterDemoMode" id="btn-demo" data-cy="btn-enter-demo">
+          View Demo
+        </button>
       </div>
       <footer>
         <div id="legal-links" class="login-container-footer">

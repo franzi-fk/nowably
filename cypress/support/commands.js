@@ -75,11 +75,11 @@ Cypress.Commands.add("createAndCompleteTask", (taskName) => {
   cy.get('[data-cy="btn-back-home"]').click(); // in TaskSuccessView
 
   // confirm task is completed
-  cy.visit("http://localhost:8888/all-tasks");
+  cy.get('[data-cy="nav-sidebar"]').contains("All tasks").click();
   cy.contains(uniqueTaskName).should("exist");
 
   // back to home
-  cy.visit("http://localhost:8888/");
+  cy.get('[data-cy="nav-sidebar"]').contains("Home").click();
   // return the task name
   return cy.wrap(uniqueTaskName);
 });

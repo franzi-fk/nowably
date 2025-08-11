@@ -76,6 +76,7 @@
         text="Leave Demo"
         @click="leaveDemoMode"
         id="btn-leave-demo"
+        data-cy="btn-leave-demo"
       />
     </div>
 

@@ -1,13 +1,17 @@
 <!-- Desktop Navi (mobile Navi is in AppHeader) -->
 <template>
   <nav
+    data-cy="nav-sidebar"
     :class="['sidebar', { collapsed: isCollapsed }]"
     aria-label="Main navigation"
     v-if="variant === 'user'"
   >
     <div class="navi-header">
       <h1 aria-label="Logo Nowably" @click="goToHome">
-        <NowablyLogo :width="isCollapsed ? '3' : '10'" :variant="isCollapsed ? 'image' : 'full'" />
+        <NowablyLogo
+          :width="isCollapsed ? '3' : '10'"
+          :variant="isCollapsed ? 'image' : 'full'"
+        />
       </h1>
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
@@ -76,7 +80,10 @@
   >
     <div class="navi-header">
       <h1 aria-label="Logo Nowably" @click="goToHome">
-        <NowablyLogo :width="isCollapsed ? '3' : '10'" :variant="isCollapsed ? 'image' : 'full'" />
+        <NowablyLogo
+          :width="isCollapsed ? '3' : '10'"
+          :variant="isCollapsed ? 'image' : 'full'"
+        />
       </h1>
     </div>
     <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
@@ -141,9 +148,9 @@
 </template>
 
 <script>
-import NowablyLogo from '@/components/Visuals/NowablyLogo.vue'
-import { useAppStore } from '@/stores/appStore'
-import TooltipOverlay from '../FeedbackAndStatus/TooltipOverlay.vue'
+import NowablyLogo from "@/components/Visuals/NowablyLogo.vue";
+import { useAppStore } from "@/stores/appStore";
+import TooltipOverlay from "../FeedbackAndStatus/TooltipOverlay.vue";
 
 export default {
   components: {
@@ -153,7 +160,7 @@ export default {
   props: {
     variant: {
       type: String,
-      default: 'user',
+      default: "user",
     },
   },
   data() {
@@ -162,35 +169,38 @@ export default {
       userMenu: [],
       adminMenu: [],
       isCollapsed: false,
-    }
+    };
   },
   computed: {
     activePath() {
-      return this.$route.path
+      return this.$route.path;
     },
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: "home" });
     },
     toggleCollapse() {
-      this.isCollapsed = !this.isCollapsed
-      sessionStorage.setItem('sidebarCollapsed', JSON.stringify(this.isCollapsed))
+      this.isCollapsed = !this.isCollapsed;
+      sessionStorage.setItem(
+        "sidebarCollapsed",
+        JSON.stringify(this.isCollapsed)
+      );
     },
     isActive(link) {
-      return this.activePath === link
+      return this.activePath === link;
     },
   },
   mounted() {
-    this.userMenu = this.appStore.userMenuNav
-    this.adminMenu = this.appStore.adminMenuNav
+    this.userMenu = this.appStore.userMenuNav;
+    this.adminMenu = this.appStore.adminMenuNav;
 
-    const savedState = sessionStorage.getItem('sidebarCollapsed')
+    const savedState = sessionStorage.getItem("sidebarCollapsed");
     if (savedState !== null) {
-      this.isCollapsed = JSON.parse(savedState)
+      this.isCollapsed = JSON.parse(savedState);
     }
   },
-}
+};
 </script>
 
 <style scoped>
