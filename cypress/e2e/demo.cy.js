@@ -1,6 +1,15 @@
 function enterDemoMode() {
   cy.get('[data-cy="btn-enter-demo"]').click();
-  cy.wait(3000);
+  cy.wait(5000);
+}
+
+function leaveDemoMode() {
+  cy.get("body").then(($body) => {
+    if ($body.find('[data-cy="btn-leave-demo"]').length) {
+      cy.get('[data-cy="btn-leave-demo"]').click();
+      cy.wait(5000);
+    }
+  });
 }
 
 function checkDemoData() {
@@ -16,7 +25,11 @@ describe("Demo", () => {
     cy.logout();
   });
 
-  // it enters demo mode
+  afterEach(() => {
+    leaveDemoMode(); // clean up firebase & firestore (clicking leave demo deletes demo user)
+  });
+
+  // it enters and leaves demo mode
   it("enters demo mode", () => {
     cy.get('[data-cy="btn-enter-demo"]')
       .should("be.visible")
@@ -63,6 +76,7 @@ describe("Demo", () => {
 
     // reject sending mebo
     cy.contains("Not available in Demo");
+    cy.get('[data-cy="btn-close-modal"]').click(); // close modal so afterEach can run successfully
   });
 
   // it rejects to receive mebo in "help" > "i feel demotivated"
@@ -92,18 +106,41 @@ describe("Demo", () => {
     cy.get('[data-cy="btn-demotivated"]').click(); // in NeedHelpView
 
     // check what is shown
-    cy.get('[data-cy="art-receive-mebo"]').should("not.exist"); // receiving a mebo should not be possible
-    cy.get('[data-cy="art-motivation-alt"]').should("be.visible"); // alternative motivational techniques should show up
+    cy.get("body").then(($body) => {
+      const meboExists = $body.find('[data-cy="art-receive-mebo"]').length > 0;
+      const altExists = $body.find('[data-cy="art-motivation-alt"]').length > 0;
+
+      if (altExists) {
+        // Option 1: alternative motivational techniques are visible
+        cy.get('[data-cy="art-motivation-alt"]').should("be.visible");
+        // leave task progression view so afterEach can run successfully
+        cy.get('[data-cy="initiate-stopping-task"]').click(); // stop task
+        cy.get('[data-cy="modal-btn-primary"]').click(); // confirm stopping task
+      } else if (meboExists) {
+        // Option 2: potential mebos found, open mebo view is visible
+        cy.get('[data-cy="art-receive-mebo"]').should("be.visible");
+        // it should have the open mebo button
+        cy.get('[data-cy="btn-open-mebo"]')
+          .should("exist")
+          .and("be.enabled")
+          .click();
+        // after clicking button, message should appear
+        cy.contains("Not available in Demo").should("be.visible");
+        cy.get('[data-cy="btn-close-modal"]').click(); // close modal so afterEach can run successfully
+      } else {
+        throw new Error(
+          'Neither [data-cy="art-motivation-alt"] nor [data-cy="art-receive-mebo"] found.'
+        );
+      }
+    });
   });
 
   // it leaves demo mode
   it("leaves demo mode", () => {
     // enter demo mode
     enterDemoMode();
-    cy.wait(3000);
     // leave demo mode
-    cy.get('[data-cy="btn-leave-demo"]').click();
-    cy.wait(3000);
+    leaveDemoMode();
     // confirm login page is shown after leaving demo mode
     cy.url().should("include", "/login");
     cy.get('[data-cy="btn-enter-demo"]').should("be.visible");

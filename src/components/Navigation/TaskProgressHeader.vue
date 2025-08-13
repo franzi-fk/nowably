@@ -10,6 +10,7 @@
       iconSize="28"
       iconColor="var(--terra-04)"
       @click="confirmCancel"
+      data-cy="initiate-stopping-task"
     />
   </section>
   <ModalOverlay
@@ -23,9 +24,9 @@
 </template>
 
 <script>
-import { useTaskStore } from '@/stores/taskStore'
-import { useRouter } from 'vue-router'
-import ModalOverlay from '@/components/ContainersAndLayouts/ModalOverlay.vue'
+import { useTaskStore } from "@/stores/taskStore";
+import { useRouter } from "vue-router";
+import ModalOverlay from "@/components/ContainersAndLayouts/ModalOverlay.vue";
 
 export default {
   components: {
@@ -36,41 +37,41 @@ export default {
       taskStore: useTaskStore(),
       router: useRouter(),
       isModalVisible: false,
-      modalText: '',
-      modalHeadline: '',
-      modalPrimaryActionText: '',
+      modalText: "",
+      modalHeadline: "",
+      modalPrimaryActionText: "",
       modalPrimaryAction: null,
-    }
+    };
   },
   methods: {
     openModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     confirmCancel() {
       // Define the modal content dynamically
-      this.modalHeadline = `Stop task`
-      this.modalText = `Do you want to stop and return to the home screen?`
+      this.modalHeadline = `Stop task`;
+      this.modalText = `Do you want to stop and return to the home screen?`;
 
       // Set dynamic action
-      this.modalPrimaryActionText = 'Stop task'
-      ;(this.modalPrimaryAction = () => {
-        this.goToHome()
-        this.closeModal()
+      this.modalPrimaryActionText = "Stop task";
+      (this.modalPrimaryAction = () => {
+        this.goToHome();
+        this.closeModal();
       }),
         // Show the modal
-        this.openModal()
+        this.openModal();
     },
     goToHome() {
-      this.router.push({ name: 'home' })
+      this.router.push({ name: "home" });
     },
   },
   mounted() {
-    this.taskStore.initLoad()
+    this.taskStore.initLoad();
   },
-}
+};
 </script>
 
 <style scoped>

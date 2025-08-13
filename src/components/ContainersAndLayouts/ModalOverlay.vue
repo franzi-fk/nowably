@@ -3,7 +3,13 @@
     <div class="modal">
       <div class="modal-header">
         <h3 v-if="headline">{{ headline }}</h3>
-        <LinkButton type="icon" icon="x" @click="closeModal" iconSize="24" />
+        <LinkButton
+          type="icon"
+          icon="x"
+          @click="closeModal"
+          iconSize="24"
+          data-cy="btn-close-modal"
+        />
       </div>
       <div class="modal-body">
         <p v-html="text"></p>

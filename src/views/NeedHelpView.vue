@@ -133,6 +133,7 @@
               id="btn-open-mebo"
               @click="openMebo"
               :stopPropagation="true"
+              data-cy="btn-open-mebo"
             />
             <div class="open-mebo-info">
               <p>You received a message from another user.</p>
