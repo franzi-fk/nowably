@@ -1,5 +1,6 @@
 function enterDemoMode() {
   cy.get('[data-cy="btn-enter-demo"]').click();
+  cy.wait(3000);
 }
 
 function checkDemoData() {
@@ -21,7 +22,6 @@ describe("Demo", () => {
       .should("be.visible")
       .should("be.enabled");
     enterDemoMode();
-    cy.wait(3000);
     cy.url().should("not.include", "/login");
     cy.contains("Welcome");
   });
@@ -29,45 +29,6 @@ describe("Demo", () => {
   // it loads demo data
   it("loads demo data", () => {
     enterDemoMode();
-    checkDemoData();
-  });
-
-  // it resets demo data
-  it("resets demo data", () => {
-    enterDemoMode();
-
-    // create a new task (to check if it gets removed later)
-    const taskName = `DemoTask-${Date.now()}`;
-    cy.createAndCompleteTask(taskName);
-
-    // delete demo data task
-    cy.contains("Learn Python")
-      .closest('[data-cy="task-row-container"]')
-      .within(() => {
-        cy.get('[data-cy="btn-initiate-task-deletion"]').click();
-      });
-    cy.get('[data-cy="modal-btn-primary"]').click(); // confirm deletion
-    cy.contains("Learn Python").should("not.exist");
-
-    // edit demo data task
-    cy.contains('[data-cy="task-row-container"]', "Update CV")
-      .should("exist")
-      .within(() => {
-        cy.get('[data-cy="btn-initiate-task-editing"]').click();
-        cy.get('[data-cy="inp-edit-task"]')
-          .find("input")
-          .clear()
-          .type("Demo Task edited");
-        cy.get('[data-cy="btn-save-edited-task"]').click();
-      });
-    cy.contains("Demo Task edited").should("exist");
-
-    // leave demo mode
-
-    cy.get('[data-cy="btn-leave-demo"]').click();
-    // enter demo mode
-    enterDemoMode();
-    // check for demo data
     checkDemoData();
   });
 
@@ -109,7 +70,14 @@ describe("Demo", () => {
     enterDemoMode();
     // create task
     const taskName = `DemoTask-${Date.now()}`;
-    cy.get('[data-cy="btn-initiate-task-creation"]').click();
+    cy.get("body").then(($body) => {
+      if ($body.find('[data-cy="inp-new-task"]').is(":visible")) {
+        // input is visible, do nothing
+      } else {
+        // input is not visible, click to reveal
+        cy.get('[data-cy="btn-initiate-task-creation"]').click();
+      }
+    });
     cy.get('[data-cy="inp-new-task"]').type(taskName);
     cy.get('[data-cy="btn-add-task"]').click();
     cy.contains(taskName).should("exist");

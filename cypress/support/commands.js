@@ -57,7 +57,14 @@ Cypress.Commands.add("createAndCompleteTask", (taskName) => {
   const uniqueTaskName = taskName || `CreatedCompleted ${Date.now()}`;
 
   // Create task
-  cy.get('[data-cy="btn-initiate-task-creation"]').click();
+  cy.get("body").then(($body) => {
+    if ($body.find('[data-cy="inp-new-task"]').is(":visible")) {
+      // input is visible, do nothing
+    } else {
+      // input is not visible, click to reveal
+      cy.get('[data-cy="btn-initiate-task-creation"]').click();
+    }
+  });
   cy.get('[data-cy="inp-new-task"]').type(uniqueTaskName);
   cy.get('[data-cy="btn-add-task"]').click();
   cy.contains(uniqueTaskName).should("exist");
