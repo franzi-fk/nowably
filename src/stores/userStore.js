@@ -5,14 +5,16 @@ import {
   getUserFs,
   getAllReceivedMebosForUserFs,
   storeReceivedMeboForUserFs,
-  loginDemo,
-  resetDemoUserData,
+  initializeDemoUserData,
   deleteUserData,
+  deleteDemoUserData,
 } from "../firestoreService";
 import {
   deleteFirebaseAccount,
   signInWithGoogle,
   signOutUser,
+  loginDemo,
+  deleteDemoUser,
 } from "../firebaseService";
 
 export const useUserStore = defineStore("userStore", {
@@ -54,11 +56,16 @@ export const useUserStore = defineStore("userStore", {
   actions: {
     async loginForDemo() {
       try {
-        await resetDemoUserData();
-        this.user = await loginDemo(); // firestoreService function
+        // Sign in anonymously
+        this.user = await loginDemo(); // from firebaseService.js
         this.userId = this.user.uid;
         this.isDemo = true;
         sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
+
+        // Initialize default demo data
+        await initializeDemoUserData(this.user.uid);
+
+        // load the rest
         await this.initLoad();
       } catch (error) {
         console.error("Error logging in for Demo:", error);
@@ -67,10 +74,9 @@ export const useUserStore = defineStore("userStore", {
     async leaveDemo() {
       if (this.isDemo) {
         try {
-          await resetDemoUserData();
-          this.user = null;
-          this.userId = null;
-          this.role = "user";
+          await deleteDemoUserData();
+          await deleteDemoUser();
+          await signOutUser();
           this.isDemo = false;
           sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
         } catch (error) {
@@ -166,6 +172,7 @@ export const useUserStore = defineStore("userStore", {
       if (!this.userId) return;
 
       try {
+        this.isDemo = JSON.parse(sessionStorage.getItem("demoMode")) || null;
         const userData = await getUserFs(this.userId);
 
         if (userData) {

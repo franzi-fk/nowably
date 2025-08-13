@@ -192,10 +192,7 @@ export default {
       this.isModalVisible = false;
     },
     confirmMebo() {
-      if (
-        this.userStore.isDemo ||
-        this.userStore.userId === "SwBi7cJTsh8sMeph9xae"
-      ) {
+      if (this.userStore.isDemo || this.userStore.userId === demo_user_id) {
         this.showDemoLimitationHint();
         return;
       }

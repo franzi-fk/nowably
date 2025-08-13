@@ -13,6 +13,7 @@ import {
   setDoc,
   arrayUnion,
 } from "firebase/firestore";
+import { getCurrentDemoUserId } from "./firebaseService";
 import { db, auth } from "./firebaseConfig";
 
 /*_______________________________________*/
@@ -325,8 +326,7 @@ export async function getUserFs(userId) {
   }
 
   try {
-    const finalUserId =
-      userId === "demo_user" ? "SwBi7cJTsh8sMeph9xae" : userId; // If demo mode, use the demo user ID
+    const finalUserId = userId === "demo_user" ? demo_user_id : userId; // If demo mode, use the demo user ID
     const userRef = userDocRef(finalUserId); // Using the correct ID
 
     const userSnap = await getDoc(userRef);
@@ -470,80 +470,115 @@ export async function deleteUserData() {
 }
 
 /* DEMO */
-const demo_user_id = "SwBi7cJTsh8sMeph9xae";
 
-// Login for demo (not using authentication but a manually added user in Firestore)
-export async function loginDemo() {
-  const demoUserRef = doc(db, "users", demo_user_id);
-  const demoUserSnap = await getDoc(demoUserRef);
+// Initialize Firestore data for a new anonymous demo user
+export async function initializeDemoUserData(uid) {
+  try {
+    // create the main user document
+    const userDocRef = doc(db, "users", uid);
+    await setDoc(userDocRef, {
+      displayName: "Demo",
+      isDemo: true,
+      role: "user",
+      createdAt: new Date(),
+      uid: uid,
+      totalSuccessCount: 7,
+    });
 
-  if (demoUserSnap.exists()) {
-    return demoUserSnap.data();
-  } else {
-    console.error("Demo user not found in Firestore.");
+    // create default tasks subcollection
+    const tasksRef = collection(userDocRef, "tasks");
+
+    const defaultTasks = [
+      { description: "Update CV", doneState: false, userId: uid },
+      { description: "Learn Python", doneState: false, userId: uid },
+    ];
+
+    for (const task of defaultTasks) {
+      const taskDocRef = doc(tasksRef);
+      await setDoc(taskDocRef, task);
+    }
+  } catch (error) {
+    console.error("Failed to initialize demo user data:", error);
   }
 }
 
 // Reset demo user data to initial state
-export async function resetDemoUserData() {
-  const initialDemoDataRef = doc(db, "demo_data", "demo_user_initial");
-  const demoUserRef = doc(db, "users", demo_user_id);
+// export async function resetDemoUserData() {
+//   const demo_user_id = getCurrentDemoUserId();
+//   const initialDemoDataRef = doc(db, "demo_data", "demo_user_initial");
+//   const demoUserRef = doc(db, "users", demo_user_id);
 
-  try {
-    // Get initial demo data
-    const initialUserSnap = await getDoc(initialDemoDataRef);
-    if (!initialUserSnap.exists()) {
-      console.error("Initial demo user data not found!");
-      return;
+//   try {
+//     // Get initial demo data
+//     const initialUserSnap = await getDoc(initialDemoDataRef);
+//     if (!initialUserSnap.exists()) {
+//       console.error("Initial demo user data not found!");
+//       return;
+//     }
+
+//     // Overwrite demo user's main document
+//     await setDoc(demoUserRef, initialUserSnap.data()); // overwrite the entire document
+
+//     // Ensure subcollections exist
+//     const subcollections = ["tasks", "deletedCompletedTasks", "receivedMebos"];
+//     for (const subcol of subcollections) {
+//       const subcolRef = collection(demoUserRef, subcol);
+//       const snapshot = await getDocs(subcolRef);
+//       if (snapshot.empty) {
+//         // Create empty doc so the collection exists
+//         await setDoc(doc(subcolRef), {});
+//       }
+//     }
+
+//     // Reset sub-collections
+//     await resetSubCollection("tasks", demo_user_id);
+//     await resetSubCollection("deletedCompletedTasks", demo_user_id);
+//   } catch (error) {
+//     console.error("Error resetting demo user data:", error);
+//   }
+// }
+
+// // Reset subcollections of demo user to initial state
+// export async function resetSubCollection(subCollectionName, uid) {
+//   const initialCollectionRef = collection(
+//     db,
+//     "demo_data",
+//     "demo_user_initial",
+//     subCollectionName
+//   );
+//   const userCollectionRef = collection(db, "users", uid, subCollectionName);
+
+//   try {
+//     // Delete current sub-collection
+//     const existingDocs = await getDocs(userCollectionRef);
+//     for (const docSnap of existingDocs.docs) {
+//       await deleteDoc(doc(db, "users", uid, subCollectionName, docSnap.id));
+//     }
+
+//     // Restore initial sub-collection
+//     const initialDocs = await getDocs(initialCollectionRef);
+//     for (const docSnap of initialDocs.docs) {
+//       await setDoc(
+//         doc(db, "users", uid, subCollectionName, docSnap.id),
+//         docSnap.data()
+//       );
+//     }
+//   } catch (error) {
+//     console.error(
+//       `Error resetting sub-collection ${subCollectionName}:`,
+//       error
+//     );
+//   }
+// }
+
+export async function deleteDemoUserData() {
+  const user = auth.currentUser;
+  if (user && user.isAnonymous) {
+    try {
+      // Delete Firestore data
+      await deleteUserData();
+    } catch (error) {
+      console.error("Failed to delete demo user data (Firestore):", error);
     }
-
-    // Overwrite demo user's main document
-    await setDoc(demoUserRef, initialUserSnap.data()); // overwrite the entire document
-
-    // Reset sub-collections
-    await resetSubCollection("tasks");
-    await resetSubCollection("deletedCompletedTasks");
-  } catch (error) {
-    console.error("Error resetting demo user data:", error);
-  }
-}
-
-// Reset subcollections of demo user to initial state
-export async function resetSubCollection(subCollectionName) {
-  const initialCollectionRef = collection(
-    db,
-    "demo_data",
-    "demo_user_initial",
-    subCollectionName
-  );
-  const userCollectionRef = collection(
-    db,
-    "users",
-    demo_user_id,
-    subCollectionName
-  );
-
-  try {
-    // Delete current sub-collection
-    const existingDocs = await getDocs(userCollectionRef);
-    for (const docSnap of existingDocs.docs) {
-      await deleteDoc(
-        doc(db, "users", demo_user_id, subCollectionName, docSnap.id)
-      );
-    }
-
-    // Restore initial sub-collection
-    const initialDocs = await getDocs(initialCollectionRef);
-    for (const docSnap of initialDocs.docs) {
-      await setDoc(
-        doc(db, "users", demo_user_id, subCollectionName, docSnap.id),
-        docSnap.data()
-      );
-    }
-  } catch (error) {
-    console.error(
-      `Error resetting sub-collection ${subCollectionName}:`,
-      error
-    );
   }
 }

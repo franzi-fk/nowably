@@ -5,8 +5,10 @@ import {
   signOut,
   deleteUser,
   reauthenticateWithPopup,
+  signInAnonymously,
 } from "firebase/auth"; // Modular imports
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs } from "firebase/firestore";
+import { deleteDemoUserData } from "./firestoreService";
 
 // Create user if it doesn't exist
 export async function createUserIfNotExists(user) {
@@ -77,5 +79,37 @@ export async function reauthenticateUser() {
   } catch (error) {
     console.error("Reauthentication failed:", error);
     throw error;
+  }
+}
+
+// Sign in anonymously for demo mode
+export async function loginDemo() {
+  try {
+    const userCredential = await signInAnonymously(auth);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Anonymous sign-in failed:", error);
+    throw error;
+  }
+}
+
+// Get UID of the currently signed-in demo user
+export function getCurrentDemoUserId() {
+  if (!auth.currentUser) {
+    throw new Error("No demo user is signed in");
+  }
+  return auth.currentUser.uid;
+}
+
+// Delete demo user
+export async function deleteDemoUser() {
+  const user = auth.currentUser;
+  if (user && user.isAnonymous) {
+    try {
+      await deleteUser(user);
+    } catch (error) {
+      console.error("Failed to delete demo user (Firebase):", error);
+      throw error;
+    }
   }
 }

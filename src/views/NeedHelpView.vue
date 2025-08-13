@@ -430,10 +430,8 @@ export default {
   },
   methods: {
     openMebo() {
-      if (
-        this.userStore.isDemo ||
-        this.userStore.userId === "SwBi7cJTsh8sMeph9xae"
-      ) {
+      const demo_user_id = import.meta.env.VITE_DEMO_USER_UID;
+      if (this.userStore.isDemo || this.userStore.userId === demo_user_id) {
         this.showDemoLimitationHint();
         return;
       }
