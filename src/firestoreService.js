@@ -326,8 +326,7 @@ export async function getUserFs(userId) {
   }
 
   try {
-    const finalUserId = userId === "demo_user" ? demo_user_id : userId; // If demo mode, use the demo user ID
-    const userRef = userDocRef(finalUserId); // Using the correct ID
+    const userRef = userDocRef(userId);
 
     const userSnap = await getDoc(userRef);
 
