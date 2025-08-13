@@ -60,7 +60,7 @@ export const useUserStore = defineStore("userStore", {
         this.user = await loginDemo(); // from firebaseService.js
         this.userId = this.user.uid;
         this.isDemo = true;
-        sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
+        localStorage.setItem("demoMode", JSON.stringify(this.isDemo));
 
         // Initialize default demo data
         await initializeDemoUserData(this.user.uid);
@@ -78,7 +78,7 @@ export const useUserStore = defineStore("userStore", {
           await deleteDemoUser();
           await signOutUser();
           this.isDemo = false;
-          sessionStorage.setItem("demoMode", JSON.stringify(this.isDemo));
+          localStorage.removeItem("demoMode");
         } catch (error) {
           console.error("Error logging out:", error);
         }
@@ -172,7 +172,7 @@ export const useUserStore = defineStore("userStore", {
       if (!this.userId) return;
 
       try {
-        this.isDemo = JSON.parse(sessionStorage.getItem("demoMode")) || null;
+        this.isDemo = JSON.parse(localStorage.getItem("demoMode")) || null;
         const userData = await getUserFs(this.userId);
 
         if (userData) {

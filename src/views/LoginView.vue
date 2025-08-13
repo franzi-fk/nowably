@@ -121,6 +121,7 @@ export default {
     });
   },
   mounted() {
+    localStorage.removeItem("demoMode");
     if (this.user) {
       this.router.push({ name: "home" });
     }
