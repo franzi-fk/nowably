@@ -18,6 +18,9 @@ if (!firebaseApp) {
 }
 const auth = getAuth(firebaseApp);
 
+// _____ CUSTOM COMMANDS _____ //
+// _______ LOGIN & LOGOUT _______ //
+
 // Custom login command
 Cypress.Commands.add("loginWithFirebase", () => {
   const email = Cypress.env("TEST_USER_EMAIL");
@@ -31,7 +34,7 @@ Cypress.Commands.add("loginWithFirebase", () => {
     });
 });
 
-// custom command for logout
+// Custom logout command
 Cypress.Commands.add("logout", () => {
   cy.visit("http://localhost:8888/");
   cy.wait(3000);
@@ -52,41 +55,55 @@ Cypress.Commands.add("logout", () => {
   });
 });
 
-// Custom command for creating and completing a task
-Cypress.Commands.add("createAndCompleteTask", (taskName) => {
-  const uniqueTaskName = taskName || `CreatedCompleted ${Date.now()}`;
+// _______ CREATE AND PROCESS TASKS _______ //
 
-  // Create task
+// Helper to ensure the input is visible
+function ensureTaskInputVisible() {
   cy.get("body").then(($body) => {
-    if ($body.find('[data-cy="inp-new-task"]').is(":visible")) {
-      // input is visible, do nothing
-    } else {
-      // input is not visible, click to reveal
+    if (!$body.find('[data-cy="inp-new-task"]').is(":visible")) {
       cy.get('[data-cy="btn-initiate-task-creation"]').click();
     }
   });
+}
+
+// Create task
+Cypress.Commands.add("createTask", (taskName) => {
+  const uniqueTaskName = taskName || `Task ${Date.now()}`;
+  ensureTaskInputVisible();
   cy.get('[data-cy="inp-new-task"]').type(uniqueTaskName);
   cy.get('[data-cy="btn-add-task"]').click();
   cy.contains(uniqueTaskName).should("exist");
+  return cy.wrap(uniqueTaskName); // allows chaining
+});
 
-  // Start & complete task
-  cy.contains(uniqueTaskName)
-    .closest('[data-cy="task-row-container"]')
-    .within(() => {
-      cy.get('[data-cy="btn-start-task"]').click(); // in open tasks card
+// Create and start task
+Cypress.Commands.add("createAndStartTask", (taskName) => {
+  return cy.createTask(taskName).then((uniqueTaskName) => {
+    cy.contains(uniqueTaskName)
+      .closest('[data-cy="task-row-container"]')
+      .within(() => {
+        cy.get('[data-cy="btn-start-task"]').click();
+      });
+    return cy.wrap(uniqueTaskName);
+  });
+});
+
+// Create, start and complete task
+Cypress.Commands.add("createAndCompleteTask", (taskName) => {
+  return cy.createAndStartTask(taskName).then((uniqueTaskName) => {
+    cy.get('[data-cy="btn-task-started"]').click();
+    cy.get('[data-cy="btn-stop-task"]').click();
+    cy.get('[data-cy="radio-task-completed"]').click();
+    cy.get('[data-cy="btn-save-continue"]').click();
+    cy.get('[data-cy="btn-back-home"]').click();
+
+    // Confirm task is completed
+    cy.get('[data-cy="nav-sidebar"]').contains("All tasks").click();
+    cy.get('[data-cy="sct-completed-tasks"]').within(() => {
+      cy.contains(uniqueTaskName).should("exist");
     });
-  cy.get('[data-cy="btn-task-started"]').click(); // in CountdownView
-  cy.get('[data-cy="btn-stop-task"]').click(); // in TaskInProgressView
-  cy.get('[data-cy="radio-task-completed"]').click(); // in TaskInProgressView
-  cy.get('[data-cy="btn-save-continue"]').click(); // in TaskInProgressView
-  cy.get('[data-cy="btn-back-home"]').click(); // in TaskSuccessView
 
-  // confirm task is completed
-  cy.get('[data-cy="nav-sidebar"]').contains("All tasks").click();
-  cy.contains(uniqueTaskName).should("exist");
-
-  // back to home
-  cy.get('[data-cy="nav-sidebar"]').contains("Home").click();
-  // return the task name
-  return cy.wrap(uniqueTaskName);
+    // Back home
+    cy.get('[data-cy="nav-sidebar"]').contains("Home").click();
+  });
 });
