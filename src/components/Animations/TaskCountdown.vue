@@ -1,12 +1,12 @@
 <template>
-  <div class="countdown-container">
+  <div class="countdown-container" data-cy="anim-task-countdown">
     <div :class="['circle', { fading: showStartNow }]"></div>
     <div
       class="countdown-number task-progress-body-text"
       :class="{ delayedFadeIn: showStartNow }"
       :style="countdownMarginStyle"
     >
-      {{ showStartNow ? 'Start now' : countdownValue }}
+      {{ showStartNow ? "Start now" : countdownValue }}
     </div>
   </div>
 </template>
@@ -17,35 +17,35 @@ export default {
     return {
       countdownValue: 30, // Initial countdown value
       showStartNow: false, // Controls fade-in effect for "Start now"
-    }
+    };
   },
   created() {
-    this.startCountdown()
+    this.startCountdown();
   },
   methods: {
     startCountdown() {
       const interval = setInterval(() => {
         if (this.countdownValue > 0) {
-          this.countdownValue--
+          this.countdownValue--;
         } else {
-          clearInterval(interval) // Stop countdown at 0
+          clearInterval(interval); // Stop countdown at 0
 
           setTimeout(() => {
-            this.showStartNow = true // Start "Start now" fade-in after 1 second
-          }, 1000) // 1-second delay before "Start now" appears
+            this.showStartNow = true; // Start "Start now" fade-in after 1 second
+          }, 1000); // 1-second delay before "Start now" appears
         }
-      }, 1000)
+      }, 1000);
     },
   },
   computed: {
     // Conditional margin-right: 5px if countdownValue has 2 digits, else 0
     countdownMarginStyle() {
       return {
-        'margin-right': this.countdownValue >= 10 ? '0.125rem' : '0',
-      }
+        "margin-right": this.countdownValue >= 10 ? "0.125rem" : "0",
+      };
     },
   },
-}
+};
 </script>
 
 <style scoped>
