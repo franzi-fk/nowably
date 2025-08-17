@@ -1,6 +1,10 @@
 <template>
   <section class="task-progress-header">
-    <h1 class="task-progress-headline" v-if="this.taskStore.currentTask">
+    <h1
+      class="task-progress-headline"
+      v-if="this.taskStore.currentTask"
+      data-cy="current-task-title"
+    >
       {{ this.taskStore.currentTask.description }}
     </h1>
     <!-- v-if in h1 ensures currentTask is loaded before vue is trying to access it-->

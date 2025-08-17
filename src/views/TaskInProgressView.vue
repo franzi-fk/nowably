@@ -3,6 +3,7 @@
   <article
     class="in-progress-view flex-grow task-view-layout"
     v-if="userStore.currentStep === 'workingOnTask'"
+    data-cy="art-working-on-task"
   >
     <div class="in-progress-view-body">
       <h2 class="sr-only">Work on the task</h2>
@@ -10,6 +11,7 @@
         src="/illus_taskprogress.gif"
         alt="You got this"
         id="you-got-this-gif"
+        data-cy="gif-you-got-this"
       />
       <span id="you-got-this-text">Keep going!</span>
       <SolidButton
@@ -24,6 +26,7 @@
   <article
     class="document-task-status flex-grow task-view-layout"
     v-if="userStore.currentStep === 'documentTaskStatus'"
+    data-cy="art-document-task-status"
   >
     <div class="document-task-status-body flex-grow">
       <h1>Document your progress on this task</h1>
@@ -44,6 +47,7 @@
             name="task-status"
             :value="false"
             v-model="taskComplete"
+            data-cy="radio-task-not-completed"
           />
         </fieldset>
         <fieldset>

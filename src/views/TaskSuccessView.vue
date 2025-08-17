@@ -1,5 +1,8 @@
 <template>
-  <div class="success-view flex-grow page-padding-inline">
+  <div
+    class="success-view flex-grow page-padding-inline"
+    data-cy="task-success"
+  >
     <Illus_Success width="16" />
     <h1>Great job, you have beaten procrastination.</h1>
     <SolidButton
