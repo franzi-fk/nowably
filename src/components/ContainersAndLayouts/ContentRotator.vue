@@ -14,6 +14,7 @@
       :icon="btnIcon"
       iconSize="18"
       variant="secondary"
+      data-cy="btn-show-another-action"
     />
   </div>
 </template>
@@ -23,11 +24,11 @@ export default {
   props: {
     btnText: {
       type: String,
-      default: 'Show next',
+      default: "Show next",
     },
     btnIcon: {
       icon: String,
-      default: 'home',
+      default: "home",
     },
     contentItems: {
       type: Array,
@@ -39,20 +40,20 @@ export default {
       currentIndex: 0, // Keeps track of the current content index
       currentContent: {},
       isContentVisible: false,
-    }
+    };
   },
   methods: {
     rotateContent() {
       // Increment the current index and loop back to the start if at the end
-      this.currentIndex = (this.currentIndex + 1) % this.contentItems.length
-      this.currentContent = this.contentItems[this.currentIndex]
-      this.isContentVisible = true
+      this.currentIndex = (this.currentIndex + 1) % this.contentItems.length;
+      this.currentContent = this.contentItems[this.currentIndex];
+      this.isContentVisible = true;
     },
   },
   mounted() {
-    this.rotateContent() // Display the first content when the component is mounted
+    this.rotateContent(); // Display the first content when the component is mounted
   },
-}
+};
 </script>
 
 <style scoped>

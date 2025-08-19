@@ -26,7 +26,10 @@
               quick ways to boost your motivation!
             </p>
           </section>
-          <section class="motivation-alt-body help-sub-view-body">
+          <section
+            class="motivation-alt-body help-sub-view-body"
+            data-cy="sct-motivation-alt"
+          >
             <section
               class="own-achievements"
               v-if="this.userStore.totalSuccessCount > 9"
@@ -61,7 +64,7 @@
                 <template #default="{ currentContent }">
                   <article class="slot-content">
                     <!-- Title of the content -->
-                    <span class="slot-headline">{{
+                    <span class="slot-headline" data-cy="action-title">{{
                       currentContent.title
                     }}</span>
 
@@ -92,6 +95,7 @@
               variant="primary"
               class="btn-continue"
               @click="finishHelp"
+              data-cy="btn-continue"
             />
           </section>
         </div>
@@ -114,7 +118,7 @@
             v-if="meboOpened === true"
           >
             <h2>Message:</h2>
-            <p id="mebo-text">{{ this.mebo.text }}</p>
+            <p id="mebo-text" data-cy="mebo-text">{{ this.mebo.text }}</p>
             <small>— written by another user</small>
             <SolidButton
               type="text"
@@ -122,6 +126,7 @@
               variant="primary"
               @click="finishHelp"
               class="btn-continue"
+              data-cy="btn-continue"
             />
           </section>
           <section class="help-sub-view-body receive-mebo-unopened" v-else>
@@ -154,6 +159,7 @@
     <article
       id="help-overwhelmed"
       v-else-if="userStore.currentEmotion === 'overwhelmed'"
+      data-cy="art-split-task"
     >
       <div class="help-sub-view">
         <section class="intro">
@@ -167,7 +173,7 @@
           <section class="split-task-form">
             <p id="current-task">{{ taskStore.currentTask.description }}</p>
             <p>Create at least 2 tasks that will replace the original task.</p>
-            <form @submit.prevent="confirmSplitting">
+            <form @submit.prevent="confirmSplitting" data-cy="form-split-task">
               <fieldset>
                 <InputText
                   v-model="splitTask1"
@@ -208,6 +214,7 @@
                   v-show="splitTask1 && splitTask2 && splitTask3 && splitTask4"
                 />
                 <SolidButton
+                  data-cy="btn-continue"
                   type="text"
                   text="Save and continue"
                   variant="primary"
@@ -227,6 +234,7 @@
     <article
       id="help-anxious"
       v-else-if="userStore.currentEmotion === 'anxious'"
+      data-cy="art-relaxation-exercise"
     >
       <div class="help-sub-view">
         <section class="intro">
@@ -237,7 +245,11 @@
           </p>
         </section>
         <section class="relaxation-exercise help-sub-view-body">
-          <section class="exercise-instructions" v-if="!relaxExerciseStarted">
+          <section
+            class="exercise-instructions"
+            data-cy="sct-exercise-instructions"
+            v-if="!relaxExerciseStarted"
+          >
             <h2>Humming</h2>
             <p>
               Sit comfortably and relax your body.<br />Inhale deeply through
@@ -250,17 +262,20 @@
               text="Start"
               variant="primary"
               @click="startExercise"
+              data-cy="btn-start-exercise"
             />
           </section>
           <section id="exercise-progress" v-if="relaxExerciseStarted">
             <HummingAnimation
               :disappearAfter="animationDuration * 1000"
               @fade-out-complete="completeHumming"
+              data-cy="anim-humming"
             />
             <GeneralCountdown
               :duration="animationDuration"
               feedbackMessage="Well done!"
               textColor="var(--primary)"
+              data-cy="anim-countdown"
             />
             <SolidButton
               v-if="hummingAnimationCompleted"
@@ -275,7 +290,12 @@
       </div>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip this" @click="finishHelp" />
+        <LinkButton
+          type="text"
+          text="Skip this"
+          @click="finishHelp"
+          data-cy="btn-skip"
+        />
       </section>
     </article>
     <section id="whats-wrong" class="flex-grow" v-else>
@@ -294,12 +314,14 @@
             text="I feel overwhelmed"
             @click="userStore.setCurrentEmotion('overwhelmed')"
             variant="tertiary"
+            data-cy="btn-overwhelmed"
           />
           <SolidButton
             type="text"
             text="I feel anxious"
             @click="userStore.setCurrentEmotion('anxious')"
             variant="tertiary"
+            data-cy="btn-anxious"
           />
         </div>
       </div>

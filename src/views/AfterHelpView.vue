@@ -1,7 +1,7 @@
 <template>
   <TaskProgressHeader />
   <section class="after-help-view flex-grow">
-    <section class="after-help-view-body">
+    <section class="after-help-view-body" data-cy="sct-after-help-view">
       <h1>Do you want to continue right now?</h1>
       <form class="ask-if-continue-form" @submit.prevent="submitUserInput">
         <fieldset>
@@ -32,6 +32,7 @@
             id="do-not-continue"
             value="dont-continue"
             label="No, I will take a break and try again another time."
+            data-cy="radio-dont-continue"
           />
         </fieldset>
         <fieldset>
@@ -40,6 +41,7 @@
             text="Continue"
             variant="primary"
             id="btn-continue"
+            data-cy="btn-continue"
           />
         </fieldset>
       </form>

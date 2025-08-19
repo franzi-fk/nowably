@@ -7,9 +7,14 @@
       :name="name"
       :id="id"
       @change="emitSelectedValue"
+      data-cy="input-select"
     >
       <option disabled value="">{{ placeholder }}</option>
-      <option v-for="item in items" :key="item[valueKey]" :value="item[valueKey]">
+      <option
+        v-for="item in items"
+        :key="item[valueKey]"
+        :value="item[valueKey]"
+      >
         {{ item[labelKey] }}
       </option>
     </select>
@@ -18,7 +23,7 @@
 </template>
 
 <script>
-import AppIcon from '@/components/Visuals/AppIcon.vue'
+import AppIcon from "@/components/Visuals/AppIcon.vue";
 
 export default {
   components: { AppIcon },
@@ -38,26 +43,26 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Select an option',
+      default: "Select an option",
     },
     disabled: Boolean,
     name: {
       type: String,
-      default: '',
+      default: "",
     },
     id: {
       type: String,
-      default: '',
+      default: "",
     },
   },
   data() {
     return {
       localSelectedValue: this.modelValue, // Local state for the select input
-    }
+    };
   },
   watch: {
     modelValue(newValue) {
-      this.localSelectedValue = newValue // Keep local state in sync with external model
+      this.localSelectedValue = newValue; // Keep local state in sync with external model
     },
     // Watch for changes to 'modelValue'
     // ensures that if the parent component updates 'modelValue',
@@ -67,10 +72,10 @@ export default {
     emitSelectedValue() {
       // is triggered when the user selects a value from the dropdown
       // Emit the updated selected value to the parent component
-      this.$emit('update:modelValue', this.localSelectedValue)
+      this.$emit("update:modelValue", this.localSelectedValue);
     },
   },
-}
+};
 </script>
 
 <style scoped>
