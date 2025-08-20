@@ -1,5 +1,5 @@
 <template>
-  <div class="not-found page-padding-inline flex-grow">
+  <div class="not-found page-padding-inline flex-grow" data-cy="404-page">
     <h1 class="sr-only">404</h1>
     <Illus_404 width="18" />
     <h2>404 - Page not found</h2>
@@ -10,30 +10,31 @@
       @click="goToHome"
       variant="primary"
       id="btn-go-home"
+      data-cy="btn-go-home"
     />
   </div>
 </template>
 
 <script>
-import Illus_404 from '../components/Visuals/Illus_404.vue'
-import { useRouter } from 'vue-router'
+import Illus_404 from "../components/Visuals/Illus_404.vue";
+import { useRouter } from "vue-router";
 
 export default {
-  name: 'NotFound',
+  name: "NotFound",
   components: {
     Illus_404,
   },
   data() {
     return {
       router: useRouter(),
-    }
+    };
   },
   methods: {
     goToHome() {
-      this.router.push({ name: 'home' })
+      this.router.push({ name: "home" });
     },
   },
-}
+};
 </script>
 
 <style scoped>
