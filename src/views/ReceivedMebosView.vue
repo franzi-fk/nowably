@@ -1,17 +1,28 @@
 <template>
   <div class="wrapper">
-    <SidebarNavi :variant="this.userStore.role === 'admin' ? 'admin' : 'user'" />
+    <SidebarNavi
+      :variant="this.userStore.role === 'admin' ? 'admin' : 'user'"
+    />
     <AppHeader />
-    <div class="main-view-container all-mebos-container flex-grow view-layout-default">
+    <div
+      class="main-view-container all-mebos-container flex-grow view-layout-default"
+    >
       <article class="received-mebos">
         <section class="received-mebos-header page-padding-inline">
           <h1>Received Messages in a Bottle</h1>
         </section>
         <!-- Show loader space (white space) when loading -->
         <div class="loader-space" v-if="loading"></div>
-        <div class="tile-container" v-else-if="this.userStore.allReceivedMebos.length > 0">
-          <section v-for="mebo in reversedMebos" :key="mebo.id" class="mebo-tile">
-            <p class="mebo-text">
+        <div
+          class="tile-container"
+          v-else-if="this.userStore.allReceivedMebos.length > 0"
+        >
+          <section
+            v-for="mebo in reversedMebos"
+            :key="mebo.id"
+            class="mebo-tile"
+          >
+            <p class="mebo-text" data-cy="mebo-text">
               {{ mebo.text }}
             </p>
             <div class="decoration">
@@ -21,7 +32,11 @@
             </div>
           </section>
         </div>
-        <section class="tile-container-empty-state" v-else>
+        <section
+          class="tile-container-empty-state"
+          data-cy="empty-state"
+          v-else
+        >
           <Illus_EmptyState width="15" />
           <p>No received Messages in a Bottle.</p>
         </section>
@@ -31,12 +46,12 @@
 </template>
 
 <script>
-import { useTaskStore } from '@/stores/taskStore'
-import { useUserStore } from '@/stores/userStore'
-import { useMeboStore } from '../stores/meboStore'
-import { useRouter } from 'vue-router'
-import SidebarNavi from '@/components/Navigation/SidebarNavi.vue'
-import Illus_EmptyState from '../components/Visuals/Illus_EmptyState.vue'
+import { useTaskStore } from "@/stores/taskStore";
+import { useUserStore } from "@/stores/userStore";
+import { useMeboStore } from "../stores/meboStore";
+import { useRouter } from "vue-router";
+import SidebarNavi from "@/components/Navigation/SidebarNavi.vue";
+import Illus_EmptyState from "../components/Visuals/Illus_EmptyState.vue";
 
 export default {
   components: {
@@ -51,37 +66,43 @@ export default {
       router: useRouter(),
       loading: true,
       allReceivedMebos: [],
-    }
+    };
   },
   computed: {
     reversedMebos() {
-      return [...this.allReceivedMebos].reverse() // Creates a new reversed array
+      return [...this.allReceivedMebos].reverse(); // Creates a new reversed array
     },
   },
   mounted() {
-    this.loading = true
+    this.loading = true;
 
-    Promise.all([this.userStore.initLoad(), this.meboStore.initLoad(), this.taskStore.initLoad()])
+    Promise.all([
+      this.userStore.initLoad(),
+      this.meboStore.initLoad(),
+      this.taskStore.initLoad(),
+    ])
       .then(() => {
-        this.loading = false
+        this.loading = false;
 
         // Use $nextTick to ensure the DOM is updated after loading
         this.$nextTick(() => {
           const receivedMeboIdsSet = new Set(
-            this.userStore.allReceivedMebos.map((item) => item.meboId),
-          )
-          const allMebos = this.meboStore.allPublishedMebos || []
+            this.userStore.allReceivedMebos.map((item) => item.meboId)
+          );
+          const allMebos = this.meboStore.allPublishedMebos || [];
 
           // Filter mebos that match the received meboId values
-          this.allReceivedMebos = allMebos.filter((mebo) => receivedMeboIdsSet.has(mebo.id))
-        })
+          this.allReceivedMebos = allMebos.filter((mebo) =>
+            receivedMeboIdsSet.has(mebo.id)
+          );
+        });
       })
       .catch((error) => {
-        this.loading = false
-        console.error('Error during data initialization:', error)
-      })
+        this.loading = false;
+        console.error("Error during data initialization:", error);
+      });
   },
-}
+};
 </script>
 
 <style scoped>

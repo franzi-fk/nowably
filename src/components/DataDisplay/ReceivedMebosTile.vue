@@ -1,5 +1,6 @@
 <template>
   <article
+    data-cy="art-received-mebos-banner"
     class="received-mebos-container"
     v-if="this.userStore.allReceivedMebos.length > 0"
   >
