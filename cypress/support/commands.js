@@ -37,7 +37,7 @@ Cypress.Commands.add("loginWithFirebase", () => {
 // Custom logout command
 Cypress.Commands.add("logout", () => {
   cy.visit("http://localhost:8888/");
-  cy.wait(3000);
+  cy.wait(500);
 
   // wait for URL to settle
   cy.url({ timeout: 6000 }).then((url) => {
