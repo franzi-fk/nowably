@@ -12,6 +12,7 @@
             id="continue-with-task"
             value="continue"
             label="Yes, I will give it another try. I want to continue with:"
+            data-cy="radio-continue"
           />
           <InputSelect
             v-model="selectedValue"

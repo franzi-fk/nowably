@@ -101,7 +101,12 @@
         </div>
         <section class="actions">
           <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-          <LinkButton type="text" text="Skip this" @click="finishHelp" />
+          <LinkButton
+            type="text"
+            text="Skip this"
+            @click="finishHelp"
+            data-cy="btn-skip"
+          />
         </section>
       </article>
       <article id="receive-mebo" data-cy="art-receive-mebo" v-else>
@@ -152,7 +157,12 @@
         </div>
         <section class="actions">
           <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-          <LinkButton type="text" text="Skip this" @click="finishHelp" />
+          <LinkButton
+            type="text"
+            text="Skip this"
+            @click="finishHelp"
+            data-cy="btn-skip"
+          />
         </section>
       </article>
     </article>
@@ -228,7 +238,12 @@
       </div>
       <section class="actions">
         <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
-        <LinkButton type="text" text="Skip this" @click="finishHelp" />
+        <LinkButton
+          type="text"
+          text="Skip this"
+          @click="finishHelp"
+          data-cy="btn-skip"
+        />
       </section>
     </article>
     <article

@@ -142,18 +142,33 @@ describe("Task progress: Need help", () => {
     checkAfterHelpView();
   });
 
-  /*
   it("lets user continue task progression after receiving help", () => {
-    // click anxious
-    // click skip
-    // choose to continue
+    // open any help option and skip
+    cy.get('[data-cy="btn-overwhelmed"]').click();
+    cy.get('[data-cy="btn-skip"]').click();
+
+    // choose to continue with task
+    checkAfterHelpView();
+    cy.get('[data-cy="radio-continue"]').click();
+    cy.wait(500);
+    checkAndClickContinueBtn();
+
     // check for countdown
+    cy.wait(500);
+    cy.get('[data-cy="anim-task-countdown"]').should("be.visible");
   });
 
   it("lets user stop task progression after receiving help", () => {
-    // click anxious
-    // click skip
-    // choose to give break
+    // open any help option and skip
+    cy.get('[data-cy="btn-anxious"]').click();
+    cy.get('[data-cy="btn-skip"]').click();
+
+    // choose to not continue with task
+    checkAfterHelpView();
+    cy.get('[data-cy="radio-dont-continue"]').click();
+    checkAndClickContinueBtn();
+
     // check for home
-  });*/ //
+    cy.contains("Welcome");
+  });
 });
