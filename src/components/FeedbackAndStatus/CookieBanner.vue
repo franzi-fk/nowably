@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showBanner" class="cookie-banner">
+  <div v-if="showBanner" class="cookie-banner" data-cy="cookie-banner">
     <p>
       This app only uses essential cookies, with Google Sign-In for secure login
       and Firestore for data storage.
@@ -15,6 +15,7 @@
       variant="primary"
       btnSize="small"
       id="btn-ok"
+      data-cy="btn-cookies-ok"
     />
   </div>
 </template>
