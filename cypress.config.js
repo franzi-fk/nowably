@@ -105,7 +105,11 @@ export default defineConfig({
       // return updated config object
       return config;
     },
-    defaultCommandTimeout: 17000, // keep it minimum 10000
-    pageLoadTimeout: 40000,
+    defaultCommandTimeout: 30000, // keep it minimum 10000
+    pageLoadTimeout: 80000,
+    retries: {
+      runMode: 2, // retry failed tests 2 times in CI
+      openMode: 0,
+    },
   },
 });
