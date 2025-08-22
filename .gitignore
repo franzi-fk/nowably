@@ -5,5 +5,4 @@ dist/
 .vscode/
 .idea/
 eslint.config.js
-cypress.config.js
 cypress/nowably-firebase-service-account.json
