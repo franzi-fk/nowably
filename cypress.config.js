@@ -2,25 +2,27 @@ import { defineConfig } from "cypress";
 import dotenv from "dotenv";
 import admin from "firebase-admin";
 import { readFileSync } from "fs";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 
 // Load env variables from .env file
 dotenv.config();
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // firebase admin sdk
 // load service account key from JSON file
 let serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  // CI: parse the GitHub secret
+  // CI
   serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 } else {
   // Local dev: read from local file
-  serviceAccount = JSON.parse(
-    readFileSync(
-      resolve("./cypress/nowably-firebase-service-account.json"),
-      "utf-8"
-    )
+  const serviceAccountPath = resolve(
+    __dirname,
+    "cypress/nowably-firebase-service-account.json"
   );
+  serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf-8"));
 }
 
 // initialize admin with full privileges
@@ -45,9 +47,8 @@ export default defineConfig({
         TEST_USER_EMAIL: process.env.CYPRESS_TEST_USER_EMAIL,
         TEST_USER_PASSWORD: process.env.CYPRESS_TEST_USER_PASSWORD,
 
-        FIREBASE_SERVICE_ACCOUNT: process.env.FIREBASE_SERVICE_ACCOUNT_JSON
-          ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
-          : require("./cypress/nowably-firebase-service-account.json"),
+        FIREBASE_SERVICE_ACCOUNT_JSON:
+          process.env.FIREBASE_SERVICE_ACCOUNT_JSON || "",
       };
 
       // register custom cypress task
@@ -104,5 +105,7 @@ export default defineConfig({
       // return updated config object
       return config;
     },
+    defaultCommandTimeout: 12000,
+    pageLoadTimeout: 40000,
   },
 });
