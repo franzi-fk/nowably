@@ -100,7 +100,12 @@
           </section>
         </div>
         <section class="actions">
-          <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+          <LinkButton
+            type="text"
+            text="Go back"
+            @click="backToWhichHelp"
+            data-cy="btn-go-back"
+          />
           <LinkButton
             type="text"
             text="Skip this"
@@ -156,7 +161,12 @@
           </section>
         </div>
         <section class="actions">
-          <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+          <LinkButton
+            type="text"
+            text="Go back"
+            @click="backToWhichHelp"
+            data-cy="btn-go-back"
+          />
           <LinkButton
             type="text"
             text="Skip this"
@@ -237,7 +247,12 @@
         </section>
       </div>
       <section class="actions">
-        <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+        <LinkButton
+          type="text"
+          text="Go back"
+          @click="backToWhichHelp"
+          data-cy="btn-go-back"
+        />
         <LinkButton
           type="text"
           text="Skip this"
@@ -304,7 +319,12 @@
         </section>
       </div>
       <section class="actions">
-        <LinkButton type="text" text="Go back" @click="backToWhichHelp" />
+        <LinkButton
+          type="text"
+          text="Go back"
+          @click="backToWhichHelp"
+          data-cy="btn-go-back"
+        />
         <LinkButton
           type="text"
           text="Skip this"
@@ -341,7 +361,12 @@
         </div>
       </div>
       <div class="actions whats-wrong-footer">
-        <LinkButton type="text" text="Go back" @click="backToCountdown" />
+        <LinkButton
+          type="text"
+          text="Go back"
+          @click="backToCountdown"
+          data-cy="btn-go-back"
+        />
       </div>
     </section>
   </div>

@@ -53,6 +53,7 @@
         text="Go back"
         @click="backToLastStep"
         v-if="this.userStore.currentEmotion !== 'overwhelmed'"
+        data-cy="btn-go-back"
       />
     </section>
   </section>
