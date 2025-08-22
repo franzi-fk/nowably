@@ -27,7 +27,7 @@
           class="menu"
           role="menu"
           aria-label="User menu options"
-          data-cy="menu-user"
+          data-cy="user-menu"
         >
           <div class="menu-header">
             <img
@@ -40,8 +40,8 @@
               <p>{{ userStore.user.email }}</p>
             </div>
           </div>
-          <!-- <hr /> -->
-          <ul class="menu-items-list">
+
+          <ul class="menu-items-list" data-cy="user-menu-main-items">
             <li role="menuitem" @click="goToAccount" tabindex="0">
               <AppIcon name="circleUserRound" size="20" />My Account
             </li>
@@ -55,8 +55,8 @@
               <AppIcon name="logOut" size="20" />Sign Out
             </li>
           </ul>
-          <!-- <hr /> -->
-          <ul class="legal-items-list">
+
+          <ul class="legal-items-list" data-cy="user-menu-legal-items">
             <li role="menuitem" @click="goToTermsOfUse" tabindex="0">
               Terms of Use
             </li>
