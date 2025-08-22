@@ -21,7 +21,7 @@ jobs:
       VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
       # Firebase Service Account (Admin SDK)
       FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-      # Test user credentials
+      # Cypress test user credentials
       CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
       CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
       CYPRESS_TEST_USER_UID: ${{ secrets.CYPRESS_TEST_USER_UID }}
@@ -35,23 +35,37 @@ jobs:
         with:
           node-version: "20"
 
-      # Write the Firebase secret to a temporary file
+      # Write the Firebase service account secret to a temporary file
       - name: Write Firebase service account secret to file
         run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" > ${{ github.workspace }}/firebase-service-account.json
 
       - name: Set GOOGLE_APPLICATION_CREDENTIALS
         run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-service-account.json" >> $GITHUB_ENV
 
+      # Install dependencies
       - name: Install dependencies
         run: npm ci
 
+      # Build the app
+      - name: Build application
+        run: npm run build
+
+      # Serve built app using a static server
+      - name: Serve built app
+        run: npx serve -s dist -l 3000 &
+
+      # Wait until the server is ready
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000
+
+      # Run Cypress tests
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
           browser: ${{ matrix.browser }}
-          start: npm run preview -- --port 3000 --host 0.0.0.0
           wait-on: "http://localhost:3000"
-          wait-on-timeout: 120
+          wait-on-timeout: 180
 
+      # Clean up service account
       - name: Clean up Firebase service account
         run: rm -f ${{ github.workspace }}/firebase-service-account.json
