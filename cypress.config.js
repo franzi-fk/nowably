@@ -9,15 +9,19 @@ dotenv.config();
 
 // firebase admin sdk
 // load service account key from JSON file
-// Reconstruct the service account from environment variable in CI
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, "\n"))
-  : JSON.parse(
-      readFileSync(
-        resolve("./cypress/nowably-firebase-service-account.json"),
-        "utf-8"
-      )
-    );
+let serviceAccount;
+if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+  // CI: parse the GitHub secret
+  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+} else {
+  // Local dev: read from local file
+  serviceAccount = JSON.parse(
+    readFileSync(
+      resolve("./cypress/nowably-firebase-service-account.json"),
+      "utf-8"
+    )
+  );
+}
 
 // initialize admin with full privileges
 admin.initializeApp({
@@ -40,6 +44,10 @@ export default defineConfig({
 
         TEST_USER_EMAIL: process.env.CYPRESS_TEST_USER_EMAIL,
         TEST_USER_PASSWORD: process.env.CYPRESS_TEST_USER_PASSWORD,
+
+        FIREBASE_SERVICE_ACCOUNT: process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+          ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
+          : require("./cypress/nowably-firebase-service-account.json"),
       };
 
       // register custom cypress task
