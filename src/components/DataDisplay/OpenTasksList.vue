@@ -10,6 +10,7 @@
         type="text"
         text="View all"
         @click="goToAllTasksView"
+        data-cy="btn-view-all"
       />
     </div>
 

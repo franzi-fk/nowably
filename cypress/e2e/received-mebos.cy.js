@@ -1,13 +1,3 @@
-function receiveMebo() {
-  cy.createAndStartTask();
-  cy.get('[data-cy="btn-need-help"]').click();
-  cy.get('[data-cy="btn-demotivated"]').click();
-  cy.get('[data-cy="btn-open-mebo"]').click();
-  cy.wait(1000);
-  cy.get('[data-cy="initiate-stopping-task"]').click();
-  cy.get('[data-cy="modal-btn-primary"]').click();
-}
-
 describe("Received Messages in a Bottle", () => {
   beforeEach(() => {
     cy.task("resetTestUser"); // reset so there are no received mebos initially
@@ -21,7 +11,7 @@ describe("Received Messages in a Bottle", () => {
   });
 
   it("views mebos the user has received", () => {
-    receiveMebo();
+    cy.receiveMebo();
     cy.visit("http://localhost:8888/received-messages");
     cy.get('[data-cy="mebo-text"]').should("be.visible");
   });
@@ -31,7 +21,7 @@ describe("Received Messages in a Bottle", () => {
   });
 
   it("views received mebo banner on home when user has at least 1 received mebo", () => {
-    receiveMebo();
+    cy.receiveMebo();
     cy.get('[data-cy="art-received-mebos-banner"]').should("be.visible");
   });
 });

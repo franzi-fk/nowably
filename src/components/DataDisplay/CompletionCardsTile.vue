@@ -1,11 +1,12 @@
 <template>
-  <article class="completion-cards-container">
+  <article class="completion-cards-container" data-cy="completion-cards-tile">
     <div class="completion-cards-header">
       <h2>Completion Cards</h2>
       <LinkButton
         type="text"
         text="View all"
         @click="goToCompletionCardsView()"
+        data-cy="btn-view-all"
       />
     </div>
     <div class="completion-cards-body">

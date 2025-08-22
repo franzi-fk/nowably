@@ -6,7 +6,12 @@
   >
     <div class="received-mebos-header">
       <h2>Received Messages in a Bottle</h2>
-      <LinkButton type="text" text="View all" @click="goToReceivedMessages()" />
+      <LinkButton
+        type="text"
+        text="View all"
+        @click="goToReceivedMessages()"
+        data-cy="btn-view-all"
+      />
     </div>
     <div class="received-mebos-body">
       <p v-if="this.userStore.allReceivedMebos.length === 1">

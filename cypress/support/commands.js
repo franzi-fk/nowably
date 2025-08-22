@@ -107,3 +107,16 @@ Cypress.Commands.add("createAndCompleteTask", (taskName) => {
     cy.get('[data-cy="nav-sidebar"]').contains("Home").click();
   });
 });
+
+// _______ MEBOS _______ //
+
+// Receive a mebo
+Cypress.Commands.add("receiveMebo", () => {
+  cy.createAndStartTask();
+  cy.get('[data-cy="btn-need-help"]').click();
+  cy.get('[data-cy="btn-demotivated"]').click();
+  cy.get('[data-cy="btn-open-mebo"]').click();
+  cy.wait(1000);
+  cy.get('[data-cy="initiate-stopping-task"]').click();
+  cy.get('[data-cy="modal-btn-primary"]').click();
+});
