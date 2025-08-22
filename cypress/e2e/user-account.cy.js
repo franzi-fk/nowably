@@ -3,9 +3,7 @@ describe("Sign In and Sign Out", () => {
   it("signs user in", () => {
     cy.logout();
 
-    cy.get('[data-cy="btn-google-sign-in"]', { timeout: 10000 }).should(
-      "be.enabled"
-    );
+    cy.get('[data-cy="btn-google-sign-in"]').should("be.enabled");
     cy.window().then((win) => {
       cy.stub(win, "open").as("windowOpen");
     });

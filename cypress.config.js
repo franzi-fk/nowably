@@ -105,7 +105,7 @@ export default defineConfig({
       // return updated config object
       return config;
     },
-    defaultCommandTimeout: 12000,
+    defaultCommandTimeout: 17000, // keep it minimum 10000
     pageLoadTimeout: 40000,
   },
 });

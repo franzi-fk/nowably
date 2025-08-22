@@ -79,15 +79,11 @@ describe("Completion Card is opened when user reaches a milestone", () => {
     cy.createAndCompleteTask("task-3");
     cy.createAndCompleteTask("task-4");
     cy.createAndCompleteTask("task-5");
-    cy.get('[data-cy="opened-completion-card"]', { timeout: 10000 }).should(
-      "exist"
-    );
+    cy.get('[data-cy="opened-completion-card"]').should("exist");
   });
 
   it("views open card on 'Completion Cards' page", () => {
     cy.visit("http://localhost:8888/completion-cards");
-    cy.get('[data-cy="opened-completion-card"]', { timeout: 10000 }).should(
-      "exist"
-    );
+    cy.get('[data-cy="opened-completion-card"]').should("exist");
   });
 });

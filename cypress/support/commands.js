@@ -40,7 +40,7 @@ Cypress.Commands.add("logout", () => {
   cy.wait(500);
 
   // wait for URL to settle
-  cy.url({ timeout: 6000 }).then((url) => {
+  cy.url().then((url) => {
     if (!url.includes("/login")) {
       cy.log("User is logged in, logging out...");
       // User is logged in
@@ -48,7 +48,7 @@ Cypress.Commands.add("logout", () => {
       cy.get('[data-cy="user-menu"]').should("be.visible"); // Menu visible
       cy.get('[data-cy="btn-signout"]').click(); // Click logout button
 
-      cy.url({ timeout: 5000 }).should("include", "/login"); // Confirm logout by checking URL includes /login
+      cy.url().should("include", "/login"); // Confirm logout by checking URL includes /login
     }
     // User is logged out, nothing to do
     cy.log("User is logged out");

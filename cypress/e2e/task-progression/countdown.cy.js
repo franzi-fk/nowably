@@ -10,7 +10,7 @@ describe("Task progress: Countdown view", () => {
     cy.get('[data-cy="anim-task-countdown"]').should("be.visible");
 
     // countdown is running
-    cy.contains("27", { timeout: 5000 });
+    cy.contains("27");
   });
 
   it("views both action buttons", () => {
