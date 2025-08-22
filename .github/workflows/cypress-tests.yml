@@ -52,18 +52,18 @@ jobs:
 
       # Serve built app using a static server
       - name: Serve built app
-        run: npx serve -s dist -l 3000 &
+        run: npx serve -s dist -l 8888 &
 
       # Wait until the server is ready
       - name: Wait for server
-        run: npx wait-on http://localhost:3000
+        run: npx wait-on http://localhost:8888
 
       # Run Cypress tests
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
           browser: ${{ matrix.browser }}
-          wait-on: "http://localhost:3000"
+          wait-on: "http://localhost:8888"
           wait-on-timeout: 180
 
       # Clean up service account
