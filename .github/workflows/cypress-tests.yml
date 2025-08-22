@@ -49,7 +49,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           browser: ${{ matrix.browser }}
-          start: npm run preview -- --port 3000
+          start: npm run preview -- --port 3000 --host 0.0.0.0
           wait-on: "http://localhost:3000"
           wait-on-timeout: 120
 
