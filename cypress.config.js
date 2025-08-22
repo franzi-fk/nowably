@@ -9,12 +9,15 @@ dotenv.config();
 
 // firebase admin sdk
 // load service account key from JSON file
-const serviceAccount = JSON.parse(
-  readFileSync(
-    resolve("./cypress/nowably-firebase-service-account.json"),
-    "utf-8"
-  )
-);
+// Reconstruct the service account from environment variable in CI
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, "\n"))
+  : JSON.parse(
+      readFileSync(
+        resolve("./cypress/nowably-firebase-service-account.json"),
+        "utf-8"
+      )
+    );
 
 // initialize admin with full privileges
 admin.initializeApp({
