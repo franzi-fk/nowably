@@ -5,6 +5,7 @@
       icon="arrowLeft"
       text="Go Back"
       @click="$router.back()"
+      data-cy="btn-back"
     />
     <h1>Legal Notice</h1>
     <p><strong>According to § 5 TMG (Telemedia Act)</strong></p>

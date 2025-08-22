@@ -5,6 +5,7 @@
       icon="arrowLeft"
       text="Go Back"
       @click="$router.back()"
+      data-cy="btn-back"
     />
     <h1>Terms of Use</h1>
     <p><strong>Effective Date:</strong> 01.04.2025</p>

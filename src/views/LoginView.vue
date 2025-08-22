@@ -63,11 +63,17 @@
       </div>
       <footer>
         <div id="legal-links" class="login-container-footer">
-          <RouterLink :to="{ name: 'terms-of-use' }">Terms of Use</RouterLink>
-          <RouterLink :to="{ name: 'privacy-policy' }"
+          <RouterLink :to="{ name: 'terms-of-use' }" data-cy="link-terms-of-use"
+            >Terms of Use</RouterLink
+          >
+          <RouterLink
+            :to="{ name: 'privacy-policy' }"
+            data-cy="link-privacy-policy"
             >Privacy Policy</RouterLink
           >
-          <RouterLink :to="{ name: 'legal-notice' }">Legal Notice</RouterLink>
+          <RouterLink :to="{ name: 'legal-notice' }" data-cy="link-legal-notice"
+            >Legal Notice</RouterLink
+          >
         </div>
         <div id="copyright">&copy; 2025 Franziska Kiel</div>
       </footer>

@@ -7,14 +7,19 @@
     v-if="variant === 'user'"
   >
     <div class="navi-header">
-      <h1 aria-label="Logo Nowably" @click="goToHome">
+      <h1 aria-label="Logo Nowably" @click="goToHome" data-cy="nowably-logo">
         <NowablyLogo
           :width="isCollapsed ? '3' : '10'"
           :variant="isCollapsed ? 'image' : 'full'"
         />
       </h1>
     </div>
-    <ul v-if="!isCollapsed" role="menu" aria-label="Main menu">
+    <ul
+      v-if="!isCollapsed"
+      role="menu"
+      aria-label="Main menu"
+      data-cy="ul-expanded-menu"
+    >
       <router-link
         v-for="(item, index) in userMenu"
         :key="index"
@@ -35,7 +40,12 @@
         </li>
       </router-link>
     </ul>
-    <ul v-else role="menu" aria-label="Collapsed menu">
+    <ul
+      v-else
+      role="menu"
+      aria-label="Collapsed menu"
+      data-cy="ul-collapsed-menu"
+    >
       <router-link
         v-for="(item, index) in userMenu"
         :key="index"
@@ -65,6 +75,7 @@
           :aria-expanded="String(!isCollapsed)"
           :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
           id="btn-menu-toggle"
+          data-cy="btn-menu-toggle"
         >
           <AppIcon
             :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
@@ -137,6 +148,7 @@
           :aria-expanded="String(!isCollapsed)"
           :aria-label="isCollapsed ? 'Expand menu' : 'Collapse menu'"
           id="btn-menu-toggle"
+          data-cy="btn-menu-toggle"
         >
           <AppIcon
             :name="isCollapsed ? 'ArrowRightFromLine' : 'ArrowLeftToLine'"
