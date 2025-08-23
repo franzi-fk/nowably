@@ -2,7 +2,7 @@ const BASE_URL = "http://localhost:8888";
 
 describe("Navigation in task progression flow", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit(`${BASE_URL}`);
     cy.createAndStartTask();
   });
@@ -59,6 +59,7 @@ describe("Navigation in task progression flow", () => {
   it("navigates to 'after help' view from each help sub view (skip)", () => {
     helpSubViews.forEach((subView) => {
       // open 'need help' overview
+      cy.wait(500);
       cy.get('[data-cy="btn-need-help"]').click();
 
       // navigate into subview

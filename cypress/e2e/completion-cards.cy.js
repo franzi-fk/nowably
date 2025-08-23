@@ -23,7 +23,7 @@ function runCompletionCardCounterTest() {
 describe('Completion Cards are viewed on "Home" page', () => {
   beforeEach(() => {
     cy.task("resetTestUser");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
   });
 
@@ -55,7 +55,7 @@ describe('Completion Cards are viewed on "Home" page', () => {
 describe('Completion Cards are viewed on "Completion Cards" page', () => {
   beforeEach(() => {
     cy.task("resetTestUser");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/completion-cards");
   });
 
@@ -68,7 +68,7 @@ describe('Completion Cards are viewed on "Completion Cards" page', () => {
 
 describe("Completion Card is opened when user reaches a milestone", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888");
   });
 
@@ -79,15 +79,11 @@ describe("Completion Card is opened when user reaches a milestone", () => {
     cy.createAndCompleteTask("task-3");
     cy.createAndCompleteTask("task-4");
     cy.createAndCompleteTask("task-5");
-    cy.get('[data-cy="opened-completion-card"]', { timeout: 10000 }).should(
-      "exist"
-    );
+    cy.get('[data-cy="opened-completion-card"]').should("exist");
   });
 
   it("views open card on 'Completion Cards' page", () => {
     cy.visit("http://localhost:8888/completion-cards");
-    cy.get('[data-cy="opened-completion-card"]', { timeout: 10000 }).should(
-      "exist"
-    );
+    cy.get('[data-cy="opened-completion-card"]').should("exist");
   });
 });

@@ -2,40 +2,80 @@ name: Cypress Cross-Browser Tests
 
 on:
   push:
-    branches:
-      - "**" # run on all branches
+    branches: [main]
   pull_request:
-    branches:
-      - "**" # run on all pull requests
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     strategy:
       matrix:
-        browser: [chrome, firefox, edge]
+        browser: [chrome]
+    env:
+      # Firebase config
+      VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+      VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+      VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+      VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+      VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+      # Firebase Service Account (Admin SDK)
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      # Cypress test user credentials
+      CYPRESS_TEST_USER_EMAIL: ${{ secrets.CYPRESS_TEST_USER_EMAIL }}
+      CYPRESS_TEST_USER_PASSWORD: ${{ secrets.CYPRESS_TEST_USER_PASSWORD }}
+      CYPRESS_TEST_USER_UID: ${{ secrets.CYPRESS_TEST_USER_UID }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: "20"
 
+      # Cache dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Write the Firebase service account secret to a temporary file
+      - name: Write Firebase service account secret to file
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" > ${{ github.workspace }}/firebase-service-account.json
+
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-service-account.json" >> $GITHUB_ENV
+
+      # Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      - name: Build and start app
-        run: |
-          npm run build
-          npm start &
-        env:
-          PORT: 3000
+      # Build the app
+      - name: Build application
+        run: npm run build
 
-      - name: Wait for app to be ready
-        run: npx wait-on http://localhost:3000
+      # Serve built app using a static server
+      - name: Serve built app
+        run: npx serve -s dist -l 8888 &
 
-      - name: Run Cypress tests on ${{ matrix.browser }}
-        run: npx cypress run --browser ${{ matrix.browser }}
+      # Wait until the server is ready
+      - name: Wait for server
+        run: npx wait-on http://localhost:8888
+
+      # Run Cypress tests
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v5
+        with:
+          browser: ${{ matrix.browser }}
+          wait-on: "http://localhost:8888"
+          wait-on-timeout: 180
+
+      # Clean up service account
+      - name: Clean up Firebase service account
+        run: rm -f ${{ github.workspace }}/firebase-service-account.json

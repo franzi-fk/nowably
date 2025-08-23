@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 // Firebase config from Cypress env variables (see cypress.config.js)
 const firebaseConfig = {
@@ -22,16 +22,10 @@ const auth = getAuth(firebaseApp);
 // _______ LOGIN & LOGOUT _______ //
 
 // Custom login command
-Cypress.Commands.add("loginWithFirebase", () => {
-  const email = Cypress.env("TEST_USER_EMAIL");
-  const password = Cypress.env("TEST_USER_PASSWORD");
-
-  return signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => userCredential.user.getIdToken())
-    .then((idToken) => {
-      // Set the token in localStorage so your app considers the user logged in
-      window.localStorage.setItem("authToken", idToken);
-    });
+Cypress.Commands.add("loginWithToken", () => {
+  cy.task("createCustomToken").then((token) => {
+    return signInWithCustomToken(auth, token);
+  });
 });
 
 // Custom logout command
@@ -40,7 +34,7 @@ Cypress.Commands.add("logout", () => {
   cy.wait(500);
 
   // wait for URL to settle
-  cy.url({ timeout: 6000 }).then((url) => {
+  cy.url().then((url) => {
     if (!url.includes("/login")) {
       cy.log("User is logged in, logging out...");
       // User is logged in
@@ -48,7 +42,7 @@ Cypress.Commands.add("logout", () => {
       cy.get('[data-cy="user-menu"]').should("be.visible"); // Menu visible
       cy.get('[data-cy="btn-signout"]').click(); // Click logout button
 
-      cy.url({ timeout: 5000 }).should("include", "/login"); // Confirm logout by checking URL includes /login
+      cy.url().should("include", "/login"); // Confirm logout by checking URL includes /login
     }
     // User is logged out, nothing to do
     cy.log("User is logged out");

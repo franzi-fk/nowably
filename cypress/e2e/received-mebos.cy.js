@@ -1,7 +1,7 @@
 describe("Received Messages in a Bottle", () => {
   beforeEach(() => {
     cy.task("resetTestUser"); // reset so there are no received mebos initially
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
   });
 

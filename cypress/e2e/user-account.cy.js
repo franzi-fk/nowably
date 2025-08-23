@@ -3,29 +3,27 @@ describe("Sign In and Sign Out", () => {
   it("signs user in", () => {
     cy.logout();
 
-    cy.get('[data-cy="btn-google-sign-in"]', { timeout: 10000 }).should(
-      "be.enabled"
-    );
+    cy.get('[data-cy="btn-google-sign-in"]').should("be.enabled");
     cy.window().then((win) => {
       cy.stub(win, "open").as("windowOpen");
     });
     cy.get('[data-cy="btn-google-sign-in"]').click();
     cy.get("@windowOpen").should("be.called");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
     cy.contains("Welcome").should("be.visible");
   });
 
   // Sign out
   it("signs user out", () => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.logout();
   });
 });
 
 describe("User Account", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/account");
   });
 
