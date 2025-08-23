@@ -32,19 +32,21 @@ Cypress.Commands.add("loginWithToken", () => {
 Cypress.Commands.add("logout", () => {
   cy.visit("http://localhost:8888/");
 
-  // wait for URL to settle
-  cy.url().then((url) => {
-    if (!url.includes("/login")) {
-      cy.log("User is logged in, logging out...");
-      // User is logged in
-      cy.get('[data-cy="btn-user-menu"]').should("be.visible").click(); // Open user menu
-      cy.get('[data-cy="user-menu"]').should("be.visible"); // Menu visible
-      cy.get('[data-cy="btn-signout"]').should("be.visible").click(); // Click logout button
+  // Wait for either login page or user menu to appear
+  cy.get("body", { timeout: 60000 }).then(($body) => {
+    if ($body.find('[data-cy="btn-user-menu"]').length) {
+      // User is logged in, perform logout
+      cy.get('[data-cy="btn-user-menu"]').should("be.visible").click();
+      cy.get('[data-cy="user-menu"]').should("be.visible");
+      cy.get('[data-cy="btn-signout"]').should("be.visible").click();
 
-      cy.url().should("include", "/login"); // Confirm logout by checking URL includes /login
+      // Confirm logout
+      cy.url({ timeout: 60000 }).should("include", "/login");
+    } else {
+      // User is already logged out
+      cy.log("User is already logged out");
+      cy.url().should("include", "/login");
     }
-    // User is logged out, nothing to do
-    cy.log("User is logged out");
   });
 });
 
