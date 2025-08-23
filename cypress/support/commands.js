@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 
 // Firebase config from Cypress env variables (see cypress.config.js)
 const firebaseConfig = {
@@ -26,28 +26,37 @@ Cypress.Commands.add("loginWithToken", () => {
   cy.task("createCustomToken").then((token) => {
     return signInWithCustomToken(auth, token);
   });
+
+  // Wait until Firebase reports a user
+  cy.then(() => {
+    return new Cypress.Promise((resolve) => {
+      const unsub = auth.onAuthStateChanged((user) => {
+        if (user) {
+          unsub();
+          resolve();
+        }
+      });
+    });
+  });
 });
 
-// Custom logout command
+// Custom logout command (SDK-based)
 Cypress.Commands.add("logout", () => {
-  cy.visit("http://localhost:8888/");
-
-  // Wait for either login page or user menu to appear
-  cy.get("body", { timeout: 60000 }).then(($body) => {
-    if ($body.find('[data-cy="btn-user-menu"]').length) {
-      // User is logged in, perform logout
-      cy.get('[data-cy="btn-user-menu"]').should("be.visible").click();
-      cy.get('[data-cy="user-menu"]').should("be.visible");
-      cy.get('[data-cy="btn-signout"]').should("be.visible").click();
-
-      // Confirm logout
-      cy.url({ timeout: 60000 }).should("include", "/login");
-    } else {
-      // User is already logged out
-      cy.log("User is already logged out");
-      cy.url().should("include", "/login");
-    }
+  cy.then(() => signOut(auth)); // sign out via Firebase SDK
+  // wait for logout to propagate
+  cy.then(() => {
+    return new Cypress.Promise((resolve) => {
+      const unsub = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          unsub();
+          resolve();
+        }
+      });
+    });
   });
+  // go to login page
+  cy.visit("http://localhost:8888/login");
+  cy.get('[data-cy="btn-enter-demo"]').should("be.visible");
 });
 
 // _______ CREATE AND PROCESS TASKS _______ //
