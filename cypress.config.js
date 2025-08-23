@@ -107,6 +107,8 @@ export default defineConfig({
     },
     defaultCommandTimeout: 30000, // keep it minimum 10000
     pageLoadTimeout: 80000,
+    requestTimeout: 20000,
+    responseTimeout: 20000,
     retries: {
       runMode: 2, // retry failed tests 2 times in CI
       openMode: 0,

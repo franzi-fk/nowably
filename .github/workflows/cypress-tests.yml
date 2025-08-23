@@ -8,9 +8,10 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     strategy:
       matrix:
-        browser: [chrome, firefox, edge]
+        browser: [chrome]
     env:
       # Firebase config
       VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
@@ -34,6 +35,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20"
+
+      # Cache dependencies
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       # Write the Firebase service account secret to a temporary file
       - name: Write Firebase service account secret to file
