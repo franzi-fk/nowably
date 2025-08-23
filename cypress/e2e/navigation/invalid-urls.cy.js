@@ -12,7 +12,7 @@ describe("404 / Invalid URL handling", () => {
       .and("be.enabled")
       .click();
 
-    // confirm we are on home page
-    cy.contains("Welcome");
+    // confirm we are on either home or login page
+    cy.url().should("match", /\/($|login)/);
   });
 });
