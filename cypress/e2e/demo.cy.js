@@ -1,13 +1,11 @@
 function enterDemoMode() {
   cy.get('[data-cy="btn-enter-demo"]').click();
-  cy.wait(5000);
 }
 
 function leaveDemoMode() {
   cy.get("body").then(($body) => {
     if ($body.find('[data-cy="btn-leave-demo"]').length) {
       cy.get('[data-cy="btn-leave-demo"]').click();
-      cy.wait(5000);
     }
   });
 }

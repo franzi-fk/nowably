@@ -59,7 +59,6 @@ describe("Navigation in task progression flow", () => {
   it("navigates to 'after help' view from each help sub view (skip)", () => {
     helpSubViews.forEach((subView) => {
       // open 'need help' overview
-      cy.wait(500);
       cy.get('[data-cy="btn-need-help"]').click();
 
       // navigate into subview
@@ -73,7 +72,6 @@ describe("Navigation in task progression flow", () => {
       cy.get('[data-cy="sct-after-help-view"]').should("be.visible");
 
       // go back to 'need help overview'
-      cy.wait(500); // let after help view load properly
       cy.get('[data-cy="btn-continue"]').click();
     });
   });

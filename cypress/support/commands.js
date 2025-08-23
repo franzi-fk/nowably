@@ -31,7 +31,6 @@ Cypress.Commands.add("loginWithToken", () => {
 // Custom logout command
 Cypress.Commands.add("logout", () => {
   cy.visit("http://localhost:8888/");
-  cy.wait(500);
 
   // wait for URL to settle
   cy.url().then((url) => {
@@ -110,7 +109,6 @@ Cypress.Commands.add("receiveMebo", () => {
   cy.get('[data-cy="btn-need-help"]').click();
   cy.get('[data-cy="btn-demotivated"]').click();
   cy.get('[data-cy="btn-open-mebo"]').click();
-  cy.wait(1000);
   cy.get('[data-cy="initiate-stopping-task"]').click();
   cy.get('[data-cy="modal-btn-primary"]').click();
 });
