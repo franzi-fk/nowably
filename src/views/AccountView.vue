@@ -27,9 +27,9 @@
         <article class="account-body">
           <section class="account-info account-tile" data-cy="sct-account-info">
             <h2>Account Information</h2>
-            <p>Name: {{ userStore.user.displayName }}</p>
-            <p>Email: {{ userStore.user.email }}</p>
-            <p>Nowably User ID: {{ userStore.user.uid }}</p>
+            <p>Name: {{ userStore.user?.displayName }}</p>
+            <p>Email: {{ userStore.user?.email }}</p>
+            <p>Nowably User ID: {{ userStore.user?.uid }}</p>
             <small>
               You are signed in with your Google account. Your name and email
               come directly from Google and can not be changed here. To use a
