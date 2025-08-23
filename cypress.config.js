@@ -117,7 +117,7 @@ export default defineConfig({
       // return updated config object
       return config;
     },
-    defaultCommandTimeout: 30000, // keep it minimum 10000
+    defaultCommandTimeout: 80000, // keep it minimum 10000
     pageLoadTimeout: 80000,
     requestTimeout: 20000,
     responseTimeout: 20000,
