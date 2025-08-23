@@ -8,7 +8,7 @@ describe("Login persistence", () => {
 
   it("persists login across page reloads", () => {
     // login
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888");
 
     // reload page

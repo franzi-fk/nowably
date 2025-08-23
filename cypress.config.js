@@ -53,6 +53,15 @@ export default defineConfig({
 
       // register custom cypress task
       on("task", {
+        async createCustomToken(email) {
+          // Lookup user by email
+          const user = await admin.auth().getUserByEmail(email);
+
+          // Create a custom token for this user
+          const token = await admin.auth().createCustomToken(user.uid);
+
+          return token;
+        },
         async resetTestUser() {
           // get UID from env
           const testUserUid = process.env.CYPRESS_TEST_USER_UID;

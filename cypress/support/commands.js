@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 // Firebase config from Cypress env variables (see cypress.config.js)
 const firebaseConfig = {
@@ -22,16 +22,13 @@ const auth = getAuth(firebaseApp);
 // _______ LOGIN & LOGOUT _______ //
 
 // Custom login command
-Cypress.Commands.add("loginWithFirebase", () => {
-  const email = Cypress.env("TEST_USER_EMAIL");
-  const password = Cypress.env("TEST_USER_PASSWORD");
-
-  return signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => userCredential.user.getIdToken())
-    .then((idToken) => {
-      // Set the token in localStorage so your app considers the user logged in
-      window.localStorage.setItem("authToken", idToken);
+Cypress.Commands.add("loginWithToken", () => {
+  const email = Cypress.env("CYPRESS_TEST_USER_EMAIL");
+  return cy.task("createCustomToken", email).then((token) => {
+    return signInWithCustomToken(auth, token).then(() => {
+      cy.log(`Signed in as ${email} with custom token`);
     });
+  });
 });
 
 // Custom logout command

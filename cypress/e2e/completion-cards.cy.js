@@ -23,7 +23,7 @@ function runCompletionCardCounterTest() {
 describe('Completion Cards are viewed on "Home" page', () => {
   beforeEach(() => {
     cy.task("resetTestUser");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
   });
 
@@ -55,7 +55,7 @@ describe('Completion Cards are viewed on "Home" page', () => {
 describe('Completion Cards are viewed on "Completion Cards" page', () => {
   beforeEach(() => {
     cy.task("resetTestUser");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/completion-cards");
   });
 
@@ -68,7 +68,7 @@ describe('Completion Cards are viewed on "Completion Cards" page', () => {
 
 describe("Completion Card is opened when user reaches a milestone", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888");
   });
 

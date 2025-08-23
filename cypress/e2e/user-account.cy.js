@@ -9,21 +9,21 @@ describe("Sign In and Sign Out", () => {
     });
     cy.get('[data-cy="btn-google-sign-in"]').click();
     cy.get("@windowOpen").should("be.called");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
     cy.contains("Welcome").should("be.visible");
   });
 
   // Sign out
   it("signs user out", () => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.logout();
   });
 });
 
 describe("User Account", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/account");
   });
 

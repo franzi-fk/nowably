@@ -20,7 +20,7 @@ function checkAfterHelpView() {
 describe("Task progress: Need help", () => {
   beforeEach(() => {
     cy.task("resetTestUser"); // reset test user so they can receive a mebo
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
     cy.createAndStartTask();
     cy.get('[data-cy="btn-need-help"]').click();
@@ -135,7 +135,7 @@ describe("Task progress: Need help", () => {
     cy.get('[data-cy="anim-humming"]').should("be.visible");
     // check for countdown animation
     cy.get('[data-cy="anim-countdown"]').should("be.visible");
-    cy.contains("1:58", { timeout: 5000 });
+    cy.contains("1:58");
     // click skip
     cy.get('[data-cy="btn-skip"]').click();
     // check for continuation question

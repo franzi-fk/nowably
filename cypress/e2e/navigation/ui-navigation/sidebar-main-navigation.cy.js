@@ -43,7 +43,7 @@ describe("App main navigation (Sidebar)", () => {
 
   beforeEach(() => {
     cy.clearAllSessionStorage(); // reset sidebar
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit(`${BASE_URL}`, {
       onBeforeLoad(win) {
         win.localStorage.setItem("cookieAccepted", "true");

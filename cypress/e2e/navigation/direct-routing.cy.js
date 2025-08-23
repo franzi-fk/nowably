@@ -58,7 +58,7 @@ describe("Direct routing", () => {
       });
 
       it(`allows access when logged in for ${page.path}`, () => {
-        cy.loginWithFirebase();
+        cy.loginWithToken();
         cy.visit(`${BASE_URL}${page.path}`);
         cy.contains(page.headline).should("be.visible");
       });

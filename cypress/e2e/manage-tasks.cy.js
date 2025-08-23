@@ -55,7 +55,7 @@ function runOpenTasksCardTest() {
 
 describe('Task management on "Home" page', () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
   });
 
@@ -68,7 +68,7 @@ describe('Task management on "Home" page', () => {
 
 describe('Task management on "All tasks" page', () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/all-tasks");
   });
 

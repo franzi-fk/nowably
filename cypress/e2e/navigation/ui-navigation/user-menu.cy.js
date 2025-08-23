@@ -7,7 +7,7 @@ function openUserMenu() {
 
 describe("User menu", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit(`${BASE_URL}`, {
       onBeforeLoad(win) {
         win.localStorage.setItem("cookieAccepted", "true");

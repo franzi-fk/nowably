@@ -1,6 +1,6 @@
 describe("Task progress: Countdown view", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
     cy.createAndStartTask();
   });

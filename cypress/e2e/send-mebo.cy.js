@@ -1,6 +1,6 @@
 describe("Send Message in a Bottle", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
   });
 

@@ -1,6 +1,6 @@
 describe("Task progress: Work on task", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit("http://localhost:8888/");
     cy.createAndStartTask();
     cy.get('[data-cy="btn-task-started"]').click();

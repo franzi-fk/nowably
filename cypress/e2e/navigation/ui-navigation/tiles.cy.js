@@ -34,7 +34,7 @@ const TilesWithViewAllBtn = [
 describe("Navigation via tiles on home page", () => {
   beforeEach(() => {
     cy.task("resetTestUser");
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit(BASE_URL);
   });
 

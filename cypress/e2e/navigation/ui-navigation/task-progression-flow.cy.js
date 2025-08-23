@@ -2,7 +2,7 @@ const BASE_URL = "http://localhost:8888";
 
 describe("Navigation in task progression flow", () => {
   beforeEach(() => {
-    cy.loginWithFirebase();
+    cy.loginWithToken();
     cy.visit(`${BASE_URL}`);
     cy.createAndStartTask();
   });
