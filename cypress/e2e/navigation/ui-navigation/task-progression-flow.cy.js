@@ -72,8 +72,16 @@ describe("Navigation in task progression flow", () => {
       cy.url().should("include", "/task-continue");
       cy.get('[data-cy="sct-after-help-view"]').should("be.visible");
 
+      // wait for the radio button to be active
+      cy.get("#continue-with-task").should("be.checked");
+
+      // wait for the dropdown to have a value
+      cy.get('[data-cy="input-select"]').should(($select) => {
+        const val = $select.val();
+        expect(val).to.not.be.oneOf([null, "", "Select a task"]);
+      });
+
       // go back to 'need help overview'
-      cy.wait(500); // let after help view load properly
       cy.get('[data-cy="btn-continue"]').click();
     });
   });

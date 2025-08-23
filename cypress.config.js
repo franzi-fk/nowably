@@ -117,12 +117,13 @@ export default defineConfig({
       // return updated config object
       return config;
     },
-    defaultCommandTimeout: 80000, // keep it minimum 10000
+
+    defaultCommandTimeout: 60000, // keep it minimum 10000
     pageLoadTimeout: 80000,
     requestTimeout: 20000,
     responseTimeout: 20000,
     retries: {
-      runMode: 3, // retry failed tests x times
+      runMode: 2, // retry failed tests x times
       openMode: 0,
     },
   },

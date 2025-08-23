@@ -1,4 +1,8 @@
 describe("Sign In and Sign Out", () => {
+  beforeEach(() => {
+    cy.visit("http://localhost:8888/account");
+  });
+
   // Sign in
   it("signs user in", () => {
     cy.logout();
@@ -17,7 +21,13 @@ describe("Sign In and Sign Out", () => {
   // Sign out
   it("signs user out", () => {
     cy.loginWithToken();
-    cy.logout();
+
+    cy.get('[data-cy="btn-user-menu"]').should("be.visible").click();
+    cy.get('[data-cy="user-menu"]').should("be.visible");
+    cy.get('[data-cy="btn-signout"]').should("be.visible").click();
+
+    // Confirm logout
+    cy.url().should("include", "/login");
   });
 });
 

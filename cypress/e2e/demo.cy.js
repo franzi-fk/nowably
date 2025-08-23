@@ -1,13 +1,11 @@
 function enterDemoMode() {
-  cy.get('[data-cy="btn-enter-demo"]').click();
-  cy.wait(5000);
+  cy.get('[data-cy="btn-enter-demo"]').should("exist").click();
 }
 
 function leaveDemoMode() {
   cy.get("body").then(($body) => {
     if ($body.find('[data-cy="btn-leave-demo"]').length) {
-      cy.get('[data-cy="btn-leave-demo"]').click();
-      cy.wait(5000);
+      cy.get('[data-cy="btn-leave-demo"]').should("exist").click();
     }
   });
 }
@@ -21,8 +19,7 @@ function checkDemoData() {
 
 describe("Demo", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:8888/");
-    cy.logout();
+    cy.visit("http://localhost:8888/login");
   });
 
   afterEach(() => {

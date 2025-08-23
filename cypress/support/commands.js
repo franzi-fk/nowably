@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 
 // Firebase config from Cypress env variables (see cypress.config.js)
 const firebaseConfig = {
@@ -26,27 +26,37 @@ Cypress.Commands.add("loginWithToken", () => {
   cy.task("createCustomToken").then((token) => {
     return signInWithCustomToken(auth, token);
   });
+
+  // Wait until Firebase reports a user
+  cy.then(() => {
+    return new Cypress.Promise((resolve) => {
+      const unsub = auth.onAuthStateChanged((user) => {
+        if (user) {
+          unsub();
+          resolve();
+        }
+      });
+    });
+  });
 });
 
-// Custom logout command
+// Custom logout command (SDK-based)
 Cypress.Commands.add("logout", () => {
-  cy.visit("http://localhost:8888/");
-  cy.wait(500);
-
-  // wait for URL to settle
-  cy.url().then((url) => {
-    if (!url.includes("/login")) {
-      cy.log("User is logged in, logging out...");
-      // User is logged in
-      cy.get('[data-cy="btn-user-menu"]').click(); // Open user menu
-      cy.get('[data-cy="user-menu"]').should("be.visible"); // Menu visible
-      cy.get('[data-cy="btn-signout"]').click(); // Click logout button
-
-      cy.url().should("include", "/login"); // Confirm logout by checking URL includes /login
-    }
-    // User is logged out, nothing to do
-    cy.log("User is logged out");
+  cy.then(() => signOut(auth)); // sign out via Firebase SDK
+  // wait for logout to propagate
+  cy.then(() => {
+    return new Cypress.Promise((resolve) => {
+      const unsub = auth.onAuthStateChanged((user) => {
+        if (!user) {
+          unsub();
+          resolve();
+        }
+      });
+    });
   });
+  // go to login page
+  cy.visit("http://localhost:8888/login");
+  cy.get('[data-cy="btn-enter-demo"]').should("be.visible");
 });
 
 // _______ CREATE AND PROCESS TASKS _______ //
@@ -110,7 +120,6 @@ Cypress.Commands.add("receiveMebo", () => {
   cy.get('[data-cy="btn-need-help"]').click();
   cy.get('[data-cy="btn-demotivated"]').click();
   cy.get('[data-cy="btn-open-mebo"]').click();
-  cy.wait(1000);
   cy.get('[data-cy="initiate-stopping-task"]').click();
   cy.get('[data-cy="modal-btn-primary"]').click();
 });

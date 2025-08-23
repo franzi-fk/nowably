@@ -66,12 +66,10 @@ describe("Task progress: Work on task", () => {
         cy.get('[data-cy="btn-back-home"]').click(); // go back to home
 
         // check for task title on home (should not appear)
-        cy.wait(2000);
         cy.contains(completedTaskTitle).should("not.exist");
 
         // check for task on completed tasks (should appear)
         cy.get('[data-cy="nav-sidebar"]').contains("All tasks").click();
-        cy.wait(2000);
         cy.get('[data-cy="sct-completed-tasks"]').within(() => {
           cy.contains(completedTaskTitle).should("exist");
         });
@@ -94,12 +92,10 @@ describe("Task progress: Work on task", () => {
         cy.get('[data-cy="btn-back-home"]').click(); // go back to home
 
         // check for task title on home (should not appear)
-        cy.wait(2000);
         cy.contains(incompleteTaskTitle).should("exist");
 
         // check for task on completed tasks (should appear)
         cy.get('[data-cy="nav-sidebar"]').contains("All tasks").click();
-        cy.wait(2000);
         cy.get('[data-cy="sct-completed-tasks"]').within(() => {
           cy.contains(incompleteTaskTitle).should("not.exist");
         });

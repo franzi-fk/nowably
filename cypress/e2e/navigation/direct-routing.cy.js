@@ -14,7 +14,6 @@ describe("Direct routing", () => {
 
     it("directly visits login page", () => {
       cy.visit(`${BASE_URL}`);
-      cy.wait(1000);
       cy.url().should("include", "/login");
     });
 
