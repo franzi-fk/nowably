@@ -23,14 +23,7 @@ const auth = getAuth(firebaseApp);
 
 // Custom login command
 Cypress.Commands.add("loginWithToken", () => {
-  const email = Cypress.env("TEST_USER_EMAIL"); // string email
-  if (!email) throw new Error("TEST_USER_EMAIL is not defined in Cypress.env");
-
-  cy.task("createCustomToken", { email }).then((token) => {
-    if (!token)
-      throw new Error("No custom token returned from createCustomToken task");
-
-    // Sign in using the Cypress-initialized Firebase instance
+  cy.task("createCustomToken").then((token) => {
     return signInWithCustomToken(auth, token);
   });
 });

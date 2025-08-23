@@ -53,12 +53,17 @@ export default defineConfig({
 
       // register custom cypress task
       on("task", {
-        async createCustomToken({ email }) {
-          if (!email)
+        async createCustomToken() {
+          const testUserUid = process.env.CYPRESS_TEST_USER_UID;
+
+          if (!testUserUid) {
             throw new Error(
-              "Invalid email passed to createCustomToken: " + email
+              "CYPRESS_TEST_USER_UID is not set in environment variables"
             );
-          return await admin.auth().createCustomToken(email);
+          }
+
+          // Create a custom token directly using the UID
+          return await admin.auth().createCustomToken(testUserUid);
         },
         async resetTestUser() {
           // get UID from env
