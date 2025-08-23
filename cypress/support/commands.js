@@ -37,9 +37,9 @@ Cypress.Commands.add("logout", () => {
     if (!url.includes("/login")) {
       cy.log("User is logged in, logging out...");
       // User is logged in
-      cy.get('[data-cy="btn-user-menu"]').click(); // Open user menu
+      cy.get('[data-cy="btn-user-menu"]').should("be.visible").click(); // Open user menu
       cy.get('[data-cy="user-menu"]').should("be.visible"); // Menu visible
-      cy.get('[data-cy="btn-signout"]').click(); // Click logout button
+      cy.get('[data-cy="btn-signout"]').should("be.visible").click(); // Click logout button
 
       cy.url().should("include", "/login"); // Confirm logout by checking URL includes /login
     }

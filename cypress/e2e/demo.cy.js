@@ -19,8 +19,7 @@ function checkDemoData() {
 
 describe("Demo", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:8888/");
-    cy.logout();
+    cy.visit("http://localhost:8888/login");
   });
 
   afterEach(() => {

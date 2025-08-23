@@ -145,8 +145,19 @@ describe("Task progress: Need help", () => {
     cy.get('[data-cy="btn-overwhelmed"]').click();
     cy.get('[data-cy="btn-skip"]').click();
 
-    // choose to continue with task
+    // check content
     checkAfterHelpView();
+
+    // wait for pre-selected radio to be active
+    cy.get("#continue-with-task").should("be.checked");
+
+    // wait for dropdown to have a valid selection
+    cy.get('[data-cy="input-select"]').should(($select) => {
+      const val = $select.val();
+      expect(val).to.not.be.oneOf([null, "", "Select a task"]);
+    });
+
+    // select and continue
     cy.get('[data-cy="radio-continue"]').click();
     checkAndClickContinueBtn();
 
