@@ -5,6 +5,7 @@
     :style="{ bottom: snackbarBottom }"
     role="alert"
     aria-live="assertive"
+    data-cy="snackbar"
   >
     <AppIcon :name="iconName" class="snackbar-icon" size="20" />
     <span class="snackbar-text">{{ text }}</span>
@@ -13,19 +14,19 @@
 
 <script>
 export default {
-  name: 'SnackbarOverlay',
+  name: "SnackbarOverlay",
   props: {
     text: {
       type: String,
       required: true,
-      default: 'This is an info for the user.',
+      default: "This is an info for the user.",
     },
     variant: {
       type: String,
       required: true,
-      default: 'info',
+      default: "info",
       validator(value) {
-        return ['success', 'warning', 'error', 'info'].includes(value)
+        return ["success", "warning", "error", "info"].includes(value);
       },
     },
     duration: {
@@ -38,60 +39,66 @@ export default {
       visible: false, // Initially hidden
       snackbarTimeout: null, // Store the timeout reference to clear it
       keyboardOpen: false, // Track if keyboard is open
-    }
+    };
   },
   computed: {
     variantClass() {
-      return `snackbar-${this.variant}`
+      return `snackbar-${this.variant}`;
     },
     iconName() {
       const icons = {
-        success: 'circleCheckBig',
-        warning: 'triangleAlert',
-        error: 'squareX',
-        info: 'badgeInfo',
-      }
-      return icons[this.variant] || 'info'
+        success: "circleCheckBig",
+        warning: "triangleAlert",
+        error: "squareX",
+        info: "badgeInfo",
+      };
+      return icons[this.variant] || "info";
     },
     snackbarBottom() {
-      return this.keyboardOpen ? '8rem' : '2rem'
+      return this.keyboardOpen ? "8rem" : "2rem";
     },
   },
   methods: {
     show() {
-      this.visible = true
+      this.visible = true;
 
       if (this.snackbarTimeout) {
-        clearTimeout(this.snackbarTimeout)
+        clearTimeout(this.snackbarTimeout);
       }
 
       this.snackbarTimeout = setTimeout(() => {
-        this.visible = false
-      }, this.duration)
+        this.visible = false;
+      }, this.duration);
     },
 
     adjustSnackbarPosition() {
-      if (!window.visualViewport) return
+      if (!window.visualViewport) return;
 
-      const viewportHeight = window.visualViewport.height
-      this.keyboardOpen = viewportHeight < window.innerHeight * 0.7
+      const viewportHeight = window.visualViewport.height;
+      this.keyboardOpen = viewportHeight < window.innerHeight * 0.7;
     },
   },
   mounted() {
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', this.adjustSnackbarPosition)
+      window.visualViewport.addEventListener(
+        "resize",
+        this.adjustSnackbarPosition
+      );
     } else {
-      window.addEventListener('resize', this.adjustSnackbarPosition)
+      window.addEventListener("resize", this.adjustSnackbarPosition);
     }
   },
   beforeUnmount() {
     if (window.visualViewport) {
-      window.visualViewport.removeEventListener('resize', this.adjustSnackbarPosition)
+      window.visualViewport.removeEventListener(
+        "resize",
+        this.adjustSnackbarPosition
+      );
     } else {
-      window.removeEventListener('resize', this.adjustSnackbarPosition)
+      window.removeEventListener("resize", this.adjustSnackbarPosition);
     }
   },
-}
+};
 </script>
 
 <style scoped>

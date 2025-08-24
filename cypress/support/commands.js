@@ -61,19 +61,19 @@ Cypress.Commands.add("logout", () => {
 
 // _______ CREATE AND PROCESS TASKS _______ //
 
-// Helper to ensure the input is visible
-function ensureTaskInputVisible() {
+// Ensure the input is visible
+Cypress.Commands.add("ensureTaskInputVisible", (taskName) => {
   cy.get("body").then(($body) => {
     if (!$body.find('[data-cy="inp-new-task"]').is(":visible")) {
       cy.get('[data-cy="btn-initiate-task-creation"]').click();
     }
   });
-}
+});
 
 // Create task
 Cypress.Commands.add("createTask", (taskName) => {
   const uniqueTaskName = taskName || `Task ${Date.now()}`;
-  ensureTaskInputVisible();
+  cy.ensureTaskInputVisible();
   cy.get('[data-cy="inp-new-task"]').type(uniqueTaskName);
   cy.get('[data-cy="btn-add-task"]').click();
   cy.contains(uniqueTaskName).should("exist");
