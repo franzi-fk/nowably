@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,
+    host: "0.0.0.0",
     port: 8888,
     strictPort: true,
     watch: {
@@ -24,7 +24,7 @@ export default defineConfig({
     hmr: {
       protocol: "ws",
       host: "localhost",
-      clientPort: 8888,
+      port: 8888,
     },
   },
 });
