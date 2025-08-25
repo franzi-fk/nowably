@@ -92,7 +92,7 @@ cypress/nowably-firebase-service-account.json
 
 **4 - Open the project in VS Code.**
 
-**5 - Reopen in a container:**
+**5 - Reopen in a container.**
 
 - VS Code will prompt you to reopen the folder in a container.
 - Alternatively, use the command line and enter: `Dev Containers: Reopen in Container`.
