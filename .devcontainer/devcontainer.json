@@ -1,0 +1,19 @@
+{
+  "name": "Nowably Dev",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "runArgs": ["-p", "8888:8888"],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": ["Vue.volar", "dbaeumer.vscode-eslint"]
+    }
+  },
+  "forwardPorts": [8888],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
+}
