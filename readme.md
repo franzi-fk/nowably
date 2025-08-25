@@ -51,7 +51,7 @@ This section provides instructions for setting up the Nowably project with the V
 **1 - Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/nowably.git
+git clone https://github.com/franzi-fk/nowably.git
 cd nowably
 ```
 
