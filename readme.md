@@ -19,7 +19,7 @@ A productivity app designed to help users defeat procrastination, start to their
 - State Management: Pinia
 - Database: Firestore
 - Authentication: Firebase
-- Testing: Cypress (E2E)
+- Testing: E2E with Cypress
 
 ### Design
 
