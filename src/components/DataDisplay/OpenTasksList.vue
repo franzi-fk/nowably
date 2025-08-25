@@ -17,7 +17,7 @@
     <!-- Show loader space (white space) when loading -->
     <div class="loader-space" data-cy="loading" v-if="loading"></div>
     <!-- Show task list content after loading -->
-    <div class="task-list-body" v-else>
+    <div class="task-list-body" data-cy="task-list-body" v-else>
       <!-- Show empty state only if NOT loading and there are no tasks -->
       <div
         class="empty-state"
