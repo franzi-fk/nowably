@@ -43,8 +43,9 @@ This section provides instructions for setting up the Nowably project with the V
 
 ### Prerequisites
 
-- [Docker](https://www.docker.com/get-started)
-- [VS Code](https://code.visualstudio.com/) with the **Dev Containers** extension by Microsoft installed
+- Install [**Docker**](https://www.docker.com/get-started) and make sure it's installed properly, not showing any errors or open updates
+- Install [**VS Code**](https://code.visualstudio.com/)
+- Inside VS Code, install the [**Dev Containers**](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension by Microsoft
 
 ### Setup
 
@@ -59,7 +60,12 @@ cd nowably
 
 Create a `.env` file in the project root with your Firebase credentials and Cypress test user:
 
-```env
+```bash
+# Navigate to the project root (if not already there)
+cd /path/to/nowably
+
+# Create .env with template
+cat > .env <<EOL
 # Firebase configuration
 VITE_FIREBASE_API_KEY=your_api_key_here
 VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
@@ -72,6 +78,8 @@ VITE_FIREBASE_APP_ID=your_app_id
 CYPRESS_TEST_USER_UID=your_test_user_uid
 CYPRESS_TEST_USER_EMAIL=your_test_user_email
 CYPRESS_TEST_USER_PASSWORD=your_test_user_password
+EOL
+
 ```
 
 > Fill in the values with your own Firebase project credentials and the manually created test user for Cypress.  
