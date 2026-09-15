@@ -20,8 +20,8 @@
     <p>The data controller responsible for your personal data is:</p>
     <p>
       Franziska Kiel <br />
-      Rheingoldstraße 157 <br />
-      68199 Mannheim <br />
+      Schleider Straße 4 <br />
+      36419 Geisa <br />
       Germany <br />
     </p>
     <p>
