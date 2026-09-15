@@ -13,8 +13,8 @@
     <h2>Responsible for this website & web app</h2>
     <p>
       Franziska Kiel <br />
-      Rheingoldstraße 157 <br />
-      68199 Mannheim <br />
+      Schleider Straße 4 <br />
+      36419 Geisa <br />
       Germany <br />
     </p>
 
